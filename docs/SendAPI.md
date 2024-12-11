@@ -578,7 +578,7 @@ Name | Type | Description  | Notes
 
 ## InvoiceV1SendValidateXmlPost
 
-> InvoiceV1SendValidateXmlPost(ctx).Execute()
+> InvoiceV1SendValidateXmlPost(ctx).FatturaOrdinaria(fatturaOrdinaria).Execute()
 
 Validate an invoice by xml
 
@@ -597,10 +597,11 @@ import (
 )
 
 func main() {
+	fatturaOrdinaria := *invoicesdk.NewFatturaOrdinaria() // FatturaOrdinaria | 
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	r, err := apiClient.SendAPI.InvoiceV1SendValidateXmlPost(context.Background()).Execute()
+	r, err := apiClient.SendAPI.InvoiceV1SendValidateXmlPost(context.Background()).FatturaOrdinaria(fatturaOrdinaria).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.InvoiceV1SendValidateXmlPost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -610,12 +611,16 @@ func main() {
 
 ### Path Parameters
 
-This endpoint does not need any parameter.
+
 
 ### Other Parameters
 
 Other parameters are passed through a pointer to a apiInvoiceV1SendValidateXmlPostRequest struct via the builder pattern
 
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **fatturaOrdinaria** | [**FatturaOrdinaria**](FatturaOrdinaria.md) |  | 
 
 ### Return type
 
@@ -627,7 +632,7 @@ Other parameters are passed through a pointer to a apiInvoiceV1SendValidateXmlPo
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
+- **Content-Type**: application/xml
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)

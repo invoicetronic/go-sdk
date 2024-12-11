@@ -1210,6 +1210,12 @@ func (a *SendAPIService) InvoiceV1SendValidatePostExecute(r ApiInvoiceV1SendVali
 type ApiInvoiceV1SendValidateXmlPostRequest struct {
 	ctx context.Context
 	ApiService *SendAPIService
+	fatturaOrdinaria *FatturaOrdinaria
+}
+
+func (r ApiInvoiceV1SendValidateXmlPostRequest) FatturaOrdinaria(fatturaOrdinaria FatturaOrdinaria) ApiInvoiceV1SendValidateXmlPostRequest {
+	r.fatturaOrdinaria = &fatturaOrdinaria
+	return r
 }
 
 func (r ApiInvoiceV1SendValidateXmlPostRequest) Execute() (*http.Response, error) {
@@ -1249,9 +1255,12 @@ func (a *SendAPIService) InvoiceV1SendValidateXmlPostExecute(r ApiInvoiceV1SendV
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
+	if r.fatturaOrdinaria == nil {
+		return nil, reportError("fatturaOrdinaria is required and must be specified")
+	}
 
 	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
+	localVarHTTPContentTypes := []string{"application/xml"}
 
 	// set Content-Type header
 	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
@@ -1267,6 +1276,8 @@ func (a *SendAPIService) InvoiceV1SendValidateXmlPostExecute(r ApiInvoiceV1SendV
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
+	// body params
+	localVarPostBody = r.fatturaOrdinaria
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return nil, err
