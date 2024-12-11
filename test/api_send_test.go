@@ -84,6 +84,50 @@ func Test_invoicesdk_SendAPIService(t *testing.T) {
 
 	})
 
+	t.Run("Test SendAPIService InvoiceV1SendValidateFilesPost", func(t *testing.T) {
+
+		t.Skip("skip test")  // remove to run test
+
+		httpRes, err := apiClient.SendAPI.InvoiceV1SendValidateFilesPost(context.Background()).Execute()
+
+		require.Nil(t, err)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
+	t.Run("Test SendAPIService InvoiceV1SendValidateJsonPost", func(t *testing.T) {
+
+		t.Skip("skip test")  // remove to run test
+
+		httpRes, err := apiClient.SendAPI.InvoiceV1SendValidateJsonPost(context.Background()).Execute()
+
+		require.Nil(t, err)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
+	t.Run("Test SendAPIService InvoiceV1SendValidatePost", func(t *testing.T) {
+
+		t.Skip("skip test")  // remove to run test
+
+		httpRes, err := apiClient.SendAPI.InvoiceV1SendValidatePost(context.Background()).Execute()
+
+		require.Nil(t, err)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
+	t.Run("Test SendAPIService InvoiceV1SendValidateXmlPost", func(t *testing.T) {
+
+		t.Skip("skip test")  // remove to run test
+
+		httpRes, err := apiClient.SendAPI.InvoiceV1SendValidateXmlPost(context.Background()).Execute()
+
+		require.Nil(t, err)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
 	t.Run("Test SendAPIService InvoiceV1SendXmlPost", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
