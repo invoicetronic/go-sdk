@@ -19,7 +19,7 @@ Method | HTTP request | Description
 
 ## InvoiceV1SendFilesPost
 
-> Send InvoiceV1SendFilesPost(ctx).Files(files).Validate(validate).Execute()
+> Send InvoiceV1SendFilesPost(ctx).Files(files).Validate(validate).Signature(signature).Execute()
 
 Add an invoice by file
 
@@ -40,10 +40,11 @@ import (
 func main() {
 	files := []*os.File{"TODO"} // []*os.File | 
 	validate := true // bool | Validate the document first, and reject it on failure. (optional) (default to false)
+	signature := "signature_example" // string | Whether to digitally sign the document. (optional) (default to "Auto")
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.SendAPI.InvoiceV1SendFilesPost(context.Background()).Files(files).Validate(validate).Execute()
+	resp, r, err := apiClient.SendAPI.InvoiceV1SendFilesPost(context.Background()).Files(files).Validate(validate).Signature(signature).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.InvoiceV1SendFilesPost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -66,6 +67,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **files** | **[]*os.File** |  | 
  **validate** | **bool** | Validate the document first, and reject it on failure. | [default to false]
+ **signature** | **string** | Whether to digitally sign the document. | [default to &quot;Auto&quot;]
 
 ### Return type
 
@@ -107,10 +109,10 @@ import (
 )
 
 func main() {
-	companyId := int32(56) // int32 | Company id. (optional)
+	companyId := int32(56) // int32 | Company id (optional)
 	identifier := "identifier_example" // string | SDI identifier. (optional)
-	committente := "committente_example" // string | VAT number or fiscal code. (optional)
-	prestatore := "prestatore_example" // string | VAT number or fiscal code. (optional)
+	committente := "committente_example" // string | Vat number or fiscal code. (optional)
+	prestatore := "prestatore_example" // string | Vat number or fiscal code. (optional)
 	fileName := "fileName_example" // string | File name. (optional)
 	lastUpdateFrom := time.Now() // time.Time | UTC ISO 8601 (2024-11-29T12:34:56Z) (optional)
 	lastUpdateTo := time.Now() // time.Time | UTC ISO 8601 (2024-11-29T12:34:56Z) (optional)
@@ -119,8 +121,8 @@ func main() {
 	documentDateFrom := time.Now() // time.Time | UTC ISO 8601 (2024-11-29T12:34:56Z) (optional)
 	documentDateTo := time.Now() // time.Time | UTC ISO 8601 (2024-11-29T12:34:56Z) (optional)
 	documentNumber := "documentNumber_example" // string | Document number. (optional)
-	page := int32(56) // int32 | Page number. (optional) (default to 1)
-	pageSize := int32(56) // int32 | Items per page. (optional) (default to 100)
+	page := int32(56) // int32 | Page number. Defaults to 1. (optional) (default to 1)
+	pageSize := int32(56) // int32 | Items per page. Defaults to 50. Cannot be greater than 200. (optional) (default to 100)
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
@@ -145,10 +147,10 @@ Other parameters are passed through a pointer to a apiInvoiceV1SendGetRequest st
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **companyId** | **int32** | Company id. | 
+ **companyId** | **int32** | Company id | 
  **identifier** | **string** | SDI identifier. | 
- **committente** | **string** | VAT number or fiscal code. | 
- **prestatore** | **string** | VAT number or fiscal code. | 
+ **committente** | **string** | Vat number or fiscal code. | 
+ **prestatore** | **string** | Vat number or fiscal code. | 
  **fileName** | **string** | File name. | 
  **lastUpdateFrom** | **time.Time** | UTC ISO 8601 (2024-11-29T12:34:56Z) | 
  **lastUpdateTo** | **time.Time** | UTC ISO 8601 (2024-11-29T12:34:56Z) | 
@@ -157,8 +159,8 @@ Name | Type | Description  | Notes
  **documentDateFrom** | **time.Time** | UTC ISO 8601 (2024-11-29T12:34:56Z) | 
  **documentDateTo** | **time.Time** | UTC ISO 8601 (2024-11-29T12:34:56Z) | 
  **documentNumber** | **string** | Document number. | 
- **page** | **int32** | Page number. | [default to 1]
- **pageSize** | **int32** | Items per page. | [default to 100]
+ **page** | **int32** | Page number. Defaults to 1. | [default to 1]
+ **pageSize** | **int32** | Items per page. Defaults to 50. Cannot be greater than 200. | [default to 100]
 
 ### Return type
 
@@ -199,7 +201,7 @@ import (
 )
 
 func main() {
-	id := int32(56) // int32 | Item id.
+	id := int32(56) // int32 | Item id
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
@@ -219,7 +221,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | Item id. | 
+**id** | **int32** | Item id | 
 
 ### Other Parameters
 
@@ -250,7 +252,7 @@ Name | Type | Description  | Notes
 
 ## InvoiceV1SendJsonPost
 
-> Send InvoiceV1SendJsonPost(ctx).FatturaOrdinaria(fatturaOrdinaria).Validate(validate).Execute()
+> Send InvoiceV1SendJsonPost(ctx).FatturaOrdinaria(fatturaOrdinaria).Validate(validate).Signature(signature).Execute()
 
 Add an invoice by json
 
@@ -271,10 +273,11 @@ import (
 func main() {
 	fatturaOrdinaria := *invoicesdk.NewFatturaOrdinaria() // FatturaOrdinaria | 
 	validate := true // bool | Validate the document first, and reject it on failure. (optional) (default to false)
+	signature := "signature_example" // string | Whether to digitally sign the document. (optional) (default to "Auto")
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.SendAPI.InvoiceV1SendJsonPost(context.Background()).FatturaOrdinaria(fatturaOrdinaria).Validate(validate).Execute()
+	resp, r, err := apiClient.SendAPI.InvoiceV1SendJsonPost(context.Background()).FatturaOrdinaria(fatturaOrdinaria).Validate(validate).Signature(signature).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.InvoiceV1SendJsonPost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -297,6 +300,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **fatturaOrdinaria** | [**FatturaOrdinaria**](FatturaOrdinaria.md) |  | 
  **validate** | **bool** | Validate the document first, and reject it on failure. | [default to false]
+ **signature** | **string** | Whether to digitally sign the document. | [default to &quot;Auto&quot;]
 
 ### Return type
 
@@ -318,7 +322,7 @@ Name | Type | Description  | Notes
 
 ## InvoiceV1SendPost
 
-> Send InvoiceV1SendPost(ctx).Send(send).Validate(validate).Execute()
+> Send InvoiceV1SendPost(ctx).Send(send).Validate(validate).Signature(signature).Execute()
 
 Add an invoice
 
@@ -339,10 +343,11 @@ import (
 func main() {
 	send := *invoicesdk.NewSend() // Send | 
 	validate := true // bool | Validate the document first, and reject it on failure. (optional) (default to false)
+	signature := "signature_example" // string | Whether to digitally sign the document. (optional) (default to "Auto")
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.SendAPI.InvoiceV1SendPost(context.Background()).Send(send).Validate(validate).Execute()
+	resp, r, err := apiClient.SendAPI.InvoiceV1SendPost(context.Background()).Send(send).Validate(validate).Signature(signature).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.InvoiceV1SendPost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -365,6 +370,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **send** | [**Send**](Send.md) |  | 
  **validate** | **bool** | Validate the document first, and reject it on failure. | [default to false]
+ **signature** | **string** | Whether to digitally sign the document. | [default to &quot;Auto&quot;]
 
 ### Return type
 
@@ -642,7 +648,7 @@ Name | Type | Description  | Notes
 
 ## InvoiceV1SendXmlPost
 
-> Send InvoiceV1SendXmlPost(ctx).FatturaOrdinaria(fatturaOrdinaria).Validate(validate).Execute()
+> Send InvoiceV1SendXmlPost(ctx).FatturaOrdinaria(fatturaOrdinaria).Validate(validate).Signature(signature).Execute()
 
 Add an invoice by xml
 
@@ -663,10 +669,11 @@ import (
 func main() {
 	fatturaOrdinaria := *invoicesdk.NewFatturaOrdinaria() // FatturaOrdinaria | 
 	validate := true // bool | Validate the document first, and reject it on failure. (optional) (default to false)
+	signature := "signature_example" // string | Whether to digitally sign the document. (optional) (default to "Auto")
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.SendAPI.InvoiceV1SendXmlPost(context.Background()).FatturaOrdinaria(fatturaOrdinaria).Validate(validate).Execute()
+	resp, r, err := apiClient.SendAPI.InvoiceV1SendXmlPost(context.Background()).FatturaOrdinaria(fatturaOrdinaria).Validate(validate).Signature(signature).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.InvoiceV1SendXmlPost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -689,6 +696,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **fatturaOrdinaria** | [**FatturaOrdinaria**](FatturaOrdinaria.md) |  | 
  **validate** | **bool** | Validate the document first, and reject it on failure. | [default to false]
+ **signature** | **string** | Whether to digitally sign the document. | [default to &quot;Auto&quot;]
 
 ### Return type
 

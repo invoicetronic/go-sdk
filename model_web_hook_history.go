@@ -1,7 +1,7 @@
 /*
 Italian eInvoice API
 
-The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while still providing complete control over the invoice send/receive process. The API also provides advanced features and a rich toolchain, such as invoice validation, multiple upload methods, webhooks, event logs, CORS support, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
+The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. The API also provides advanced features as encryption at rest, invoice validation, multiple upload formats, webhooks, event logging, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
 API version: 1.0.0
 Contact: support@invoicetronic.com
@@ -35,10 +35,6 @@ type WebHookHistory struct {
 	Event NullableString `json:"event,omitempty"`
 	// Status code.
 	StatusCode *int32 `json:"status_code,omitempty"`
-	// Webhook request body.
-	RequestBody NullableString `json:"request_body,omitempty"`
-	// Webhook response body.
-	ResponseBody NullableString `json:"response_body,omitempty"`
 	// Date and time of the request.
 	DateTime *time.Time `json:"date_time,omitempty"`
 	// Wether the request was successful.
@@ -296,90 +292,6 @@ func (o *WebHookHistory) SetStatusCode(v int32) {
 	o.StatusCode = &v
 }
 
-// GetRequestBody returns the RequestBody field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *WebHookHistory) GetRequestBody() string {
-	if o == nil || IsNil(o.RequestBody.Get()) {
-		var ret string
-		return ret
-	}
-	return *o.RequestBody.Get()
-}
-
-// GetRequestBodyOk returns a tuple with the RequestBody field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *WebHookHistory) GetRequestBodyOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return o.RequestBody.Get(), o.RequestBody.IsSet()
-}
-
-// HasRequestBody returns a boolean if a field has been set.
-func (o *WebHookHistory) HasRequestBody() bool {
-	if o != nil && o.RequestBody.IsSet() {
-		return true
-	}
-
-	return false
-}
-
-// SetRequestBody gets a reference to the given NullableString and assigns it to the RequestBody field.
-func (o *WebHookHistory) SetRequestBody(v string) {
-	o.RequestBody.Set(&v)
-}
-// SetRequestBodyNil sets the value for RequestBody to be an explicit nil
-func (o *WebHookHistory) SetRequestBodyNil() {
-	o.RequestBody.Set(nil)
-}
-
-// UnsetRequestBody ensures that no value is present for RequestBody, not even an explicit nil
-func (o *WebHookHistory) UnsetRequestBody() {
-	o.RequestBody.Unset()
-}
-
-// GetResponseBody returns the ResponseBody field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *WebHookHistory) GetResponseBody() string {
-	if o == nil || IsNil(o.ResponseBody.Get()) {
-		var ret string
-		return ret
-	}
-	return *o.ResponseBody.Get()
-}
-
-// GetResponseBodyOk returns a tuple with the ResponseBody field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *WebHookHistory) GetResponseBodyOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return o.ResponseBody.Get(), o.ResponseBody.IsSet()
-}
-
-// HasResponseBody returns a boolean if a field has been set.
-func (o *WebHookHistory) HasResponseBody() bool {
-	if o != nil && o.ResponseBody.IsSet() {
-		return true
-	}
-
-	return false
-}
-
-// SetResponseBody gets a reference to the given NullableString and assigns it to the ResponseBody field.
-func (o *WebHookHistory) SetResponseBody(v string) {
-	o.ResponseBody.Set(&v)
-}
-// SetResponseBodyNil sets the value for ResponseBody to be an explicit nil
-func (o *WebHookHistory) SetResponseBodyNil() {
-	o.ResponseBody.Set(nil)
-}
-
-// UnsetResponseBody ensures that no value is present for ResponseBody, not even an explicit nil
-func (o *WebHookHistory) UnsetResponseBody() {
-	o.ResponseBody.Unset()
-}
-
 // GetDateTime returns the DateTime field value if set, zero value otherwise.
 func (o *WebHookHistory) GetDateTime() time.Time {
 	if o == nil || IsNil(o.DateTime) {
@@ -474,12 +386,6 @@ func (o WebHookHistory) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.StatusCode) {
 		toSerialize["status_code"] = o.StatusCode
-	}
-	if o.RequestBody.IsSet() {
-		toSerialize["request_body"] = o.RequestBody.Get()
-	}
-	if o.ResponseBody.IsSet() {
-		toSerialize["response_body"] = o.ResponseBody.Get()
 	}
 	if !IsNil(o.DateTime) {
 		toSerialize["date_time"] = o.DateTime

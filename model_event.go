@@ -1,7 +1,7 @@
 /*
 Italian eInvoice API
 
-The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while still providing complete control over the invoice send/receive process. The API also provides advanced features and a rich toolchain, such as invoice validation, multiple upload methods, webhooks, event logs, CORS support, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
+The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. The API also provides advanced features as encryption at rest, invoice validation, multiple upload formats, webhooks, event logging, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
 API version: 1.0.0
 Contact: support@invoicetronic.com
@@ -27,6 +27,10 @@ type Event struct {
 	Created *time.Time `json:"created,omitempty"`
 	// Row version, for optimistic concurrency. It is set automatically.
 	Version *int32 `json:"version,omitempty"`
+	// User id.
+	UserId *int32 `json:"user_id,omitempty"`
+	// Api key id.
+	ApiKeyId *int32 `json:"api_key_id,omitempty"`
 	// Company id.
 	CompanyId NullableInt32 `json:"company_id,omitempty"`
 	// Request method.
@@ -43,16 +47,10 @@ type Event struct {
 	DateTime *time.Time `json:"date_time,omitempty"`
 	// Response error.
 	Error NullableString `json:"error,omitempty"`
-	// Request payload. It is guaranteed to be cyphered at rest.
-	RequestBody NullableString `json:"request_body,omitempty"`
-	// Response payload. It is guaranteed to be cyphered at rest.
-	ResponseBody NullableString `json:"response_body,omitempty"`
 	// Wether the request was successful.
 	Success *bool `json:"success,omitempty"`
-	// User id.
-	UserId *int32 `json:"user_id,omitempty"`
-	// Api key id.
-	ApiKeyId *int32 `json:"api_key_id,omitempty"`
+	// Response payload. It is guaranteed to be cyphered at rest.
+	ResponseBody NullableString `json:"response_body,omitempty"`
 }
 
 // NewEvent instantiates a new Event object
@@ -166,6 +164,70 @@ func (o *Event) HasVersion() bool {
 // SetVersion gets a reference to the given int32 and assigns it to the Version field.
 func (o *Event) SetVersion(v int32) {
 	o.Version = &v
+}
+
+// GetUserId returns the UserId field value if set, zero value otherwise.
+func (o *Event) GetUserId() int32 {
+	if o == nil || IsNil(o.UserId) {
+		var ret int32
+		return ret
+	}
+	return *o.UserId
+}
+
+// GetUserIdOk returns a tuple with the UserId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Event) GetUserIdOk() (*int32, bool) {
+	if o == nil || IsNil(o.UserId) {
+		return nil, false
+	}
+	return o.UserId, true
+}
+
+// HasUserId returns a boolean if a field has been set.
+func (o *Event) HasUserId() bool {
+	if o != nil && !IsNil(o.UserId) {
+		return true
+	}
+
+	return false
+}
+
+// SetUserId gets a reference to the given int32 and assigns it to the UserId field.
+func (o *Event) SetUserId(v int32) {
+	o.UserId = &v
+}
+
+// GetApiKeyId returns the ApiKeyId field value if set, zero value otherwise.
+func (o *Event) GetApiKeyId() int32 {
+	if o == nil || IsNil(o.ApiKeyId) {
+		var ret int32
+		return ret
+	}
+	return *o.ApiKeyId
+}
+
+// GetApiKeyIdOk returns a tuple with the ApiKeyId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Event) GetApiKeyIdOk() (*int32, bool) {
+	if o == nil || IsNil(o.ApiKeyId) {
+		return nil, false
+	}
+	return o.ApiKeyId, true
+}
+
+// HasApiKeyId returns a boolean if a field has been set.
+func (o *Event) HasApiKeyId() bool {
+	if o != nil && !IsNil(o.ApiKeyId) {
+		return true
+	}
+
+	return false
+}
+
+// SetApiKeyId gets a reference to the given int32 and assigns it to the ApiKeyId field.
+func (o *Event) SetApiKeyId(v int32) {
+	o.ApiKeyId = &v
 }
 
 // GetCompanyId returns the CompanyId field value if set, zero value otherwise (both if not set or set to explicit null).
@@ -474,46 +536,36 @@ func (o *Event) UnsetError() {
 	o.Error.Unset()
 }
 
-// GetRequestBody returns the RequestBody field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *Event) GetRequestBody() string {
-	if o == nil || IsNil(o.RequestBody.Get()) {
-		var ret string
+// GetSuccess returns the Success field value if set, zero value otherwise.
+func (o *Event) GetSuccess() bool {
+	if o == nil || IsNil(o.Success) {
+		var ret bool
 		return ret
 	}
-	return *o.RequestBody.Get()
+	return *o.Success
 }
 
-// GetRequestBodyOk returns a tuple with the RequestBody field value if set, nil otherwise
+// GetSuccessOk returns a tuple with the Success field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *Event) GetRequestBodyOk() (*string, bool) {
-	if o == nil {
+func (o *Event) GetSuccessOk() (*bool, bool) {
+	if o == nil || IsNil(o.Success) {
 		return nil, false
 	}
-	return o.RequestBody.Get(), o.RequestBody.IsSet()
+	return o.Success, true
 }
 
-// HasRequestBody returns a boolean if a field has been set.
-func (o *Event) HasRequestBody() bool {
-	if o != nil && o.RequestBody.IsSet() {
+// HasSuccess returns a boolean if a field has been set.
+func (o *Event) HasSuccess() bool {
+	if o != nil && !IsNil(o.Success) {
 		return true
 	}
 
 	return false
 }
 
-// SetRequestBody gets a reference to the given NullableString and assigns it to the RequestBody field.
-func (o *Event) SetRequestBody(v string) {
-	o.RequestBody.Set(&v)
-}
-// SetRequestBodyNil sets the value for RequestBody to be an explicit nil
-func (o *Event) SetRequestBodyNil() {
-	o.RequestBody.Set(nil)
-}
-
-// UnsetRequestBody ensures that no value is present for RequestBody, not even an explicit nil
-func (o *Event) UnsetRequestBody() {
-	o.RequestBody.Unset()
+// SetSuccess gets a reference to the given bool and assigns it to the Success field.
+func (o *Event) SetSuccess(v bool) {
+	o.Success = &v
 }
 
 // GetResponseBody returns the ResponseBody field value if set, zero value otherwise (both if not set or set to explicit null).
@@ -558,102 +610,6 @@ func (o *Event) UnsetResponseBody() {
 	o.ResponseBody.Unset()
 }
 
-// GetSuccess returns the Success field value if set, zero value otherwise.
-func (o *Event) GetSuccess() bool {
-	if o == nil || IsNil(o.Success) {
-		var ret bool
-		return ret
-	}
-	return *o.Success
-}
-
-// GetSuccessOk returns a tuple with the Success field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *Event) GetSuccessOk() (*bool, bool) {
-	if o == nil || IsNil(o.Success) {
-		return nil, false
-	}
-	return o.Success, true
-}
-
-// HasSuccess returns a boolean if a field has been set.
-func (o *Event) HasSuccess() bool {
-	if o != nil && !IsNil(o.Success) {
-		return true
-	}
-
-	return false
-}
-
-// SetSuccess gets a reference to the given bool and assigns it to the Success field.
-func (o *Event) SetSuccess(v bool) {
-	o.Success = &v
-}
-
-// GetUserId returns the UserId field value if set, zero value otherwise.
-func (o *Event) GetUserId() int32 {
-	if o == nil || IsNil(o.UserId) {
-		var ret int32
-		return ret
-	}
-	return *o.UserId
-}
-
-// GetUserIdOk returns a tuple with the UserId field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *Event) GetUserIdOk() (*int32, bool) {
-	if o == nil || IsNil(o.UserId) {
-		return nil, false
-	}
-	return o.UserId, true
-}
-
-// HasUserId returns a boolean if a field has been set.
-func (o *Event) HasUserId() bool {
-	if o != nil && !IsNil(o.UserId) {
-		return true
-	}
-
-	return false
-}
-
-// SetUserId gets a reference to the given int32 and assigns it to the UserId field.
-func (o *Event) SetUserId(v int32) {
-	o.UserId = &v
-}
-
-// GetApiKeyId returns the ApiKeyId field value if set, zero value otherwise.
-func (o *Event) GetApiKeyId() int32 {
-	if o == nil || IsNil(o.ApiKeyId) {
-		var ret int32
-		return ret
-	}
-	return *o.ApiKeyId
-}
-
-// GetApiKeyIdOk returns a tuple with the ApiKeyId field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *Event) GetApiKeyIdOk() (*int32, bool) {
-	if o == nil || IsNil(o.ApiKeyId) {
-		return nil, false
-	}
-	return o.ApiKeyId, true
-}
-
-// HasApiKeyId returns a boolean if a field has been set.
-func (o *Event) HasApiKeyId() bool {
-	if o != nil && !IsNil(o.ApiKeyId) {
-		return true
-	}
-
-	return false
-}
-
-// SetApiKeyId gets a reference to the given int32 and assigns it to the ApiKeyId field.
-func (o *Event) SetApiKeyId(v int32) {
-	o.ApiKeyId = &v
-}
-
 func (o Event) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -672,6 +628,12 @@ func (o Event) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Version) {
 		toSerialize["version"] = o.Version
+	}
+	if !IsNil(o.UserId) {
+		toSerialize["user_id"] = o.UserId
+	}
+	if !IsNil(o.ApiKeyId) {
+		toSerialize["api_key_id"] = o.ApiKeyId
 	}
 	if o.CompanyId.IsSet() {
 		toSerialize["company_id"] = o.CompanyId.Get()
@@ -697,20 +659,11 @@ func (o Event) ToMap() (map[string]interface{}, error) {
 	if o.Error.IsSet() {
 		toSerialize["error"] = o.Error.Get()
 	}
-	if o.RequestBody.IsSet() {
-		toSerialize["request_body"] = o.RequestBody.Get()
-	}
-	if o.ResponseBody.IsSet() {
-		toSerialize["response_body"] = o.ResponseBody.Get()
-	}
 	if !IsNil(o.Success) {
 		toSerialize["success"] = o.Success
 	}
-	if !IsNil(o.UserId) {
-		toSerialize["user_id"] = o.UserId
-	}
-	if !IsNil(o.ApiKeyId) {
-		toSerialize["api_key_id"] = o.ApiKeyId
+	if o.ResponseBody.IsSet() {
+		toSerialize["response_body"] = o.ResponseBody.Get()
 	}
 	return toSerialize, nil
 }

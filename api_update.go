@@ -1,7 +1,7 @@
 /*
 Italian eInvoice API
 
-The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while still providing complete control over the invoice send/receive process. The API also provides advanced features and a rich toolchain, such as invoice validation, multiple upload methods, webhooks, event logs, CORS support, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
+The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. The API also provides advanced features as encryption at rest, invoice validation, multiple upload formats, webhooks, event logging, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
 API version: 1.0.0
 Contact: support@invoicetronic.com
@@ -41,7 +41,7 @@ type ApiInvoiceV1UpdateGetRequest struct {
 	pageSize *int32
 }
 
-// Company id.
+// Company id
 func (r ApiInvoiceV1UpdateGetRequest) CompanyId(companyId int32) ApiInvoiceV1UpdateGetRequest {
 	r.companyId = &companyId
 	return r
@@ -53,7 +53,7 @@ func (r ApiInvoiceV1UpdateGetRequest) Identifier(identifier string) ApiInvoiceV1
 	return r
 }
 
-// Only unread items.
+// Unread items only.
 func (r ApiInvoiceV1UpdateGetRequest) Unread(unread bool) ApiInvoiceV1UpdateGetRequest {
 	r.unread = &unread
 	return r
@@ -89,19 +89,19 @@ func (r ApiInvoiceV1UpdateGetRequest) DateSentFrom(dateSentFrom time.Time) ApiIn
 	return r
 }
 
-// UTC ISO 8601 format (2024-11-29T12:34:56Z)
+// UTC ISO 8601 (2024-11-29T12:34:56Z)
 func (r ApiInvoiceV1UpdateGetRequest) DateSentTo(dateSentTo time.Time) ApiInvoiceV1UpdateGetRequest {
 	r.dateSentTo = &dateSentTo
 	return r
 }
 
-// Page number.
+// Page number. Defaults to 1.
 func (r ApiInvoiceV1UpdateGetRequest) Page(page int32) ApiInvoiceV1UpdateGetRequest {
 	r.page = &page
 	return r
 }
 
-// Items per page.
+// Items per page. Defaults to 50. Cannot be greater than 200.
 func (r ApiInvoiceV1UpdateGetRequest) PageSize(pageSize int32) ApiInvoiceV1UpdateGetRequest {
 	r.pageSize = &pageSize
 	return r
@@ -266,7 +266,7 @@ InvoiceV1UpdateIdGet Get an update by id
 Updates are notifications that are sent by the SDI about the status of sent invoices.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Item id.
+ @param id Item id
  @return ApiInvoiceV1UpdateIdGetRequest
 */
 func (a *UpdateAPIService) InvoiceV1UpdateIdGet(ctx context.Context, id int32) ApiInvoiceV1UpdateIdGetRequest {

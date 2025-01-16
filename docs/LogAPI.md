@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 ## InvoiceV1LogGet
 
-> []Event InvoiceV1LogGet(ctx).Page(page).PageSize(pageSize).Execute()
+> []Event InvoiceV1LogGet(ctx).CompanyId(companyId).Endpoint(endpoint).Method(method).ApiVerion(apiVerion).StatusCode(statusCode).DateCreatedFrom(dateCreatedFrom).DateCreatedTo(dateCreatedTo).Page(page).PageSize(pageSize).Execute()
 
 List events
 
@@ -26,16 +26,24 @@ import (
 	"context"
 	"fmt"
 	"os"
+    "time"
 	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
-	page := int32(56) // int32 | Page number. (optional) (default to 1)
-	pageSize := int32(56) // int32 | Items per page. (optional) (default to 100)
+	companyId := int32(56) // int32 | Company id (optional)
+	endpoint := "endpoint_example" // string |  (optional)
+	method := "method_example" // string |  (optional)
+	apiVerion := int32(56) // int32 | Api version (optional)
+	statusCode := int32(56) // int32 | Response status code (optional)
+	dateCreatedFrom := time.Now() // time.Time | UTC ISO 8601 (2024-11-29T12:34:56Z) (optional)
+	dateCreatedTo := time.Now() // time.Time | UTC ISO 8601 (2024-11-29T12:34:56Z) (optional)
+	page := int32(56) // int32 | Page number. Defaults to 1. (optional) (default to 1)
+	pageSize := int32(56) // int32 | Items per page. Defaults to 50. Cannot be greater than 200. (optional) (default to 100)
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.LogAPI.InvoiceV1LogGet(context.Background()).Page(page).PageSize(pageSize).Execute()
+	resp, r, err := apiClient.LogAPI.InvoiceV1LogGet(context.Background()).CompanyId(companyId).Endpoint(endpoint).Method(method).ApiVerion(apiVerion).StatusCode(statusCode).DateCreatedFrom(dateCreatedFrom).DateCreatedTo(dateCreatedTo).Page(page).PageSize(pageSize).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `LogAPI.InvoiceV1LogGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -56,8 +64,15 @@ Other parameters are passed through a pointer to a apiInvoiceV1LogGetRequest str
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **page** | **int32** | Page number. | [default to 1]
- **pageSize** | **int32** | Items per page. | [default to 100]
+ **companyId** | **int32** | Company id | 
+ **endpoint** | **string** |  | 
+ **method** | **string** |  | 
+ **apiVerion** | **int32** | Api version | 
+ **statusCode** | **int32** | Response status code | 
+ **dateCreatedFrom** | **time.Time** | UTC ISO 8601 (2024-11-29T12:34:56Z) | 
+ **dateCreatedTo** | **time.Time** | UTC ISO 8601 (2024-11-29T12:34:56Z) | 
+ **page** | **int32** | Page number. Defaults to 1. | [default to 1]
+ **pageSize** | **int32** | Items per page. Defaults to 50. Cannot be greater than 200. | [default to 100]
 
 ### Return type
 
@@ -98,7 +113,7 @@ import (
 )
 
 func main() {
-	id := int32(56) // int32 | Item id.
+	id := int32(56) // int32 | Item id
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
@@ -118,7 +133,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | Item id. | 
+**id** | **int32** | Item id | 
 
 ### Other Parameters
 

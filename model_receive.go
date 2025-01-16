@@ -1,7 +1,7 @@
 /*
 Italian eInvoice API
 
-The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while still providing complete control over the invoice send/receive process. The API also provides advanced features and a rich toolchain, such as invoice validation, multiple upload methods, webhooks, event logs, CORS support, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
+The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. The API also provides advanced features as encryption at rest, invoice validation, multiple upload formats, webhooks, event logging, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
 API version: 1.0.0
 Contact: support@invoicetronic.com
@@ -49,8 +49,12 @@ type Receive struct {
 	DateSent NullableTime `json:"date_sent,omitempty"`
 	// The invoices included in the payload. This is set by the system, based on the xml content.
 	Documents []DocumentData `json:"documents,omitempty"`
+	// Whether the payload is Base64 encoded or a plain XML (text).
+	Encoding *string `json:"encoding,omitempty"`
 	// Wether the invoice has been read at least once.
 	IsRead *bool `json:"is_read,omitempty"`
+	// SDI message id.
+	MessageId NullableString `json:"message_id,omitempty"`
 }
 
 // NewReceive instantiates a new Receive object
@@ -599,6 +603,38 @@ func (o *Receive) SetDocuments(v []DocumentData) {
 	o.Documents = v
 }
 
+// GetEncoding returns the Encoding field value if set, zero value otherwise.
+func (o *Receive) GetEncoding() string {
+	if o == nil || IsNil(o.Encoding) {
+		var ret string
+		return ret
+	}
+	return *o.Encoding
+}
+
+// GetEncodingOk returns a tuple with the Encoding field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Receive) GetEncodingOk() (*string, bool) {
+	if o == nil || IsNil(o.Encoding) {
+		return nil, false
+	}
+	return o.Encoding, true
+}
+
+// HasEncoding returns a boolean if a field has been set.
+func (o *Receive) HasEncoding() bool {
+	if o != nil && !IsNil(o.Encoding) {
+		return true
+	}
+
+	return false
+}
+
+// SetEncoding gets a reference to the given string and assigns it to the Encoding field.
+func (o *Receive) SetEncoding(v string) {
+	o.Encoding = &v
+}
+
 // GetIsRead returns the IsRead field value if set, zero value otherwise.
 func (o *Receive) GetIsRead() bool {
 	if o == nil || IsNil(o.IsRead) {
@@ -629,6 +665,48 @@ func (o *Receive) HasIsRead() bool {
 // SetIsRead gets a reference to the given bool and assigns it to the IsRead field.
 func (o *Receive) SetIsRead(v bool) {
 	o.IsRead = &v
+}
+
+// GetMessageId returns the MessageId field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *Receive) GetMessageId() string {
+	if o == nil || IsNil(o.MessageId.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.MessageId.Get()
+}
+
+// GetMessageIdOk returns a tuple with the MessageId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *Receive) GetMessageIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.MessageId.Get(), o.MessageId.IsSet()
+}
+
+// HasMessageId returns a boolean if a field has been set.
+func (o *Receive) HasMessageId() bool {
+	if o != nil && o.MessageId.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetMessageId gets a reference to the given NullableString and assigns it to the MessageId field.
+func (o *Receive) SetMessageId(v string) {
+	o.MessageId.Set(&v)
+}
+// SetMessageIdNil sets the value for MessageId to be an explicit nil
+func (o *Receive) SetMessageIdNil() {
+	o.MessageId.Set(nil)
+}
+
+// UnsetMessageId ensures that no value is present for MessageId, not even an explicit nil
+func (o *Receive) UnsetMessageId() {
+	o.MessageId.Unset()
 }
 
 func (o Receive) MarshalJSON() ([]byte, error) {
@@ -683,8 +761,14 @@ func (o Receive) ToMap() (map[string]interface{}, error) {
 	if o.Documents != nil {
 		toSerialize["documents"] = o.Documents
 	}
+	if !IsNil(o.Encoding) {
+		toSerialize["encoding"] = o.Encoding
+	}
 	if !IsNil(o.IsRead) {
 		toSerialize["is_read"] = o.IsRead
+	}
+	if o.MessageId.IsSet() {
+		toSerialize["message_id"] = o.MessageId.Get()
 	}
 	return toSerialize, nil
 }

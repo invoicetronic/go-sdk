@@ -1,7 +1,7 @@
 /*
 Italian eInvoice API
 
-The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while still providing complete control over the invoice send/receive process. The API also provides advanced features and a rich toolchain, such as invoice validation, multiple upload methods, webhooks, event logs, CORS support, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
+The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. The API also provides advanced features as encryption at rest, invoice validation, multiple upload formats, webhooks, event logging, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
 API version: 1.0.0
 Contact: support@invoicetronic.com
@@ -31,13 +31,13 @@ type ApiInvoiceV1WebhookGetRequest struct {
 	pageSize *int32
 }
 
-// Page number.
+// Page number. Defaults to 1.
 func (r ApiInvoiceV1WebhookGetRequest) Page(page int32) ApiInvoiceV1WebhookGetRequest {
 	r.page = &page
 	return r
 }
 
-// Items per page.
+// Items per page. Defaults to 50. Cannot be greater than 200.
 func (r ApiInvoiceV1WebhookGetRequest) PageSize(pageSize int32) ApiInvoiceV1WebhookGetRequest {
 	r.pageSize = &pageSize
 	return r
@@ -175,7 +175,7 @@ InvoiceV1WebhookIdDelete Delete a webhook by id
 Webhooks are used to notify external services about write events that occur in the API. You can subscribe to specific events and receive a notification when they occur.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Item id.
+ @param id Item id
  @return ApiInvoiceV1WebhookIdDeleteRequest
 */
 func (a *WebhookAPIService) InvoiceV1WebhookIdDelete(ctx context.Context, id int32) ApiInvoiceV1WebhookIdDeleteRequest {
@@ -300,7 +300,7 @@ InvoiceV1WebhookIdGet Get a webhook by id
 Webhooks are used to notify external services about write events that occur in the API. You can subscribe to specific events and receive a notification when they occur.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Item id.
+ @param id Item id
  @return ApiInvoiceV1WebhookIdGetRequest
 */
 func (a *WebhookAPIService) InvoiceV1WebhookIdGet(ctx context.Context, id int32) ApiInvoiceV1WebhookIdGetRequest {
@@ -656,13 +656,13 @@ type ApiInvoiceV1WebhookhistoryGetRequest struct {
 	pageSize *int32
 }
 
-// Page number.
+// Page number. Defaults to 1.
 func (r ApiInvoiceV1WebhookhistoryGetRequest) Page(page int32) ApiInvoiceV1WebhookhistoryGetRequest {
 	r.page = &page
 	return r
 }
 
-// Items per page.
+// Items per page. Defaults to 50. Cannot be greater than 200.
 func (r ApiInvoiceV1WebhookhistoryGetRequest) PageSize(pageSize int32) ApiInvoiceV1WebhookhistoryGetRequest {
 	r.pageSize = &pageSize
 	return r
@@ -796,7 +796,7 @@ func (r ApiInvoiceV1WebhookhistoryIdGetRequest) Execute() (*WebHookHistory, *htt
 InvoiceV1WebhookhistoryIdGet Get a webhook history item by id
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Item id.
+ @param id Item id
  @return ApiInvoiceV1WebhookhistoryIdGetRequest
 */
 func (a *WebhookAPIService) InvoiceV1WebhookhistoryIdGet(ctx context.Context, id int32) ApiInvoiceV1WebhookhistoryIdGetRequest {

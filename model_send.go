@@ -1,7 +1,7 @@
 /*
 Italian eInvoice API
 
-The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while still providing complete control over the invoice send/receive process. The API also provides advanced features and a rich toolchain, such as invoice validation, multiple upload methods, webhooks, event logs, CORS support, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
+The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. The API also provides advanced features as encryption at rest, invoice validation, multiple upload formats, webhooks, event logging, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
 API version: 1.0.0
 Contact: support@invoicetronic.com
@@ -49,8 +49,11 @@ type Send struct {
 	DateSent NullableTime `json:"date_sent,omitempty"`
 	// The invoices included in the payload. This is set by the system, based on the xml content.
 	Documents []DocumentData `json:"documents,omitempty"`
+	// Whether the payload is Base64 encoded or a plain XML (text).
+	Encoding *string `json:"encoding,omitempty"`
 	// Optional metadata, as json.
 	MetaData map[string]string `json:"meta_data,omitempty"`
+	Company *Company `json:"company,omitempty"`
 }
 
 // NewSend instantiates a new Send object
@@ -599,6 +602,38 @@ func (o *Send) SetDocuments(v []DocumentData) {
 	o.Documents = v
 }
 
+// GetEncoding returns the Encoding field value if set, zero value otherwise.
+func (o *Send) GetEncoding() string {
+	if o == nil || IsNil(o.Encoding) {
+		var ret string
+		return ret
+	}
+	return *o.Encoding
+}
+
+// GetEncodingOk returns a tuple with the Encoding field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Send) GetEncodingOk() (*string, bool) {
+	if o == nil || IsNil(o.Encoding) {
+		return nil, false
+	}
+	return o.Encoding, true
+}
+
+// HasEncoding returns a boolean if a field has been set.
+func (o *Send) HasEncoding() bool {
+	if o != nil && !IsNil(o.Encoding) {
+		return true
+	}
+
+	return false
+}
+
+// SetEncoding gets a reference to the given string and assigns it to the Encoding field.
+func (o *Send) SetEncoding(v string) {
+	o.Encoding = &v
+}
+
 // GetMetaData returns the MetaData field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *Send) GetMetaData() map[string]string {
 	if o == nil {
@@ -630,6 +665,38 @@ func (o *Send) HasMetaData() bool {
 // SetMetaData gets a reference to the given map[string]string and assigns it to the MetaData field.
 func (o *Send) SetMetaData(v map[string]string) {
 	o.MetaData = v
+}
+
+// GetCompany returns the Company field value if set, zero value otherwise.
+func (o *Send) GetCompany() Company {
+	if o == nil || IsNil(o.Company) {
+		var ret Company
+		return ret
+	}
+	return *o.Company
+}
+
+// GetCompanyOk returns a tuple with the Company field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Send) GetCompanyOk() (*Company, bool) {
+	if o == nil || IsNil(o.Company) {
+		return nil, false
+	}
+	return o.Company, true
+}
+
+// HasCompany returns a boolean if a field has been set.
+func (o *Send) HasCompany() bool {
+	if o != nil && !IsNil(o.Company) {
+		return true
+	}
+
+	return false
+}
+
+// SetCompany gets a reference to the given Company and assigns it to the Company field.
+func (o *Send) SetCompany(v Company) {
+	o.Company = &v
 }
 
 func (o Send) MarshalJSON() ([]byte, error) {
@@ -684,8 +751,14 @@ func (o Send) ToMap() (map[string]interface{}, error) {
 	if o.Documents != nil {
 		toSerialize["documents"] = o.Documents
 	}
+	if !IsNil(o.Encoding) {
+		toSerialize["encoding"] = o.Encoding
+	}
 	if o.MetaData != nil {
 		toSerialize["meta_data"] = o.MetaData
+	}
+	if !IsNil(o.Company) {
+		toSerialize["company"] = o.Company
 	}
 	return toSerialize, nil
 }

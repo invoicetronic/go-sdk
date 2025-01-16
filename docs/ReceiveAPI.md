@@ -32,11 +32,11 @@ import (
 )
 
 func main() {
-	companyId := int32(56) // int32 | Company id. (optional)
+	companyId := int32(56) // int32 | Company id (optional)
 	identifier := "identifier_example" // string | SDI identifier. (optional)
 	unread := true // bool | Unread items only. (optional)
-	committente := "committente_example" // string | VAT number or fiscal code. (optional)
-	prestatore := "prestatore_example" // string | VAT number or fiscal code. (optional)
+	committente := "committente_example" // string | Vat number or fiscal code. (optional)
+	prestatore := "prestatore_example" // string | Vat number or fiscal code. (optional)
 	fileName := "fileName_example" // string | File name. (optional)
 	lastUpdateFrom := time.Now() // time.Time | UTC ISO 8601 (2024-11-29T12:34:56Z) (optional)
 	lastUpdateTo := time.Now() // time.Time | UTC ISO 8601 (2024-11-29T12:34:56Z) (optional)
@@ -45,8 +45,8 @@ func main() {
 	documentDateFrom := time.Now() // time.Time | UTC ISO 8601 (2024-11-29T12:34:56Z) (optional)
 	documentDateTo := time.Now() // time.Time | UTC ISO 8601 (2024-11-29T12:34:56Z) (optional)
 	documentNumber := "documentNumber_example" // string | Document number. (optional)
-	page := int32(56) // int32 | Page number. (optional) (default to 1)
-	pageSize := int32(56) // int32 | Items per page. (optional) (default to 100)
+	page := int32(56) // int32 | Page number. Defaults to 1. (optional) (default to 1)
+	pageSize := int32(56) // int32 | Items per page. Defaults to 50. Cannot be greater than 200. (optional) (default to 100)
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
@@ -71,11 +71,11 @@ Other parameters are passed through a pointer to a apiInvoiceV1ReceiveGetRequest
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **companyId** | **int32** | Company id. | 
+ **companyId** | **int32** | Company id | 
  **identifier** | **string** | SDI identifier. | 
  **unread** | **bool** | Unread items only. | 
- **committente** | **string** | VAT number or fiscal code. | 
- **prestatore** | **string** | VAT number or fiscal code. | 
+ **committente** | **string** | Vat number or fiscal code. | 
+ **prestatore** | **string** | Vat number or fiscal code. | 
  **fileName** | **string** | File name. | 
  **lastUpdateFrom** | **time.Time** | UTC ISO 8601 (2024-11-29T12:34:56Z) | 
  **lastUpdateTo** | **time.Time** | UTC ISO 8601 (2024-11-29T12:34:56Z) | 
@@ -84,8 +84,8 @@ Name | Type | Description  | Notes
  **documentDateFrom** | **time.Time** | UTC ISO 8601 (2024-11-29T12:34:56Z) | 
  **documentDateTo** | **time.Time** | UTC ISO 8601 (2024-11-29T12:34:56Z) | 
  **documentNumber** | **string** | Document number. | 
- **page** | **int32** | Page number. | [default to 1]
- **pageSize** | **int32** | Items per page. | [default to 100]
+ **page** | **int32** | Page number. Defaults to 1. | [default to 1]
+ **pageSize** | **int32** | Items per page. Defaults to 50. Cannot be greater than 200. | [default to 100]
 
 ### Return type
 
@@ -126,7 +126,7 @@ import (
 )
 
 func main() {
-	id := int32(56) // int32 | Item id.
+	id := int32(56) // int32 | Item id
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
@@ -146,7 +146,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | Item id. | 
+**id** | **int32** | Item id | 
 
 ### Other Parameters
 
@@ -196,7 +196,7 @@ import (
 )
 
 func main() {
-	id := int32(56) // int32 | Item id.
+	id := int32(56) // int32 | Item id
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
@@ -216,7 +216,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | Item id. | 
+**id** | **int32** | Item id | 
 
 ### Other Parameters
 

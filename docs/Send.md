@@ -18,7 +18,9 @@ Name | Type | Description | Notes
 **LastUpdate** | Pointer to **NullableTime** | Last update from SDI. | [optional] 
 **DateSent** | Pointer to **NullableTime** | When the invoice was sent to SDI. | [optional] 
 **Documents** | Pointer to [**[]DocumentData**](DocumentData.md) | The invoices included in the payload. This is set by the system, based on the xml content. | [optional] 
+**Encoding** | Pointer to **string** | Whether the payload is Base64 encoded or a plain XML (text). | [optional] 
 **MetaData** | Pointer to **map[string]string** | Optional metadata, as json. | [optional] 
+**Company** | Pointer to [**Company**](Company.md) |  | [optional] 
 
 ## Methods
 
@@ -479,6 +481,31 @@ HasDocuments returns a boolean if a field has been set.
 `func (o *Send) UnsetDocuments()`
 
 UnsetDocuments ensures that no value is present for Documents, not even an explicit nil
+### GetEncoding
+
+`func (o *Send) GetEncoding() string`
+
+GetEncoding returns the Encoding field if non-nil, zero value otherwise.
+
+### GetEncodingOk
+
+`func (o *Send) GetEncodingOk() (*string, bool)`
+
+GetEncodingOk returns a tuple with the Encoding field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetEncoding
+
+`func (o *Send) SetEncoding(v string)`
+
+SetEncoding sets Encoding field to given value.
+
+### HasEncoding
+
+`func (o *Send) HasEncoding() bool`
+
+HasEncoding returns a boolean if a field has been set.
+
 ### GetMetaData
 
 `func (o *Send) GetMetaData() map[string]string`
@@ -514,6 +541,31 @@ HasMetaData returns a boolean if a field has been set.
 `func (o *Send) UnsetMetaData()`
 
 UnsetMetaData ensures that no value is present for MetaData, not even an explicit nil
+### GetCompany
+
+`func (o *Send) GetCompany() Company`
+
+GetCompany returns the Company field if non-nil, zero value otherwise.
+
+### GetCompanyOk
+
+`func (o *Send) GetCompanyOk() (*Company, bool)`
+
+GetCompanyOk returns a tuple with the Company field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCompany
+
+`func (o *Send) SetCompany(v Company)`
+
+SetCompany sets Company field to given value.
+
+### HasCompany
+
+`func (o *Send) HasCompany() bool`
+
+HasCompany returns a boolean if a field has been set.
+
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

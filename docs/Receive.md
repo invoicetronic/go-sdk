@@ -18,7 +18,9 @@ Name | Type | Description | Notes
 **LastUpdate** | Pointer to **NullableTime** | Last update from SDI. | [optional] 
 **DateSent** | Pointer to **NullableTime** | When the invoice was sent to SDI. | [optional] 
 **Documents** | Pointer to [**[]DocumentData**](DocumentData.md) | The invoices included in the payload. This is set by the system, based on the xml content. | [optional] 
+**Encoding** | Pointer to **string** | Whether the payload is Base64 encoded or a plain XML (text). | [optional] 
 **IsRead** | Pointer to **bool** | Wether the invoice has been read at least once. | [optional] 
+**MessageId** | Pointer to **NullableString** | SDI message id. | [optional] 
 
 ## Methods
 
@@ -479,6 +481,31 @@ HasDocuments returns a boolean if a field has been set.
 `func (o *Receive) UnsetDocuments()`
 
 UnsetDocuments ensures that no value is present for Documents, not even an explicit nil
+### GetEncoding
+
+`func (o *Receive) GetEncoding() string`
+
+GetEncoding returns the Encoding field if non-nil, zero value otherwise.
+
+### GetEncodingOk
+
+`func (o *Receive) GetEncodingOk() (*string, bool)`
+
+GetEncodingOk returns a tuple with the Encoding field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetEncoding
+
+`func (o *Receive) SetEncoding(v string)`
+
+SetEncoding sets Encoding field to given value.
+
+### HasEncoding
+
+`func (o *Receive) HasEncoding() bool`
+
+HasEncoding returns a boolean if a field has been set.
+
 ### GetIsRead
 
 `func (o *Receive) GetIsRead() bool`
@@ -504,6 +531,41 @@ SetIsRead sets IsRead field to given value.
 
 HasIsRead returns a boolean if a field has been set.
 
+### GetMessageId
+
+`func (o *Receive) GetMessageId() string`
+
+GetMessageId returns the MessageId field if non-nil, zero value otherwise.
+
+### GetMessageIdOk
+
+`func (o *Receive) GetMessageIdOk() (*string, bool)`
+
+GetMessageIdOk returns a tuple with the MessageId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetMessageId
+
+`func (o *Receive) SetMessageId(v string)`
+
+SetMessageId sets MessageId field to given value.
+
+### HasMessageId
+
+`func (o *Receive) HasMessageId() bool`
+
+HasMessageId returns a boolean if a field has been set.
+
+### SetMessageIdNil
+
+`func (o *Receive) SetMessageIdNil(b bool)`
+
+ SetMessageIdNil sets the value for MessageId to be an explicit nil
+
+### UnsetMessageId
+`func (o *Receive) UnsetMessageId()`
+
+UnsetMessageId ensures that no value is present for MessageId, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

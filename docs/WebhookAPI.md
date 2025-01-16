@@ -35,8 +35,8 @@ import (
 )
 
 func main() {
-	page := int32(56) // int32 | Page number. (optional) (default to 1)
-	pageSize := int32(56) // int32 | Items per page. (optional) (default to 100)
+	page := int32(56) // int32 | Page number. Defaults to 1. (optional) (default to 1)
+	pageSize := int32(56) // int32 | Items per page. Defaults to 50. Cannot be greater than 200. (optional) (default to 100)
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
@@ -61,8 +61,8 @@ Other parameters are passed through a pointer to a apiInvoiceV1WebhookGetRequest
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **page** | **int32** | Page number. | [default to 1]
- **pageSize** | **int32** | Items per page. | [default to 100]
+ **page** | **int32** | Page number. Defaults to 1. | [default to 1]
+ **pageSize** | **int32** | Items per page. Defaults to 50. Cannot be greater than 200. | [default to 100]
 
 ### Return type
 
@@ -103,7 +103,7 @@ import (
 )
 
 func main() {
-	id := int32(56) // int32 | Item id.
+	id := int32(56) // int32 | Item id
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
@@ -123,7 +123,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | Item id. | 
+**id** | **int32** | Item id | 
 
 ### Other Parameters
 
@@ -173,7 +173,7 @@ import (
 )
 
 func main() {
-	id := int32(56) // int32 | Item id.
+	id := int32(56) // int32 | Item id
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
@@ -193,7 +193,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | Item id. | 
+**id** | **int32** | Item id | 
 
 ### Other Parameters
 
@@ -373,8 +373,8 @@ import (
 )
 
 func main() {
-	page := int32(56) // int32 | Page number. (optional) (default to 1)
-	pageSize := int32(56) // int32 | Items per page. (optional) (default to 100)
+	page := int32(56) // int32 | Page number. Defaults to 1. (optional) (default to 1)
+	pageSize := int32(56) // int32 | Items per page. Defaults to 50. Cannot be greater than 200. (optional) (default to 100)
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
@@ -399,8 +399,8 @@ Other parameters are passed through a pointer to a apiInvoiceV1WebhookhistoryGet
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **page** | **int32** | Page number. | [default to 1]
- **pageSize** | **int32** | Items per page. | [default to 100]
+ **page** | **int32** | Page number. Defaults to 1. | [default to 1]
+ **pageSize** | **int32** | Items per page. Defaults to 50. Cannot be greater than 200. | [default to 100]
 
 ### Return type
 
@@ -439,7 +439,7 @@ import (
 )
 
 func main() {
-	id := int32(56) // int32 | Item id.
+	id := int32(56) // int32 | Item id
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
@@ -459,7 +459,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | Item id. | 
+**id** | **int32** | Item id | 
 
 ### Other Parameters
 

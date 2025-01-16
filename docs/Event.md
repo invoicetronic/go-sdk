@@ -7,6 +7,8 @@ Name | Type | Description | Notes
 **Id** | Pointer to **int32** | Unique identifier. Leave it at 0 for new records as it will be set automatically. | [optional] 
 **Created** | Pointer to **time.Time** | Creation date. It is set automatically. | [optional] 
 **Version** | Pointer to **int32** | Row version, for optimistic concurrency. It is set automatically. | [optional] 
+**UserId** | Pointer to **int32** | User id. | [optional] 
+**ApiKeyId** | Pointer to **int32** | Api key id. | [optional] 
 **CompanyId** | Pointer to **NullableInt32** | Company id. | [optional] 
 **Method** | Pointer to **NullableString** | Request method. | [optional] 
 **Query** | Pointer to **NullableString** | Request query. | [optional] 
@@ -15,11 +17,8 @@ Name | Type | Description | Notes
 **StatusCode** | Pointer to **int32** | Status code returned by the API. | [optional] 
 **DateTime** | Pointer to **time.Time** | Date and time of the request. | [optional] 
 **Error** | Pointer to **NullableString** | Response error. | [optional] 
-**RequestBody** | Pointer to **NullableString** | Request payload. It is guaranteed to be cyphered at rest. | [optional] 
-**ResponseBody** | Pointer to **NullableString** | Response payload. It is guaranteed to be cyphered at rest. | [optional] 
 **Success** | Pointer to **bool** | Wether the request was successful. | [optional] [readonly] 
-**UserId** | Pointer to **int32** | User id. | [optional] 
-**ApiKeyId** | Pointer to **int32** | Api key id. | [optional] 
+**ResponseBody** | Pointer to **NullableString** | Response payload. It is guaranteed to be cyphered at rest. | [optional] 
 
 ## Methods
 
@@ -114,6 +113,56 @@ SetVersion sets Version field to given value.
 `func (o *Event) HasVersion() bool`
 
 HasVersion returns a boolean if a field has been set.
+
+### GetUserId
+
+`func (o *Event) GetUserId() int32`
+
+GetUserId returns the UserId field if non-nil, zero value otherwise.
+
+### GetUserIdOk
+
+`func (o *Event) GetUserIdOk() (*int32, bool)`
+
+GetUserIdOk returns a tuple with the UserId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetUserId
+
+`func (o *Event) SetUserId(v int32)`
+
+SetUserId sets UserId field to given value.
+
+### HasUserId
+
+`func (o *Event) HasUserId() bool`
+
+HasUserId returns a boolean if a field has been set.
+
+### GetApiKeyId
+
+`func (o *Event) GetApiKeyId() int32`
+
+GetApiKeyId returns the ApiKeyId field if non-nil, zero value otherwise.
+
+### GetApiKeyIdOk
+
+`func (o *Event) GetApiKeyIdOk() (*int32, bool)`
+
+GetApiKeyIdOk returns a tuple with the ApiKeyId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetApiKeyId
+
+`func (o *Event) SetApiKeyId(v int32)`
+
+SetApiKeyId sets ApiKeyId field to given value.
+
+### HasApiKeyId
+
+`func (o *Event) HasApiKeyId() bool`
+
+HasApiKeyId returns a boolean if a field has been set.
 
 ### GetCompanyId
 
@@ -365,41 +414,31 @@ HasError returns a boolean if a field has been set.
 `func (o *Event) UnsetError()`
 
 UnsetError ensures that no value is present for Error, not even an explicit nil
-### GetRequestBody
+### GetSuccess
 
-`func (o *Event) GetRequestBody() string`
+`func (o *Event) GetSuccess() bool`
 
-GetRequestBody returns the RequestBody field if non-nil, zero value otherwise.
+GetSuccess returns the Success field if non-nil, zero value otherwise.
 
-### GetRequestBodyOk
+### GetSuccessOk
 
-`func (o *Event) GetRequestBodyOk() (*string, bool)`
+`func (o *Event) GetSuccessOk() (*bool, bool)`
 
-GetRequestBodyOk returns a tuple with the RequestBody field if it's non-nil, zero value otherwise
+GetSuccessOk returns a tuple with the Success field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetRequestBody
+### SetSuccess
 
-`func (o *Event) SetRequestBody(v string)`
+`func (o *Event) SetSuccess(v bool)`
 
-SetRequestBody sets RequestBody field to given value.
+SetSuccess sets Success field to given value.
 
-### HasRequestBody
+### HasSuccess
 
-`func (o *Event) HasRequestBody() bool`
+`func (o *Event) HasSuccess() bool`
 
-HasRequestBody returns a boolean if a field has been set.
+HasSuccess returns a boolean if a field has been set.
 
-### SetRequestBodyNil
-
-`func (o *Event) SetRequestBodyNil(b bool)`
-
- SetRequestBodyNil sets the value for RequestBody to be an explicit nil
-
-### UnsetRequestBody
-`func (o *Event) UnsetRequestBody()`
-
-UnsetRequestBody ensures that no value is present for RequestBody, not even an explicit nil
 ### GetResponseBody
 
 `func (o *Event) GetResponseBody() string`
@@ -435,81 +474,6 @@ HasResponseBody returns a boolean if a field has been set.
 `func (o *Event) UnsetResponseBody()`
 
 UnsetResponseBody ensures that no value is present for ResponseBody, not even an explicit nil
-### GetSuccess
-
-`func (o *Event) GetSuccess() bool`
-
-GetSuccess returns the Success field if non-nil, zero value otherwise.
-
-### GetSuccessOk
-
-`func (o *Event) GetSuccessOk() (*bool, bool)`
-
-GetSuccessOk returns a tuple with the Success field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetSuccess
-
-`func (o *Event) SetSuccess(v bool)`
-
-SetSuccess sets Success field to given value.
-
-### HasSuccess
-
-`func (o *Event) HasSuccess() bool`
-
-HasSuccess returns a boolean if a field has been set.
-
-### GetUserId
-
-`func (o *Event) GetUserId() int32`
-
-GetUserId returns the UserId field if non-nil, zero value otherwise.
-
-### GetUserIdOk
-
-`func (o *Event) GetUserIdOk() (*int32, bool)`
-
-GetUserIdOk returns a tuple with the UserId field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetUserId
-
-`func (o *Event) SetUserId(v int32)`
-
-SetUserId sets UserId field to given value.
-
-### HasUserId
-
-`func (o *Event) HasUserId() bool`
-
-HasUserId returns a boolean if a field has been set.
-
-### GetApiKeyId
-
-`func (o *Event) GetApiKeyId() int32`
-
-GetApiKeyId returns the ApiKeyId field if non-nil, zero value otherwise.
-
-### GetApiKeyIdOk
-
-`func (o *Event) GetApiKeyIdOk() (*int32, bool)`
-
-GetApiKeyIdOk returns a tuple with the ApiKeyId field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetApiKeyId
-
-`func (o *Event) SetApiKeyId(v int32)`
-
-SetApiKeyId sets ApiKeyId field to given value.
-
-### HasApiKeyId
-
-`func (o *Event) HasApiKeyId() bool`
-
-HasApiKeyId returns a boolean if a field has been set.
-
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

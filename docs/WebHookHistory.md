@@ -11,8 +11,6 @@ Name | Type | Description | Notes
 **UserId** | Pointer to **int32** | User id. | [optional] 
 **Event** | Pointer to **NullableString** | Event name. | [optional] 
 **StatusCode** | Pointer to **int32** | Status code. | [optional] 
-**RequestBody** | Pointer to **NullableString** | Webhook request body. | [optional] 
-**ResponseBody** | Pointer to **NullableString** | Webhook response body. | [optional] 
 **DateTime** | Pointer to **time.Time** | Date and time of the request. | [optional] 
 **Success** | Pointer to **bool** | Wether the request was successful. | [optional] [readonly] 
 
@@ -220,76 +218,6 @@ SetStatusCode sets StatusCode field to given value.
 
 HasStatusCode returns a boolean if a field has been set.
 
-### GetRequestBody
-
-`func (o *WebHookHistory) GetRequestBody() string`
-
-GetRequestBody returns the RequestBody field if non-nil, zero value otherwise.
-
-### GetRequestBodyOk
-
-`func (o *WebHookHistory) GetRequestBodyOk() (*string, bool)`
-
-GetRequestBodyOk returns a tuple with the RequestBody field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetRequestBody
-
-`func (o *WebHookHistory) SetRequestBody(v string)`
-
-SetRequestBody sets RequestBody field to given value.
-
-### HasRequestBody
-
-`func (o *WebHookHistory) HasRequestBody() bool`
-
-HasRequestBody returns a boolean if a field has been set.
-
-### SetRequestBodyNil
-
-`func (o *WebHookHistory) SetRequestBodyNil(b bool)`
-
- SetRequestBodyNil sets the value for RequestBody to be an explicit nil
-
-### UnsetRequestBody
-`func (o *WebHookHistory) UnsetRequestBody()`
-
-UnsetRequestBody ensures that no value is present for RequestBody, not even an explicit nil
-### GetResponseBody
-
-`func (o *WebHookHistory) GetResponseBody() string`
-
-GetResponseBody returns the ResponseBody field if non-nil, zero value otherwise.
-
-### GetResponseBodyOk
-
-`func (o *WebHookHistory) GetResponseBodyOk() (*string, bool)`
-
-GetResponseBodyOk returns a tuple with the ResponseBody field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetResponseBody
-
-`func (o *WebHookHistory) SetResponseBody(v string)`
-
-SetResponseBody sets ResponseBody field to given value.
-
-### HasResponseBody
-
-`func (o *WebHookHistory) HasResponseBody() bool`
-
-HasResponseBody returns a boolean if a field has been set.
-
-### SetResponseBodyNil
-
-`func (o *WebHookHistory) SetResponseBodyNil(b bool)`
-
- SetResponseBodyNil sets the value for ResponseBody to be an explicit nil
-
-### UnsetResponseBody
-`func (o *WebHookHistory) UnsetResponseBody()`
-
-UnsetResponseBody ensures that no value is present for ResponseBody, not even an explicit nil
 ### GetDateTime
 
 `func (o *WebHookHistory) GetDateTime() time.Time`

@@ -1,7 +1,7 @@
 /*
 Italian eInvoice API
 
-The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while still providing complete control over the invoice send/receive process. The API also provides advanced features and a rich toolchain, such as invoice validation, multiple upload methods, webhooks, event logs, CORS support, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
+The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. The API also provides advanced features as encryption at rest, invoice validation, multiple upload formats, webhooks, event logging, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
 API version: 1.0.0
 Contact: support@invoicetronic.com
@@ -45,7 +45,7 @@ type ApiInvoiceV1ReceiveGetRequest struct {
 	pageSize *int32
 }
 
-// Company id.
+// Company id
 func (r ApiInvoiceV1ReceiveGetRequest) CompanyId(companyId int32) ApiInvoiceV1ReceiveGetRequest {
 	r.companyId = &companyId
 	return r
@@ -63,13 +63,13 @@ func (r ApiInvoiceV1ReceiveGetRequest) Unread(unread bool) ApiInvoiceV1ReceiveGe
 	return r
 }
 
-// VAT number or fiscal code.
+// Vat number or fiscal code.
 func (r ApiInvoiceV1ReceiveGetRequest) Committente(committente string) ApiInvoiceV1ReceiveGetRequest {
 	r.committente = &committente
 	return r
 }
 
-// VAT number or fiscal code.
+// Vat number or fiscal code.
 func (r ApiInvoiceV1ReceiveGetRequest) Prestatore(prestatore string) ApiInvoiceV1ReceiveGetRequest {
 	r.prestatore = &prestatore
 	return r
@@ -123,13 +123,13 @@ func (r ApiInvoiceV1ReceiveGetRequest) DocumentNumber(documentNumber string) Api
 	return r
 }
 
-// Page number.
+// Page number. Defaults to 1.
 func (r ApiInvoiceV1ReceiveGetRequest) Page(page int32) ApiInvoiceV1ReceiveGetRequest {
 	r.page = &page
 	return r
 }
 
-// Items per page.
+// Items per page. Defaults to 50. Cannot be greater than 200.
 func (r ApiInvoiceV1ReceiveGetRequest) PageSize(pageSize int32) ApiInvoiceV1ReceiveGetRequest {
 	r.pageSize = &pageSize
 	return r
@@ -306,7 +306,7 @@ InvoiceV1ReceiveIdDelete Delete an incoming invoice by id
 Receive invoices are the invoices that are received from other companies.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Item id.
+ @param id Item id
  @return ApiInvoiceV1ReceiveIdDeleteRequest
 */
 func (a *ReceiveAPIService) InvoiceV1ReceiveIdDelete(ctx context.Context, id int32) ApiInvoiceV1ReceiveIdDeleteRequest {
@@ -431,7 +431,7 @@ InvoiceV1ReceiveIdGet Get an incoming invoice by id
 Receive invoices are the invoices that are received from other companies.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Item id.
+ @param id Item id
  @return ApiInvoiceV1ReceiveIdGetRequest
 */
 func (a *ReceiveAPIService) InvoiceV1ReceiveIdGet(ctx context.Context, id int32) ApiInvoiceV1ReceiveIdGetRequest {

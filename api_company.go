@@ -1,7 +1,7 @@
 /*
 Italian eInvoice API
 
-The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while still providing complete control over the invoice send/receive process. The API also provides advanced features and a rich toolchain, such as invoice validation, multiple upload methods, webhooks, event logs, CORS support, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
+The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. The API also provides advanced features as encryption at rest, invoice validation, multiple upload formats, webhooks, event logging, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
 API version: 1.0.0
 Contact: support@invoicetronic.com
@@ -31,13 +31,13 @@ type ApiInvoiceV1CompanyGetRequest struct {
 	pageSize *int32
 }
 
-// Page number.
+// Page number. Defaults to 1.
 func (r ApiInvoiceV1CompanyGetRequest) Page(page int32) ApiInvoiceV1CompanyGetRequest {
 	r.page = &page
 	return r
 }
 
-// Items per page.
+// Items per page. Defaults to 50. Cannot be greater than 200.
 func (r ApiInvoiceV1CompanyGetRequest) PageSize(pageSize int32) ApiInvoiceV1CompanyGetRequest {
 	r.pageSize = &pageSize
 	return r
@@ -50,7 +50,8 @@ func (r ApiInvoiceV1CompanyGetRequest) Execute() ([]Company, *http.Response, err
 /*
 InvoiceV1CompanyGet List companies
 
-Companies are the entities that send and receive invoices. At least one company is required in order to send and receive invoices.
+Companies are the entities that send and receive invoices. As you send invoices, companies are added as needed. **You
+can only receive invoices for existing companies**.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiInvoiceV1CompanyGetRequest
@@ -90,7 +91,7 @@ func (a *CompanyAPIService) InvoiceV1CompanyGetExecute(r ApiInvoiceV1CompanyGetR
 		r.page = &defaultValue
 	}
 	if r.pageSize != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "pageSize", r.pageSize, "form", "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "form", "")
 	} else {
 		var defaultValue int32 = 100
 		r.pageSize = &defaultValue
@@ -172,10 +173,11 @@ func (r ApiInvoiceV1CompanyIdDeleteRequest) Execute() (*Company, *http.Response,
 /*
 InvoiceV1CompanyIdDelete Delete a company
 
-Companies are the entities that send and receive invoices. At least one company is required in order to send and receive invoices.
+Companies are the entities that send and receive invoices. As you send invoices, companies are added as needed. **You
+can only receive invoices for existing companies**.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Item id.
+ @param id Item id
  @return ApiInvoiceV1CompanyIdDeleteRequest
 */
 func (a *CompanyAPIService) InvoiceV1CompanyIdDelete(ctx context.Context, id int32) ApiInvoiceV1CompanyIdDeleteRequest {
@@ -297,10 +299,11 @@ func (r ApiInvoiceV1CompanyIdGetRequest) Execute() (*Company, *http.Response, er
 /*
 InvoiceV1CompanyIdGet Get a company by id
 
-Companies are the entities that send and receive invoices. At least one company is required in order to send and receive invoices.
+Companies are the entities that send and receive invoices. As you send invoices, companies are added as needed. **You
+can only receive invoices for existing companies**.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Item id.
+ @param id Item id
  @return ApiInvoiceV1CompanyIdGetRequest
 */
 func (a *CompanyAPIService) InvoiceV1CompanyIdGet(ctx context.Context, id int32) ApiInvoiceV1CompanyIdGetRequest {
@@ -405,7 +408,8 @@ func (r ApiInvoiceV1CompanyPostRequest) Execute() (*Company, *http.Response, err
 /*
 InvoiceV1CompanyPost Add a company
 
-Companies are the entities that send and receive invoices. At least one company is required in order to send and receive invoices.
+Companies are the entities that send and receive invoices. As you send invoices, companies are added as needed. **You
+can only receive invoices for existing companies**.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiInvoiceV1CompanyPostRequest
@@ -536,7 +540,8 @@ func (r ApiInvoiceV1CompanyPutRequest) Execute() (*Company, *http.Response, erro
 /*
 InvoiceV1CompanyPut Update a company
 
-Companies are the entities that send and receive invoices. At least one company is required in order to send and receive invoices.
+Companies are the entities that send and receive invoices. As you send invoices, companies are added as needed. **You
+can only receive invoices for existing companies**.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiInvoiceV1CompanyPutRequest

@@ -1,7 +1,7 @@
 /*
 Italian eInvoice API
 
-The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while still providing complete control over the invoice send/receive process. The API also provides advanced features and a rich toolchain, such as invoice validation, multiple upload methods, webhooks, event logs, CORS support, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
+The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. The API also provides advanced features as encryption at rest, invoice validation, multiple upload formats, webhooks, event logging, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
 API version: 1.0.0
 Contact: support@invoicetronic.com
@@ -30,6 +30,7 @@ type ApiInvoiceV1SendFilesPostRequest struct {
 	ApiService *SendAPIService
 	files []*os.File
 	validate *bool
+	signature *string
 }
 
 func (r ApiInvoiceV1SendFilesPostRequest) Files(files []*os.File) ApiInvoiceV1SendFilesPostRequest {
@@ -40,6 +41,12 @@ func (r ApiInvoiceV1SendFilesPostRequest) Files(files []*os.File) ApiInvoiceV1Se
 // Validate the document first, and reject it on failure.
 func (r ApiInvoiceV1SendFilesPostRequest) Validate(validate bool) ApiInvoiceV1SendFilesPostRequest {
 	r.validate = &validate
+	return r
+}
+
+// Whether to digitally sign the document.
+func (r ApiInvoiceV1SendFilesPostRequest) Signature(signature string) ApiInvoiceV1SendFilesPostRequest {
+	r.signature = &signature
 	return r
 }
 
@@ -91,6 +98,12 @@ func (a *SendAPIService) InvoiceV1SendFilesPostExecute(r ApiInvoiceV1SendFilesPo
 	} else {
 		var defaultValue bool = false
 		r.validate = &defaultValue
+	}
+	if r.signature != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "signature", r.signature, "form", "")
+	} else {
+		var defaultValue string = "Auto"
+		r.signature = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"multipart/form-data"}
@@ -204,7 +217,7 @@ type ApiInvoiceV1SendGetRequest struct {
 	pageSize *int32
 }
 
-// Company id.
+// Company id
 func (r ApiInvoiceV1SendGetRequest) CompanyId(companyId int32) ApiInvoiceV1SendGetRequest {
 	r.companyId = &companyId
 	return r
@@ -216,13 +229,13 @@ func (r ApiInvoiceV1SendGetRequest) Identifier(identifier string) ApiInvoiceV1Se
 	return r
 }
 
-// VAT number or fiscal code.
+// Vat number or fiscal code.
 func (r ApiInvoiceV1SendGetRequest) Committente(committente string) ApiInvoiceV1SendGetRequest {
 	r.committente = &committente
 	return r
 }
 
-// VAT number or fiscal code.
+// Vat number or fiscal code.
 func (r ApiInvoiceV1SendGetRequest) Prestatore(prestatore string) ApiInvoiceV1SendGetRequest {
 	r.prestatore = &prestatore
 	return r
@@ -276,13 +289,13 @@ func (r ApiInvoiceV1SendGetRequest) DocumentNumber(documentNumber string) ApiInv
 	return r
 }
 
-// Page number.
+// Page number. Defaults to 1.
 func (r ApiInvoiceV1SendGetRequest) Page(page int32) ApiInvoiceV1SendGetRequest {
 	r.page = &page
 	return r
 }
 
-// Items per page.
+// Items per page. Defaults to 50. Cannot be greater than 200.
 func (r ApiInvoiceV1SendGetRequest) PageSize(pageSize int32) ApiInvoiceV1SendGetRequest {
 	r.pageSize = &pageSize
 	return r
@@ -456,7 +469,7 @@ InvoiceV1SendIdGet Get a invoice by id
 Send invoices are the invoices that are sent to the SDI.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Item id.
+ @param id Item id
  @return ApiInvoiceV1SendIdGetRequest
 */
 func (a *SendAPIService) InvoiceV1SendIdGet(ctx context.Context, id int32) ApiInvoiceV1SendIdGetRequest {
@@ -548,6 +561,7 @@ type ApiInvoiceV1SendJsonPostRequest struct {
 	ApiService *SendAPIService
 	fatturaOrdinaria *FatturaOrdinaria
 	validate *bool
+	signature *string
 }
 
 func (r ApiInvoiceV1SendJsonPostRequest) FatturaOrdinaria(fatturaOrdinaria FatturaOrdinaria) ApiInvoiceV1SendJsonPostRequest {
@@ -558,6 +572,12 @@ func (r ApiInvoiceV1SendJsonPostRequest) FatturaOrdinaria(fatturaOrdinaria Fattu
 // Validate the document first, and reject it on failure.
 func (r ApiInvoiceV1SendJsonPostRequest) Validate(validate bool) ApiInvoiceV1SendJsonPostRequest {
 	r.validate = &validate
+	return r
+}
+
+// Whether to digitally sign the document.
+func (r ApiInvoiceV1SendJsonPostRequest) Signature(signature string) ApiInvoiceV1SendJsonPostRequest {
+	r.signature = &signature
 	return r
 }
 
@@ -609,6 +629,12 @@ func (a *SendAPIService) InvoiceV1SendJsonPostExecute(r ApiInvoiceV1SendJsonPost
 	} else {
 		var defaultValue bool = false
 		r.validate = &defaultValue
+	}
+	if r.signature != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "signature", r.signature, "form", "")
+	} else {
+		var defaultValue string = "Auto"
+		r.signature = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json"}
@@ -692,6 +718,7 @@ type ApiInvoiceV1SendPostRequest struct {
 	ApiService *SendAPIService
 	send *Send
 	validate *bool
+	signature *string
 }
 
 func (r ApiInvoiceV1SendPostRequest) Send(send Send) ApiInvoiceV1SendPostRequest {
@@ -702,6 +729,12 @@ func (r ApiInvoiceV1SendPostRequest) Send(send Send) ApiInvoiceV1SendPostRequest
 // Validate the document first, and reject it on failure.
 func (r ApiInvoiceV1SendPostRequest) Validate(validate bool) ApiInvoiceV1SendPostRequest {
 	r.validate = &validate
+	return r
+}
+
+// Whether to digitally sign the document.
+func (r ApiInvoiceV1SendPostRequest) Signature(signature string) ApiInvoiceV1SendPostRequest {
+	r.signature = &signature
 	return r
 }
 
@@ -753,6 +786,12 @@ func (a *SendAPIService) InvoiceV1SendPostExecute(r ApiInvoiceV1SendPostRequest)
 	} else {
 		var defaultValue bool = false
 		r.validate = &defaultValue
+	}
+	if r.signature != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "signature", r.signature, "form", "")
+	} else {
+		var defaultValue string = "Auto"
+		r.signature = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json"}
@@ -1332,6 +1371,7 @@ type ApiInvoiceV1SendXmlPostRequest struct {
 	ApiService *SendAPIService
 	fatturaOrdinaria *FatturaOrdinaria
 	validate *bool
+	signature *string
 }
 
 func (r ApiInvoiceV1SendXmlPostRequest) FatturaOrdinaria(fatturaOrdinaria FatturaOrdinaria) ApiInvoiceV1SendXmlPostRequest {
@@ -1342,6 +1382,12 @@ func (r ApiInvoiceV1SendXmlPostRequest) FatturaOrdinaria(fatturaOrdinaria Fattur
 // Validate the document first, and reject it on failure.
 func (r ApiInvoiceV1SendXmlPostRequest) Validate(validate bool) ApiInvoiceV1SendXmlPostRequest {
 	r.validate = &validate
+	return r
+}
+
+// Whether to digitally sign the document.
+func (r ApiInvoiceV1SendXmlPostRequest) Signature(signature string) ApiInvoiceV1SendXmlPostRequest {
+	r.signature = &signature
 	return r
 }
 
@@ -1393,6 +1439,12 @@ func (a *SendAPIService) InvoiceV1SendXmlPostExecute(r ApiInvoiceV1SendXmlPostRe
 	} else {
 		var defaultValue bool = false
 		r.validate = &defaultValue
+	}
+	if r.signature != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "signature", r.signature, "form", "")
+	} else {
+		var defaultValue string = "Auto"
+		r.signature = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/xml"}

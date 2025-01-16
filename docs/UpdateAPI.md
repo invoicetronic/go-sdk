@@ -31,17 +31,17 @@ import (
 )
 
 func main() {
-	companyId := int32(56) // int32 | Company id. (optional)
+	companyId := int32(56) // int32 | Company id (optional)
 	identifier := "identifier_example" // string | SDI identifier. (optional)
-	unread := true // bool | Only unread items. (optional)
+	unread := true // bool | Unread items only. (optional)
 	sendId := int32(56) // int32 | Send item's id. (optional)
 	state := "state_example" // string | SDI state (optional)
 	lastUpdateFrom := time.Now() // time.Time | UTC ISO 8601 (2024-11-29T12:34:56Z) (optional)
 	lastUpdateTo := time.Now() // time.Time | UTC ISO 8601 (2024-11-29T12:34:56Z) (optional)
 	dateSentFrom := time.Now() // time.Time | UTC ISO 8601 (2024-11-29T12:34:56Z) (optional)
-	dateSentTo := time.Now() // time.Time | UTC ISO 8601 format (2024-11-29T12:34:56Z) (optional)
-	page := int32(56) // int32 | Page number. (optional) (default to 1)
-	pageSize := int32(56) // int32 | Items per page. (optional) (default to 100)
+	dateSentTo := time.Now() // time.Time | UTC ISO 8601 (2024-11-29T12:34:56Z) (optional)
+	page := int32(56) // int32 | Page number. Defaults to 1. (optional) (default to 1)
+	pageSize := int32(56) // int32 | Items per page. Defaults to 50. Cannot be greater than 200. (optional) (default to 100)
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
@@ -66,17 +66,17 @@ Other parameters are passed through a pointer to a apiInvoiceV1UpdateGetRequest 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **companyId** | **int32** | Company id. | 
+ **companyId** | **int32** | Company id | 
  **identifier** | **string** | SDI identifier. | 
- **unread** | **bool** | Only unread items. | 
+ **unread** | **bool** | Unread items only. | 
  **sendId** | **int32** | Send item&#39;s id. | 
  **state** | **string** | SDI state | 
  **lastUpdateFrom** | **time.Time** | UTC ISO 8601 (2024-11-29T12:34:56Z) | 
  **lastUpdateTo** | **time.Time** | UTC ISO 8601 (2024-11-29T12:34:56Z) | 
  **dateSentFrom** | **time.Time** | UTC ISO 8601 (2024-11-29T12:34:56Z) | 
- **dateSentTo** | **time.Time** | UTC ISO 8601 format (2024-11-29T12:34:56Z) | 
- **page** | **int32** | Page number. | [default to 1]
- **pageSize** | **int32** | Items per page. | [default to 100]
+ **dateSentTo** | **time.Time** | UTC ISO 8601 (2024-11-29T12:34:56Z) | 
+ **page** | **int32** | Page number. Defaults to 1. | [default to 1]
+ **pageSize** | **int32** | Items per page. Defaults to 50. Cannot be greater than 200. | [default to 100]
 
 ### Return type
 
@@ -117,7 +117,7 @@ import (
 )
 
 func main() {
-	id := int32(56) // int32 | Item id.
+	id := int32(56) // int32 | Item id
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
@@ -137,7 +137,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | Item id. | 
+**id** | **int32** | Item id | 
 
 ### Other Parameters
 
