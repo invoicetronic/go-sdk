@@ -1,5 +1,5 @@
 /*
-Italian eInvoice API
+Italian eInvoice API v1
 
 Testing UpdateAPIService
 
@@ -22,11 +22,11 @@ func Test_invoicesdk_UpdateAPIService(t *testing.T) {
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
 
-	t.Run("Test UpdateAPIService InvoiceV1UpdateGet", func(t *testing.T) {
+	t.Run("Test UpdateAPIService UpdateGet", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.UpdateAPI.InvoiceV1UpdateGet(context.Background()).Execute()
+		resp, httpRes, err := apiClient.UpdateAPI.UpdateGet(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,13 +34,13 @@ func Test_invoicesdk_UpdateAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test UpdateAPIService InvoiceV1UpdateIdGet", func(t *testing.T) {
+	t.Run("Test UpdateAPIService UpdateIdGet", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
 		var id int32
 
-		resp, httpRes, err := apiClient.UpdateAPI.InvoiceV1UpdateIdGet(context.Background(), id).Execute()
+		resp, httpRes, err := apiClient.UpdateAPI.UpdateIdGet(context.Background(), id).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

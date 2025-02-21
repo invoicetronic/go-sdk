@@ -4,15 +4,15 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**InvoiceV1ReceiveGet**](ReceiveAPI.md#InvoiceV1ReceiveGet) | **Get** /invoice/v1/receive | List incoming invoices
-[**InvoiceV1ReceiveIdDelete**](ReceiveAPI.md#InvoiceV1ReceiveIdDelete) | **Delete** /invoice/v1/receive/{id} | Delete an incoming invoice by id
-[**InvoiceV1ReceiveIdGet**](ReceiveAPI.md#InvoiceV1ReceiveIdGet) | **Get** /invoice/v1/receive/{id} | Get an incoming invoice by id
+[**ReceiveGet**](ReceiveAPI.md#ReceiveGet) | **Get** /receive | List incoming invoices
+[**ReceiveIdDelete**](ReceiveAPI.md#ReceiveIdDelete) | **Delete** /receive/{id} | Delete an incoming invoice by id
+[**ReceiveIdGet**](ReceiveAPI.md#ReceiveIdGet) | **Get** /receive/{id} | Get an incoming invoice by id
 
 
 
-## InvoiceV1ReceiveGet
+## ReceiveGet
 
-> []Receive InvoiceV1ReceiveGet(ctx).CompanyId(companyId).Identifier(identifier).Unread(unread).Committente(committente).Prestatore(prestatore).FileName(fileName).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).DocumentDateFrom(documentDateFrom).DocumentDateTo(documentDateTo).DocumentNumber(documentNumber).Page(page).PageSize(pageSize).Execute()
+> []Receive ReceiveGet(ctx).CompanyId(companyId).Identifier(identifier).Unread(unread).Committente(committente).Prestatore(prestatore).FileName(fileName).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).DocumentDateFrom(documentDateFrom).DocumentDateTo(documentDateTo).DocumentNumber(documentNumber).Page(page).PageSize(pageSize).Sort(sort).Execute()
 
 List incoming invoices
 
@@ -47,16 +47,17 @@ func main() {
 	documentNumber := "documentNumber_example" // string | Document number. (optional)
 	page := int32(56) // int32 | Page number. Defaults to 1. (optional) (default to 1)
 	pageSize := int32(56) // int32 | Items per page. Defaults to 50. Cannot be greater than 200. (optional) (default to 100)
+	sort := "sort_example" // string | Sort by field. Prefix with '-' for descending order. (optional)
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.ReceiveAPI.InvoiceV1ReceiveGet(context.Background()).CompanyId(companyId).Identifier(identifier).Unread(unread).Committente(committente).Prestatore(prestatore).FileName(fileName).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).DocumentDateFrom(documentDateFrom).DocumentDateTo(documentDateTo).DocumentNumber(documentNumber).Page(page).PageSize(pageSize).Execute()
+	resp, r, err := apiClient.ReceiveAPI.ReceiveGet(context.Background()).CompanyId(companyId).Identifier(identifier).Unread(unread).Committente(committente).Prestatore(prestatore).FileName(fileName).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).DocumentDateFrom(documentDateFrom).DocumentDateTo(documentDateTo).DocumentNumber(documentNumber).Page(page).PageSize(pageSize).Sort(sort).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `ReceiveAPI.InvoiceV1ReceiveGet``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `ReceiveAPI.ReceiveGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `InvoiceV1ReceiveGet`: []Receive
-	fmt.Fprintf(os.Stdout, "Response from `ReceiveAPI.InvoiceV1ReceiveGet`: %v\n", resp)
+	// response from `ReceiveGet`: []Receive
+	fmt.Fprintf(os.Stdout, "Response from `ReceiveAPI.ReceiveGet`: %v\n", resp)
 }
 ```
 
@@ -66,7 +67,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiInvoiceV1ReceiveGetRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiReceiveGetRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -86,6 +87,7 @@ Name | Type | Description  | Notes
  **documentNumber** | **string** | Document number. | 
  **page** | **int32** | Page number. Defaults to 1. | [default to 1]
  **pageSize** | **int32** | Items per page. Defaults to 50. Cannot be greater than 200. | [default to 100]
+ **sort** | **string** | Sort by field. Prefix with &#39;-&#39; for descending order. | 
 
 ### Return type
 
@@ -105,9 +107,9 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## InvoiceV1ReceiveIdDelete
+## ReceiveIdDelete
 
-> Receive InvoiceV1ReceiveIdDelete(ctx, id).Execute()
+> Receive ReceiveIdDelete(ctx, id).Execute()
 
 Delete an incoming invoice by id
 
@@ -130,13 +132,13 @@ func main() {
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.ReceiveAPI.InvoiceV1ReceiveIdDelete(context.Background(), id).Execute()
+	resp, r, err := apiClient.ReceiveAPI.ReceiveIdDelete(context.Background(), id).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `ReceiveAPI.InvoiceV1ReceiveIdDelete``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `ReceiveAPI.ReceiveIdDelete``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `InvoiceV1ReceiveIdDelete`: Receive
-	fmt.Fprintf(os.Stdout, "Response from `ReceiveAPI.InvoiceV1ReceiveIdDelete`: %v\n", resp)
+	// response from `ReceiveIdDelete`: Receive
+	fmt.Fprintf(os.Stdout, "Response from `ReceiveAPI.ReceiveIdDelete`: %v\n", resp)
 }
 ```
 
@@ -150,7 +152,7 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiInvoiceV1ReceiveIdDeleteRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiReceiveIdDeleteRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -175,9 +177,9 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## InvoiceV1ReceiveIdGet
+## ReceiveIdGet
 
-> Receive InvoiceV1ReceiveIdGet(ctx, id).Execute()
+> Receive ReceiveIdGet(ctx, id).Execute()
 
 Get an incoming invoice by id
 
@@ -200,13 +202,13 @@ func main() {
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.ReceiveAPI.InvoiceV1ReceiveIdGet(context.Background(), id).Execute()
+	resp, r, err := apiClient.ReceiveAPI.ReceiveIdGet(context.Background(), id).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `ReceiveAPI.InvoiceV1ReceiveIdGet``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `ReceiveAPI.ReceiveIdGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `InvoiceV1ReceiveIdGet`: Receive
-	fmt.Fprintf(os.Stdout, "Response from `ReceiveAPI.InvoiceV1ReceiveIdGet`: %v\n", resp)
+	// response from `ReceiveIdGet`: Receive
+	fmt.Fprintf(os.Stdout, "Response from `ReceiveAPI.ReceiveIdGet`: %v\n", resp)
 }
 ```
 
@@ -220,7 +222,7 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiInvoiceV1ReceiveIdGetRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiReceiveIdGetRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

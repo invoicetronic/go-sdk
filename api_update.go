@@ -1,9 +1,9 @@
 /*
-Italian eInvoice API
+Italian eInvoice API v1
 
-The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. The API also provides advanced features as encryption at rest, invoice validation, multiple upload formats, webhooks, event logging, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
+The [Italian eInvoice API][2] is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. The API also provides advanced features as encryption at rest, invoice validation, multiple upload formats, webhooks, event logging, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
-API version: 1.0.0
+API version: 1
 Contact: support@invoicetronic.com
 */
 
@@ -25,7 +25,7 @@ import (
 // UpdateAPIService UpdateAPI service
 type UpdateAPIService service
 
-type ApiInvoiceV1UpdateGetRequest struct {
+type ApiUpdateGetRequest struct {
 	ctx context.Context
 	ApiService *UpdateAPIService
 	companyId *int32
@@ -39,88 +39,95 @@ type ApiInvoiceV1UpdateGetRequest struct {
 	dateSentTo *time.Time
 	page *int32
 	pageSize *int32
+	sort *string
 }
 
 // Company id
-func (r ApiInvoiceV1UpdateGetRequest) CompanyId(companyId int32) ApiInvoiceV1UpdateGetRequest {
+func (r ApiUpdateGetRequest) CompanyId(companyId int32) ApiUpdateGetRequest {
 	r.companyId = &companyId
 	return r
 }
 
 // SDI identifier.
-func (r ApiInvoiceV1UpdateGetRequest) Identifier(identifier string) ApiInvoiceV1UpdateGetRequest {
+func (r ApiUpdateGetRequest) Identifier(identifier string) ApiUpdateGetRequest {
 	r.identifier = &identifier
 	return r
 }
 
 // Unread items only.
-func (r ApiInvoiceV1UpdateGetRequest) Unread(unread bool) ApiInvoiceV1UpdateGetRequest {
+func (r ApiUpdateGetRequest) Unread(unread bool) ApiUpdateGetRequest {
 	r.unread = &unread
 	return r
 }
 
 // Send item&#39;s id.
-func (r ApiInvoiceV1UpdateGetRequest) SendId(sendId int32) ApiInvoiceV1UpdateGetRequest {
+func (r ApiUpdateGetRequest) SendId(sendId int32) ApiUpdateGetRequest {
 	r.sendId = &sendId
 	return r
 }
 
 // SDI state
-func (r ApiInvoiceV1UpdateGetRequest) State(state string) ApiInvoiceV1UpdateGetRequest {
+func (r ApiUpdateGetRequest) State(state string) ApiUpdateGetRequest {
 	r.state = &state
 	return r
 }
 
 // UTC ISO 8601 (2024-11-29T12:34:56Z)
-func (r ApiInvoiceV1UpdateGetRequest) LastUpdateFrom(lastUpdateFrom time.Time) ApiInvoiceV1UpdateGetRequest {
+func (r ApiUpdateGetRequest) LastUpdateFrom(lastUpdateFrom time.Time) ApiUpdateGetRequest {
 	r.lastUpdateFrom = &lastUpdateFrom
 	return r
 }
 
 // UTC ISO 8601 (2024-11-29T12:34:56Z)
-func (r ApiInvoiceV1UpdateGetRequest) LastUpdateTo(lastUpdateTo time.Time) ApiInvoiceV1UpdateGetRequest {
+func (r ApiUpdateGetRequest) LastUpdateTo(lastUpdateTo time.Time) ApiUpdateGetRequest {
 	r.lastUpdateTo = &lastUpdateTo
 	return r
 }
 
 // UTC ISO 8601 (2024-11-29T12:34:56Z)
-func (r ApiInvoiceV1UpdateGetRequest) DateSentFrom(dateSentFrom time.Time) ApiInvoiceV1UpdateGetRequest {
+func (r ApiUpdateGetRequest) DateSentFrom(dateSentFrom time.Time) ApiUpdateGetRequest {
 	r.dateSentFrom = &dateSentFrom
 	return r
 }
 
 // UTC ISO 8601 (2024-11-29T12:34:56Z)
-func (r ApiInvoiceV1UpdateGetRequest) DateSentTo(dateSentTo time.Time) ApiInvoiceV1UpdateGetRequest {
+func (r ApiUpdateGetRequest) DateSentTo(dateSentTo time.Time) ApiUpdateGetRequest {
 	r.dateSentTo = &dateSentTo
 	return r
 }
 
 // Page number. Defaults to 1.
-func (r ApiInvoiceV1UpdateGetRequest) Page(page int32) ApiInvoiceV1UpdateGetRequest {
+func (r ApiUpdateGetRequest) Page(page int32) ApiUpdateGetRequest {
 	r.page = &page
 	return r
 }
 
 // Items per page. Defaults to 50. Cannot be greater than 200.
-func (r ApiInvoiceV1UpdateGetRequest) PageSize(pageSize int32) ApiInvoiceV1UpdateGetRequest {
+func (r ApiUpdateGetRequest) PageSize(pageSize int32) ApiUpdateGetRequest {
 	r.pageSize = &pageSize
 	return r
 }
 
-func (r ApiInvoiceV1UpdateGetRequest) Execute() ([]Update, *http.Response, error) {
-	return r.ApiService.InvoiceV1UpdateGetExecute(r)
+// Sort by field. Prefix with &#39;-&#39; for descending order.
+func (r ApiUpdateGetRequest) Sort(sort string) ApiUpdateGetRequest {
+	r.sort = &sort
+	return r
+}
+
+func (r ApiUpdateGetRequest) Execute() ([]Update, *http.Response, error) {
+	return r.ApiService.UpdateGetExecute(r)
 }
 
 /*
-InvoiceV1UpdateGet List updates
+UpdateGet List updates
 
 Updates are notifications that are sent by the SDI about the status of sent invoices.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvoiceV1UpdateGetRequest
+ @return ApiUpdateGetRequest
 */
-func (a *UpdateAPIService) InvoiceV1UpdateGet(ctx context.Context) ApiInvoiceV1UpdateGetRequest {
-	return ApiInvoiceV1UpdateGetRequest{
+func (a *UpdateAPIService) UpdateGet(ctx context.Context) ApiUpdateGetRequest {
+	return ApiUpdateGetRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -128,7 +135,7 @@ func (a *UpdateAPIService) InvoiceV1UpdateGet(ctx context.Context) ApiInvoiceV1U
 
 // Execute executes the request
 //  @return []Update
-func (a *UpdateAPIService) InvoiceV1UpdateGetExecute(r ApiInvoiceV1UpdateGetRequest) ([]Update, *http.Response, error) {
+func (a *UpdateAPIService) UpdateGetExecute(r ApiUpdateGetRequest) ([]Update, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -136,12 +143,12 @@ func (a *UpdateAPIService) InvoiceV1UpdateGetExecute(r ApiInvoiceV1UpdateGetRequ
 		localVarReturnValue  []Update
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UpdateAPIService.InvoiceV1UpdateGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UpdateAPIService.UpdateGet")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/update"
+	localVarPath := localBasePath + "/update"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -185,6 +192,9 @@ func (a *UpdateAPIService) InvoiceV1UpdateGetExecute(r ApiInvoiceV1UpdateGetRequ
 	} else {
 		var defaultValue int32 = 100
 		r.pageSize = &defaultValue
+	}
+	if r.sort != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", r.sort, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -250,27 +260,27 @@ func (a *UpdateAPIService) InvoiceV1UpdateGetExecute(r ApiInvoiceV1UpdateGetRequ
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1UpdateIdGetRequest struct {
+type ApiUpdateIdGetRequest struct {
 	ctx context.Context
 	ApiService *UpdateAPIService
 	id int32
 }
 
-func (r ApiInvoiceV1UpdateIdGetRequest) Execute() (*Update, *http.Response, error) {
-	return r.ApiService.InvoiceV1UpdateIdGetExecute(r)
+func (r ApiUpdateIdGetRequest) Execute() (*Update, *http.Response, error) {
+	return r.ApiService.UpdateIdGetExecute(r)
 }
 
 /*
-InvoiceV1UpdateIdGet Get an update by id
+UpdateIdGet Get an update by id
 
 Updates are notifications that are sent by the SDI about the status of sent invoices.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id Item id
- @return ApiInvoiceV1UpdateIdGetRequest
+ @return ApiUpdateIdGetRequest
 */
-func (a *UpdateAPIService) InvoiceV1UpdateIdGet(ctx context.Context, id int32) ApiInvoiceV1UpdateIdGetRequest {
-	return ApiInvoiceV1UpdateIdGetRequest{
+func (a *UpdateAPIService) UpdateIdGet(ctx context.Context, id int32) ApiUpdateIdGetRequest {
+	return ApiUpdateIdGetRequest{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
@@ -279,7 +289,7 @@ func (a *UpdateAPIService) InvoiceV1UpdateIdGet(ctx context.Context, id int32) A
 
 // Execute executes the request
 //  @return Update
-func (a *UpdateAPIService) InvoiceV1UpdateIdGetExecute(r ApiInvoiceV1UpdateIdGetRequest) (*Update, *http.Response, error) {
+func (a *UpdateAPIService) UpdateIdGetExecute(r ApiUpdateIdGetRequest) (*Update, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -287,12 +297,12 @@ func (a *UpdateAPIService) InvoiceV1UpdateIdGetExecute(r ApiInvoiceV1UpdateIdGet
 		localVarReturnValue  *Update
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UpdateAPIService.InvoiceV1UpdateIdGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UpdateAPIService.UpdateIdGet")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/update/{id}"
+	localVarPath := localBasePath + "/update/{id}"
 	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)

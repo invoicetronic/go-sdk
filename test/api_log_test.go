@@ -1,5 +1,5 @@
 /*
-Italian eInvoice API
+Italian eInvoice API v1
 
 Testing LogAPIService
 
@@ -22,11 +22,11 @@ func Test_invoicesdk_LogAPIService(t *testing.T) {
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
 
-	t.Run("Test LogAPIService InvoiceV1LogGet", func(t *testing.T) {
+	t.Run("Test LogAPIService LogGet", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.LogAPI.InvoiceV1LogGet(context.Background()).Execute()
+		resp, httpRes, err := apiClient.LogAPI.LogGet(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,13 +34,13 @@ func Test_invoicesdk_LogAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test LogAPIService InvoiceV1LogIdGet", func(t *testing.T) {
+	t.Run("Test LogAPIService LogIdGet", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
 		var id int32
 
-		resp, httpRes, err := apiClient.LogAPI.InvoiceV1LogIdGet(context.Background(), id).Execute()
+		resp, httpRes, err := apiClient.LogAPI.LogIdGet(context.Background(), id).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

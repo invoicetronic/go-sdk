@@ -1,5 +1,5 @@
 /*
-Italian eInvoice API
+Italian eInvoice API v1
 
 Testing CompanyAPIService
 
@@ -22,11 +22,11 @@ func Test_invoicesdk_CompanyAPIService(t *testing.T) {
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
 
-	t.Run("Test CompanyAPIService InvoiceV1CompanyGet", func(t *testing.T) {
+	t.Run("Test CompanyAPIService CompanyGet", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.CompanyAPI.InvoiceV1CompanyGet(context.Background()).Execute()
+		resp, httpRes, err := apiClient.CompanyAPI.CompanyGet(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,13 +34,13 @@ func Test_invoicesdk_CompanyAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test CompanyAPIService InvoiceV1CompanyIdDelete", func(t *testing.T) {
+	t.Run("Test CompanyAPIService CompanyIdDelete", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
 		var id int32
 
-		resp, httpRes, err := apiClient.CompanyAPI.InvoiceV1CompanyIdDelete(context.Background(), id).Execute()
+		resp, httpRes, err := apiClient.CompanyAPI.CompanyIdDelete(context.Background(), id).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -48,13 +48,13 @@ func Test_invoicesdk_CompanyAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test CompanyAPIService InvoiceV1CompanyIdGet", func(t *testing.T) {
+	t.Run("Test CompanyAPIService CompanyIdGet", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
 		var id int32
 
-		resp, httpRes, err := apiClient.CompanyAPI.InvoiceV1CompanyIdGet(context.Background(), id).Execute()
+		resp, httpRes, err := apiClient.CompanyAPI.CompanyIdGet(context.Background(), id).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -62,11 +62,11 @@ func Test_invoicesdk_CompanyAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test CompanyAPIService InvoiceV1CompanyPost", func(t *testing.T) {
+	t.Run("Test CompanyAPIService CompanyPost", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.CompanyAPI.InvoiceV1CompanyPost(context.Background()).Execute()
+		resp, httpRes, err := apiClient.CompanyAPI.CompanyPost(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -74,11 +74,11 @@ func Test_invoicesdk_CompanyAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test CompanyAPIService InvoiceV1CompanyPut", func(t *testing.T) {
+	t.Run("Test CompanyAPIService CompanyPut", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.CompanyAPI.InvoiceV1CompanyPut(context.Background()).Execute()
+		resp, httpRes, err := apiClient.CompanyAPI.CompanyPut(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

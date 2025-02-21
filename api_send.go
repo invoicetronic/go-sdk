@@ -1,9 +1,9 @@
 /*
-Italian eInvoice API
+Italian eInvoice API v1
 
-The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. The API also provides advanced features as encryption at rest, invoice validation, multiple upload formats, webhooks, event logging, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
+The [Italian eInvoice API][2] is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. The API also provides advanced features as encryption at rest, invoice validation, multiple upload formats, webhooks, event logging, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
-API version: 1.0.0
+API version: 1
 Contact: support@invoicetronic.com
 */
 
@@ -18,6 +18,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"os"
 	"time"
 )
 
@@ -25,45 +26,45 @@ import (
 // SendAPIService SendAPI service
 type SendAPIService service
 
-type ApiInvoiceV1SendFilesPostRequest struct {
+type ApiSendFilePostRequest struct {
 	ctx context.Context
 	ApiService *SendAPIService
-	files []*os.File
+	file *os.File
 	validate *bool
 	signature *string
 }
 
-func (r ApiInvoiceV1SendFilesPostRequest) Files(files []*os.File) ApiInvoiceV1SendFilesPostRequest {
-	r.files = files
+func (r ApiSendFilePostRequest) File(file *os.File) ApiSendFilePostRequest {
+	r.file = file
 	return r
 }
 
 // Validate the document first, and reject it on failure.
-func (r ApiInvoiceV1SendFilesPostRequest) Validate(validate bool) ApiInvoiceV1SendFilesPostRequest {
+func (r ApiSendFilePostRequest) Validate(validate bool) ApiSendFilePostRequest {
 	r.validate = &validate
 	return r
 }
 
 // Whether to digitally sign the document.
-func (r ApiInvoiceV1SendFilesPostRequest) Signature(signature string) ApiInvoiceV1SendFilesPostRequest {
+func (r ApiSendFilePostRequest) Signature(signature string) ApiSendFilePostRequest {
 	r.signature = &signature
 	return r
 }
 
-func (r ApiInvoiceV1SendFilesPostRequest) Execute() (*Send, *http.Response, error) {
-	return r.ApiService.InvoiceV1SendFilesPostExecute(r)
+func (r ApiSendFilePostRequest) Execute() (*Send, *http.Response, error) {
+	return r.ApiService.SendFilePostExecute(r)
 }
 
 /*
-InvoiceV1SendFilesPost Add an invoice by file
+SendFilePost Add an invoice by file
 
 Send invoices are the invoices that are sent to the SDI.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvoiceV1SendFilesPostRequest
+ @return ApiSendFilePostRequest
 */
-func (a *SendAPIService) InvoiceV1SendFilesPost(ctx context.Context) ApiInvoiceV1SendFilesPostRequest {
-	return ApiInvoiceV1SendFilesPostRequest{
+func (a *SendAPIService) SendFilePost(ctx context.Context) ApiSendFilePostRequest {
+	return ApiSendFilePostRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -71,7 +72,7 @@ func (a *SendAPIService) InvoiceV1SendFilesPost(ctx context.Context) ApiInvoiceV
 
 // Execute executes the request
 //  @return Send
-func (a *SendAPIService) InvoiceV1SendFilesPostExecute(r ApiInvoiceV1SendFilesPostRequest) (*Send, *http.Response, error) {
+func (a *SendAPIService) SendFilePostExecute(r ApiSendFilePostRequest) (*Send, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -79,18 +80,18 @@ func (a *SendAPIService) InvoiceV1SendFilesPostExecute(r ApiInvoiceV1SendFilesPo
 		localVarReturnValue  *Send
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.InvoiceV1SendFilesPost")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.SendFilePost")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/send/files"
+	localVarPath := localBasePath + "/send/file"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.files == nil {
-		return localVarReturnValue, nil, reportError("files is required and must be specified")
+	if r.file == nil {
+		return localVarReturnValue, nil, reportError("file is required and must be specified")
 	}
 
 	if r.validate != nil {
@@ -122,23 +123,20 @@ func (a *SendAPIService) InvoiceV1SendFilesPostExecute(r ApiInvoiceV1SendFilesPo
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	var filesLocalVarFormFileName string
-	var filesLocalVarFileName     string
-	var filesLocalVarFileBytes    []byte
+	var fileLocalVarFormFileName string
+	var fileLocalVarFileName     string
+	var fileLocalVarFileBytes    []byte
 
-	filesLocalVarFormFileName = "files"
-	filesLocalVarFile := r.files
+	fileLocalVarFormFileName = "file"
+	fileLocalVarFile := r.file
 
-	if filesLocalVarFile != nil {
-		// loop through the array to prepare multiple files upload
-		for _, filesLocalVarFileValue := range filesLocalVarFile {
-			fbs, _ := io.ReadAll(filesLocalVarFileValue)
+	if fileLocalVarFile != nil {
+		fbs, _ := io.ReadAll(fileLocalVarFile)
 
-			filesLocalVarFileBytes = fbs
-			filesLocalVarFileName = filesLocalVarFileValue.Name()
-			filesLocalVarFileValue.Close()
-			formFiles = append(formFiles, formFile{fileBytes: filesLocalVarFileBytes, fileName: filesLocalVarFileName, formFileName: filesLocalVarFormFileName})
-		}
+		fileLocalVarFileBytes = fbs
+		fileLocalVarFileName = fileLocalVarFile.Name()
+		fileLocalVarFile.Close()
+		formFiles = append(formFiles, formFile{fileBytes: fileLocalVarFileBytes, fileName: fileLocalVarFileName, formFileName: fileLocalVarFormFileName})
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -198,7 +196,7 @@ func (a *SendAPIService) InvoiceV1SendFilesPostExecute(r ApiInvoiceV1SendFilesPo
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1SendGetRequest struct {
+type ApiSendGetRequest struct {
 	ctx context.Context
 	ApiService *SendAPIService
 	companyId *int32
@@ -215,106 +213,113 @@ type ApiInvoiceV1SendGetRequest struct {
 	documentNumber *string
 	page *int32
 	pageSize *int32
+	sort *string
 }
 
 // Company id
-func (r ApiInvoiceV1SendGetRequest) CompanyId(companyId int32) ApiInvoiceV1SendGetRequest {
+func (r ApiSendGetRequest) CompanyId(companyId int32) ApiSendGetRequest {
 	r.companyId = &companyId
 	return r
 }
 
 // SDI identifier.
-func (r ApiInvoiceV1SendGetRequest) Identifier(identifier string) ApiInvoiceV1SendGetRequest {
+func (r ApiSendGetRequest) Identifier(identifier string) ApiSendGetRequest {
 	r.identifier = &identifier
 	return r
 }
 
 // Vat number or fiscal code.
-func (r ApiInvoiceV1SendGetRequest) Committente(committente string) ApiInvoiceV1SendGetRequest {
+func (r ApiSendGetRequest) Committente(committente string) ApiSendGetRequest {
 	r.committente = &committente
 	return r
 }
 
 // Vat number or fiscal code.
-func (r ApiInvoiceV1SendGetRequest) Prestatore(prestatore string) ApiInvoiceV1SendGetRequest {
+func (r ApiSendGetRequest) Prestatore(prestatore string) ApiSendGetRequest {
 	r.prestatore = &prestatore
 	return r
 }
 
 // File name.
-func (r ApiInvoiceV1SendGetRequest) FileName(fileName string) ApiInvoiceV1SendGetRequest {
+func (r ApiSendGetRequest) FileName(fileName string) ApiSendGetRequest {
 	r.fileName = &fileName
 	return r
 }
 
 // UTC ISO 8601 (2024-11-29T12:34:56Z)
-func (r ApiInvoiceV1SendGetRequest) LastUpdateFrom(lastUpdateFrom time.Time) ApiInvoiceV1SendGetRequest {
+func (r ApiSendGetRequest) LastUpdateFrom(lastUpdateFrom time.Time) ApiSendGetRequest {
 	r.lastUpdateFrom = &lastUpdateFrom
 	return r
 }
 
 // UTC ISO 8601 (2024-11-29T12:34:56Z)
-func (r ApiInvoiceV1SendGetRequest) LastUpdateTo(lastUpdateTo time.Time) ApiInvoiceV1SendGetRequest {
+func (r ApiSendGetRequest) LastUpdateTo(lastUpdateTo time.Time) ApiSendGetRequest {
 	r.lastUpdateTo = &lastUpdateTo
 	return r
 }
 
 // UTC ISO 8601 (2024-11-29T12:34:56Z)
-func (r ApiInvoiceV1SendGetRequest) DateSentFrom(dateSentFrom time.Time) ApiInvoiceV1SendGetRequest {
+func (r ApiSendGetRequest) DateSentFrom(dateSentFrom time.Time) ApiSendGetRequest {
 	r.dateSentFrom = &dateSentFrom
 	return r
 }
 
 // UTC ISO 8601 (2024-11-29T12:34:56Z)
-func (r ApiInvoiceV1SendGetRequest) DateSentTo(dateSentTo time.Time) ApiInvoiceV1SendGetRequest {
+func (r ApiSendGetRequest) DateSentTo(dateSentTo time.Time) ApiSendGetRequest {
 	r.dateSentTo = &dateSentTo
 	return r
 }
 
 // UTC ISO 8601 (2024-11-29T12:34:56Z)
-func (r ApiInvoiceV1SendGetRequest) DocumentDateFrom(documentDateFrom time.Time) ApiInvoiceV1SendGetRequest {
+func (r ApiSendGetRequest) DocumentDateFrom(documentDateFrom time.Time) ApiSendGetRequest {
 	r.documentDateFrom = &documentDateFrom
 	return r
 }
 
 // UTC ISO 8601 (2024-11-29T12:34:56Z)
-func (r ApiInvoiceV1SendGetRequest) DocumentDateTo(documentDateTo time.Time) ApiInvoiceV1SendGetRequest {
+func (r ApiSendGetRequest) DocumentDateTo(documentDateTo time.Time) ApiSendGetRequest {
 	r.documentDateTo = &documentDateTo
 	return r
 }
 
 // Document number.
-func (r ApiInvoiceV1SendGetRequest) DocumentNumber(documentNumber string) ApiInvoiceV1SendGetRequest {
+func (r ApiSendGetRequest) DocumentNumber(documentNumber string) ApiSendGetRequest {
 	r.documentNumber = &documentNumber
 	return r
 }
 
 // Page number. Defaults to 1.
-func (r ApiInvoiceV1SendGetRequest) Page(page int32) ApiInvoiceV1SendGetRequest {
+func (r ApiSendGetRequest) Page(page int32) ApiSendGetRequest {
 	r.page = &page
 	return r
 }
 
 // Items per page. Defaults to 50. Cannot be greater than 200.
-func (r ApiInvoiceV1SendGetRequest) PageSize(pageSize int32) ApiInvoiceV1SendGetRequest {
+func (r ApiSendGetRequest) PageSize(pageSize int32) ApiSendGetRequest {
 	r.pageSize = &pageSize
 	return r
 }
 
-func (r ApiInvoiceV1SendGetRequest) Execute() ([]Send, *http.Response, error) {
-	return r.ApiService.InvoiceV1SendGetExecute(r)
+// Sort by field. Prefix with &#39;-&#39; for descending order.
+func (r ApiSendGetRequest) Sort(sort string) ApiSendGetRequest {
+	r.sort = &sort
+	return r
+}
+
+func (r ApiSendGetRequest) Execute() ([]Send, *http.Response, error) {
+	return r.ApiService.SendGetExecute(r)
 }
 
 /*
-InvoiceV1SendGet List invoices
+SendGet List invoices
 
 test **markdown**.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvoiceV1SendGetRequest
+ @return ApiSendGetRequest
 */
-func (a *SendAPIService) InvoiceV1SendGet(ctx context.Context) ApiInvoiceV1SendGetRequest {
-	return ApiInvoiceV1SendGetRequest{
+func (a *SendAPIService) SendGet(ctx context.Context) ApiSendGetRequest {
+	return ApiSendGetRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -322,7 +327,7 @@ func (a *SendAPIService) InvoiceV1SendGet(ctx context.Context) ApiInvoiceV1SendG
 
 // Execute executes the request
 //  @return []Send
-func (a *SendAPIService) InvoiceV1SendGetExecute(r ApiInvoiceV1SendGetRequest) ([]Send, *http.Response, error) {
+func (a *SendAPIService) SendGetExecute(r ApiSendGetRequest) ([]Send, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -330,12 +335,12 @@ func (a *SendAPIService) InvoiceV1SendGetExecute(r ApiInvoiceV1SendGetRequest) (
 		localVarReturnValue  []Send
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.InvoiceV1SendGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.SendGet")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/send"
+	localVarPath := localBasePath + "/send"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -388,6 +393,9 @@ func (a *SendAPIService) InvoiceV1SendGetExecute(r ApiInvoiceV1SendGetRequest) (
 	} else {
 		var defaultValue int32 = 100
 		r.pageSize = &defaultValue
+	}
+	if r.sort != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", r.sort, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -453,27 +461,27 @@ func (a *SendAPIService) InvoiceV1SendGetExecute(r ApiInvoiceV1SendGetRequest) (
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1SendIdGetRequest struct {
+type ApiSendIdGetRequest struct {
 	ctx context.Context
 	ApiService *SendAPIService
 	id int32
 }
 
-func (r ApiInvoiceV1SendIdGetRequest) Execute() (*Send, *http.Response, error) {
-	return r.ApiService.InvoiceV1SendIdGetExecute(r)
+func (r ApiSendIdGetRequest) Execute() (*Send, *http.Response, error) {
+	return r.ApiService.SendIdGetExecute(r)
 }
 
 /*
-InvoiceV1SendIdGet Get a invoice by id
+SendIdGet Get a invoice by id
 
 Send invoices are the invoices that are sent to the SDI.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id Item id
- @return ApiInvoiceV1SendIdGetRequest
+ @return ApiSendIdGetRequest
 */
-func (a *SendAPIService) InvoiceV1SendIdGet(ctx context.Context, id int32) ApiInvoiceV1SendIdGetRequest {
-	return ApiInvoiceV1SendIdGetRequest{
+func (a *SendAPIService) SendIdGet(ctx context.Context, id int32) ApiSendIdGetRequest {
+	return ApiSendIdGetRequest{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
@@ -482,7 +490,7 @@ func (a *SendAPIService) InvoiceV1SendIdGet(ctx context.Context, id int32) ApiIn
 
 // Execute executes the request
 //  @return Send
-func (a *SendAPIService) InvoiceV1SendIdGetExecute(r ApiInvoiceV1SendIdGetRequest) (*Send, *http.Response, error) {
+func (a *SendAPIService) SendIdGetExecute(r ApiSendIdGetRequest) (*Send, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -490,12 +498,12 @@ func (a *SendAPIService) InvoiceV1SendIdGetExecute(r ApiInvoiceV1SendIdGetReques
 		localVarReturnValue  *Send
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.InvoiceV1SendIdGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.SendIdGet")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/send/{id}"
+	localVarPath := localBasePath + "/send/{id}"
 	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
@@ -556,7 +564,7 @@ func (a *SendAPIService) InvoiceV1SendIdGetExecute(r ApiInvoiceV1SendIdGetReques
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1SendJsonPostRequest struct {
+type ApiSendJsonPostRequest struct {
 	ctx context.Context
 	ApiService *SendAPIService
 	fatturaOrdinaria *FatturaOrdinaria
@@ -564,37 +572,37 @@ type ApiInvoiceV1SendJsonPostRequest struct {
 	signature *string
 }
 
-func (r ApiInvoiceV1SendJsonPostRequest) FatturaOrdinaria(fatturaOrdinaria FatturaOrdinaria) ApiInvoiceV1SendJsonPostRequest {
+func (r ApiSendJsonPostRequest) FatturaOrdinaria(fatturaOrdinaria FatturaOrdinaria) ApiSendJsonPostRequest {
 	r.fatturaOrdinaria = &fatturaOrdinaria
 	return r
 }
 
 // Validate the document first, and reject it on failure.
-func (r ApiInvoiceV1SendJsonPostRequest) Validate(validate bool) ApiInvoiceV1SendJsonPostRequest {
+func (r ApiSendJsonPostRequest) Validate(validate bool) ApiSendJsonPostRequest {
 	r.validate = &validate
 	return r
 }
 
 // Whether to digitally sign the document.
-func (r ApiInvoiceV1SendJsonPostRequest) Signature(signature string) ApiInvoiceV1SendJsonPostRequest {
+func (r ApiSendJsonPostRequest) Signature(signature string) ApiSendJsonPostRequest {
 	r.signature = &signature
 	return r
 }
 
-func (r ApiInvoiceV1SendJsonPostRequest) Execute() (*Send, *http.Response, error) {
-	return r.ApiService.InvoiceV1SendJsonPostExecute(r)
+func (r ApiSendJsonPostRequest) Execute() (*Send, *http.Response, error) {
+	return r.ApiService.SendJsonPostExecute(r)
 }
 
 /*
-InvoiceV1SendJsonPost Add an invoice by json
+SendJsonPost Add an invoice by json
 
 Send invoices are the invoices that are sent to the SDI.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvoiceV1SendJsonPostRequest
+ @return ApiSendJsonPostRequest
 */
-func (a *SendAPIService) InvoiceV1SendJsonPost(ctx context.Context) ApiInvoiceV1SendJsonPostRequest {
-	return ApiInvoiceV1SendJsonPostRequest{
+func (a *SendAPIService) SendJsonPost(ctx context.Context) ApiSendJsonPostRequest {
+	return ApiSendJsonPostRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -602,7 +610,7 @@ func (a *SendAPIService) InvoiceV1SendJsonPost(ctx context.Context) ApiInvoiceV1
 
 // Execute executes the request
 //  @return Send
-func (a *SendAPIService) InvoiceV1SendJsonPostExecute(r ApiInvoiceV1SendJsonPostRequest) (*Send, *http.Response, error) {
+func (a *SendAPIService) SendJsonPostExecute(r ApiSendJsonPostRequest) (*Send, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -610,12 +618,12 @@ func (a *SendAPIService) InvoiceV1SendJsonPostExecute(r ApiInvoiceV1SendJsonPost
 		localVarReturnValue  *Send
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.InvoiceV1SendJsonPost")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.SendJsonPost")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/send/json"
+	localVarPath := localBasePath + "/send/json"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -713,7 +721,7 @@ func (a *SendAPIService) InvoiceV1SendJsonPostExecute(r ApiInvoiceV1SendJsonPost
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1SendPostRequest struct {
+type ApiSendPostRequest struct {
 	ctx context.Context
 	ApiService *SendAPIService
 	send *Send
@@ -721,37 +729,37 @@ type ApiInvoiceV1SendPostRequest struct {
 	signature *string
 }
 
-func (r ApiInvoiceV1SendPostRequest) Send(send Send) ApiInvoiceV1SendPostRequest {
+func (r ApiSendPostRequest) Send(send Send) ApiSendPostRequest {
 	r.send = &send
 	return r
 }
 
 // Validate the document first, and reject it on failure.
-func (r ApiInvoiceV1SendPostRequest) Validate(validate bool) ApiInvoiceV1SendPostRequest {
+func (r ApiSendPostRequest) Validate(validate bool) ApiSendPostRequest {
 	r.validate = &validate
 	return r
 }
 
 // Whether to digitally sign the document.
-func (r ApiInvoiceV1SendPostRequest) Signature(signature string) ApiInvoiceV1SendPostRequest {
+func (r ApiSendPostRequest) Signature(signature string) ApiSendPostRequest {
 	r.signature = &signature
 	return r
 }
 
-func (r ApiInvoiceV1SendPostRequest) Execute() (*Send, *http.Response, error) {
-	return r.ApiService.InvoiceV1SendPostExecute(r)
+func (r ApiSendPostRequest) Execute() (*Send, *http.Response, error) {
+	return r.ApiService.SendPostExecute(r)
 }
 
 /*
-InvoiceV1SendPost Add an invoice
+SendPost Add an invoice
 
 Send invoices are the invoices that are sent to the SDI.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvoiceV1SendPostRequest
+ @return ApiSendPostRequest
 */
-func (a *SendAPIService) InvoiceV1SendPost(ctx context.Context) ApiInvoiceV1SendPostRequest {
-	return ApiInvoiceV1SendPostRequest{
+func (a *SendAPIService) SendPost(ctx context.Context) ApiSendPostRequest {
+	return ApiSendPostRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -759,7 +767,7 @@ func (a *SendAPIService) InvoiceV1SendPost(ctx context.Context) ApiInvoiceV1Send
 
 // Execute executes the request
 //  @return Send
-func (a *SendAPIService) InvoiceV1SendPostExecute(r ApiInvoiceV1SendPostRequest) (*Send, *http.Response, error) {
+func (a *SendAPIService) SendPostExecute(r ApiSendPostRequest) (*Send, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -767,12 +775,12 @@ func (a *SendAPIService) InvoiceV1SendPostExecute(r ApiInvoiceV1SendPostRequest)
 		localVarReturnValue  *Send
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.InvoiceV1SendPost")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.SendPost")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/send"
+	localVarPath := localBasePath + "/send"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -870,50 +878,50 @@ func (a *SendAPIService) InvoiceV1SendPostExecute(r ApiInvoiceV1SendPostRequest)
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1SendValidateFilesPostRequest struct {
+type ApiSendValidateFilesPostRequest struct {
 	ctx context.Context
 	ApiService *SendAPIService
 	files []*os.File
 }
 
-func (r ApiInvoiceV1SendValidateFilesPostRequest) Files(files []*os.File) ApiInvoiceV1SendValidateFilesPostRequest {
+func (r ApiSendValidateFilesPostRequest) Files(files []*os.File) ApiSendValidateFilesPostRequest {
 	r.files = files
 	return r
 }
 
-func (r ApiInvoiceV1SendValidateFilesPostRequest) Execute() (*http.Response, error) {
-	return r.ApiService.InvoiceV1SendValidateFilesPostExecute(r)
+func (r ApiSendValidateFilesPostRequest) Execute() (*http.Response, error) {
+	return r.ApiService.SendValidateFilesPostExecute(r)
 }
 
 /*
-InvoiceV1SendValidateFilesPost Validate an invoice by file
+SendValidateFilesPost Validate an invoice by file
 
 Send invoices are the invoices that are sent to the SDI.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvoiceV1SendValidateFilesPostRequest
+ @return ApiSendValidateFilesPostRequest
 */
-func (a *SendAPIService) InvoiceV1SendValidateFilesPost(ctx context.Context) ApiInvoiceV1SendValidateFilesPostRequest {
-	return ApiInvoiceV1SendValidateFilesPostRequest{
+func (a *SendAPIService) SendValidateFilesPost(ctx context.Context) ApiSendValidateFilesPostRequest {
+	return ApiSendValidateFilesPostRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-func (a *SendAPIService) InvoiceV1SendValidateFilesPostExecute(r ApiInvoiceV1SendValidateFilesPostRequest) (*http.Response, error) {
+func (a *SendAPIService) SendValidateFilesPostExecute(r ApiSendValidateFilesPostRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.InvoiceV1SendValidateFilesPost")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.SendValidateFilesPost")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/send/validate/files"
+	localVarPath := localBasePath + "/send/validate/files"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1006,50 +1014,50 @@ func (a *SendAPIService) InvoiceV1SendValidateFilesPostExecute(r ApiInvoiceV1Sen
 	return localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1SendValidateJsonPostRequest struct {
+type ApiSendValidateJsonPostRequest struct {
 	ctx context.Context
 	ApiService *SendAPIService
 	fatturaOrdinaria *FatturaOrdinaria
 }
 
-func (r ApiInvoiceV1SendValidateJsonPostRequest) FatturaOrdinaria(fatturaOrdinaria FatturaOrdinaria) ApiInvoiceV1SendValidateJsonPostRequest {
+func (r ApiSendValidateJsonPostRequest) FatturaOrdinaria(fatturaOrdinaria FatturaOrdinaria) ApiSendValidateJsonPostRequest {
 	r.fatturaOrdinaria = &fatturaOrdinaria
 	return r
 }
 
-func (r ApiInvoiceV1SendValidateJsonPostRequest) Execute() (*http.Response, error) {
-	return r.ApiService.InvoiceV1SendValidateJsonPostExecute(r)
+func (r ApiSendValidateJsonPostRequest) Execute() (*http.Response, error) {
+	return r.ApiService.SendValidateJsonPostExecute(r)
 }
 
 /*
-InvoiceV1SendValidateJsonPost Validate an invoice by json
+SendValidateJsonPost Validate an invoice by json
 
 Send invoices are the invoices that are sent to the SDI.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvoiceV1SendValidateJsonPostRequest
+ @return ApiSendValidateJsonPostRequest
 */
-func (a *SendAPIService) InvoiceV1SendValidateJsonPost(ctx context.Context) ApiInvoiceV1SendValidateJsonPostRequest {
-	return ApiInvoiceV1SendValidateJsonPostRequest{
+func (a *SendAPIService) SendValidateJsonPost(ctx context.Context) ApiSendValidateJsonPostRequest {
+	return ApiSendValidateJsonPostRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-func (a *SendAPIService) InvoiceV1SendValidateJsonPostExecute(r ApiInvoiceV1SendValidateJsonPostRequest) (*http.Response, error) {
+func (a *SendAPIService) SendValidateJsonPostExecute(r ApiSendValidateJsonPostRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.InvoiceV1SendValidateJsonPost")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.SendValidateJsonPost")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/send/validate/json"
+	localVarPath := localBasePath + "/send/validate/json"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1126,50 +1134,50 @@ func (a *SendAPIService) InvoiceV1SendValidateJsonPostExecute(r ApiInvoiceV1Send
 	return localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1SendValidatePostRequest struct {
+type ApiSendValidatePostRequest struct {
 	ctx context.Context
 	ApiService *SendAPIService
 	send *Send
 }
 
-func (r ApiInvoiceV1SendValidatePostRequest) Send(send Send) ApiInvoiceV1SendValidatePostRequest {
+func (r ApiSendValidatePostRequest) Send(send Send) ApiSendValidatePostRequest {
 	r.send = &send
 	return r
 }
 
-func (r ApiInvoiceV1SendValidatePostRequest) Execute() (*http.Response, error) {
-	return r.ApiService.InvoiceV1SendValidatePostExecute(r)
+func (r ApiSendValidatePostRequest) Execute() (*http.Response, error) {
+	return r.ApiService.SendValidatePostExecute(r)
 }
 
 /*
-InvoiceV1SendValidatePost Validate an invoice
+SendValidatePost Validate an invoice
 
 Send invoices are the invoices that are sent to the SDI.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvoiceV1SendValidatePostRequest
+ @return ApiSendValidatePostRequest
 */
-func (a *SendAPIService) InvoiceV1SendValidatePost(ctx context.Context) ApiInvoiceV1SendValidatePostRequest {
-	return ApiInvoiceV1SendValidatePostRequest{
+func (a *SendAPIService) SendValidatePost(ctx context.Context) ApiSendValidatePostRequest {
+	return ApiSendValidatePostRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-func (a *SendAPIService) InvoiceV1SendValidatePostExecute(r ApiInvoiceV1SendValidatePostRequest) (*http.Response, error) {
+func (a *SendAPIService) SendValidatePostExecute(r ApiSendValidatePostRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.InvoiceV1SendValidatePost")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.SendValidatePost")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/send/validate"
+	localVarPath := localBasePath + "/send/validate"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1246,50 +1254,50 @@ func (a *SendAPIService) InvoiceV1SendValidatePostExecute(r ApiInvoiceV1SendVali
 	return localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1SendValidateXmlPostRequest struct {
+type ApiSendValidateXmlPostRequest struct {
 	ctx context.Context
 	ApiService *SendAPIService
 	fatturaOrdinaria *FatturaOrdinaria
 }
 
-func (r ApiInvoiceV1SendValidateXmlPostRequest) FatturaOrdinaria(fatturaOrdinaria FatturaOrdinaria) ApiInvoiceV1SendValidateXmlPostRequest {
+func (r ApiSendValidateXmlPostRequest) FatturaOrdinaria(fatturaOrdinaria FatturaOrdinaria) ApiSendValidateXmlPostRequest {
 	r.fatturaOrdinaria = &fatturaOrdinaria
 	return r
 }
 
-func (r ApiInvoiceV1SendValidateXmlPostRequest) Execute() (*http.Response, error) {
-	return r.ApiService.InvoiceV1SendValidateXmlPostExecute(r)
+func (r ApiSendValidateXmlPostRequest) Execute() (*http.Response, error) {
+	return r.ApiService.SendValidateXmlPostExecute(r)
 }
 
 /*
-InvoiceV1SendValidateXmlPost Validate an invoice by xml
+SendValidateXmlPost Validate an invoice by xml
 
 Send invoices are the invoices that are sent to the SDI.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvoiceV1SendValidateXmlPostRequest
+ @return ApiSendValidateXmlPostRequest
 */
-func (a *SendAPIService) InvoiceV1SendValidateXmlPost(ctx context.Context) ApiInvoiceV1SendValidateXmlPostRequest {
-	return ApiInvoiceV1SendValidateXmlPostRequest{
+func (a *SendAPIService) SendValidateXmlPost(ctx context.Context) ApiSendValidateXmlPostRequest {
+	return ApiSendValidateXmlPostRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-func (a *SendAPIService) InvoiceV1SendValidateXmlPostExecute(r ApiInvoiceV1SendValidateXmlPostRequest) (*http.Response, error) {
+func (a *SendAPIService) SendValidateXmlPostExecute(r ApiSendValidateXmlPostRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.InvoiceV1SendValidateXmlPost")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.SendValidateXmlPost")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/send/validate/xml"
+	localVarPath := localBasePath + "/send/validate/xml"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1366,7 +1374,7 @@ func (a *SendAPIService) InvoiceV1SendValidateXmlPostExecute(r ApiInvoiceV1SendV
 	return localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1SendXmlPostRequest struct {
+type ApiSendXmlPostRequest struct {
 	ctx context.Context
 	ApiService *SendAPIService
 	fatturaOrdinaria *FatturaOrdinaria
@@ -1374,37 +1382,37 @@ type ApiInvoiceV1SendXmlPostRequest struct {
 	signature *string
 }
 
-func (r ApiInvoiceV1SendXmlPostRequest) FatturaOrdinaria(fatturaOrdinaria FatturaOrdinaria) ApiInvoiceV1SendXmlPostRequest {
+func (r ApiSendXmlPostRequest) FatturaOrdinaria(fatturaOrdinaria FatturaOrdinaria) ApiSendXmlPostRequest {
 	r.fatturaOrdinaria = &fatturaOrdinaria
 	return r
 }
 
 // Validate the document first, and reject it on failure.
-func (r ApiInvoiceV1SendXmlPostRequest) Validate(validate bool) ApiInvoiceV1SendXmlPostRequest {
+func (r ApiSendXmlPostRequest) Validate(validate bool) ApiSendXmlPostRequest {
 	r.validate = &validate
 	return r
 }
 
 // Whether to digitally sign the document.
-func (r ApiInvoiceV1SendXmlPostRequest) Signature(signature string) ApiInvoiceV1SendXmlPostRequest {
+func (r ApiSendXmlPostRequest) Signature(signature string) ApiSendXmlPostRequest {
 	r.signature = &signature
 	return r
 }
 
-func (r ApiInvoiceV1SendXmlPostRequest) Execute() (*Send, *http.Response, error) {
-	return r.ApiService.InvoiceV1SendXmlPostExecute(r)
+func (r ApiSendXmlPostRequest) Execute() (*Send, *http.Response, error) {
+	return r.ApiService.SendXmlPostExecute(r)
 }
 
 /*
-InvoiceV1SendXmlPost Add an invoice by xml
+SendXmlPost Add an invoice by xml
 
 Send invoices are the invoices that are sent to the SDI.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvoiceV1SendXmlPostRequest
+ @return ApiSendXmlPostRequest
 */
-func (a *SendAPIService) InvoiceV1SendXmlPost(ctx context.Context) ApiInvoiceV1SendXmlPostRequest {
-	return ApiInvoiceV1SendXmlPostRequest{
+func (a *SendAPIService) SendXmlPost(ctx context.Context) ApiSendXmlPostRequest {
+	return ApiSendXmlPostRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -1412,7 +1420,7 @@ func (a *SendAPIService) InvoiceV1SendXmlPost(ctx context.Context) ApiInvoiceV1S
 
 // Execute executes the request
 //  @return Send
-func (a *SendAPIService) InvoiceV1SendXmlPostExecute(r ApiInvoiceV1SendXmlPostRequest) (*Send, *http.Response, error) {
+func (a *SendAPIService) SendXmlPostExecute(r ApiSendXmlPostRequest) (*Send, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1420,12 +1428,12 @@ func (a *SendAPIService) InvoiceV1SendXmlPostExecute(r ApiInvoiceV1SendXmlPostRe
 		localVarReturnValue  *Send
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.InvoiceV1SendXmlPost")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.SendXmlPost")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/send/xml"
+	localVarPath := localBasePath + "/send/xml"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}

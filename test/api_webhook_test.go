@@ -1,5 +1,5 @@
 /*
-Italian eInvoice API
+Italian eInvoice API v1
 
 Testing WebhookAPIService
 
@@ -22,11 +22,11 @@ func Test_invoicesdk_WebhookAPIService(t *testing.T) {
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
 
-	t.Run("Test WebhookAPIService InvoiceV1WebhookGet", func(t *testing.T) {
+	t.Run("Test WebhookAPIService WebhookGet", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.WebhookAPI.InvoiceV1WebhookGet(context.Background()).Execute()
+		resp, httpRes, err := apiClient.WebhookAPI.WebhookGet(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,13 +34,13 @@ func Test_invoicesdk_WebhookAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test WebhookAPIService InvoiceV1WebhookIdDelete", func(t *testing.T) {
+	t.Run("Test WebhookAPIService WebhookIdDelete", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
 		var id int32
 
-		resp, httpRes, err := apiClient.WebhookAPI.InvoiceV1WebhookIdDelete(context.Background(), id).Execute()
+		resp, httpRes, err := apiClient.WebhookAPI.WebhookIdDelete(context.Background(), id).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -48,13 +48,13 @@ func Test_invoicesdk_WebhookAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test WebhookAPIService InvoiceV1WebhookIdGet", func(t *testing.T) {
+	t.Run("Test WebhookAPIService WebhookIdGet", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
 		var id int32
 
-		resp, httpRes, err := apiClient.WebhookAPI.InvoiceV1WebhookIdGet(context.Background(), id).Execute()
+		resp, httpRes, err := apiClient.WebhookAPI.WebhookIdGet(context.Background(), id).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -62,11 +62,11 @@ func Test_invoicesdk_WebhookAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test WebhookAPIService InvoiceV1WebhookPost", func(t *testing.T) {
+	t.Run("Test WebhookAPIService WebhookPost", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.WebhookAPI.InvoiceV1WebhookPost(context.Background()).Execute()
+		resp, httpRes, err := apiClient.WebhookAPI.WebhookPost(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -74,11 +74,11 @@ func Test_invoicesdk_WebhookAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test WebhookAPIService InvoiceV1WebhookPut", func(t *testing.T) {
+	t.Run("Test WebhookAPIService WebhookPut", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.WebhookAPI.InvoiceV1WebhookPut(context.Background()).Execute()
+		resp, httpRes, err := apiClient.WebhookAPI.WebhookPut(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -86,11 +86,11 @@ func Test_invoicesdk_WebhookAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test WebhookAPIService InvoiceV1WebhookhistoryGet", func(t *testing.T) {
+	t.Run("Test WebhookAPIService WebhookhistoryGet", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.WebhookAPI.InvoiceV1WebhookhistoryGet(context.Background()).Execute()
+		resp, httpRes, err := apiClient.WebhookAPI.WebhookhistoryGet(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -98,13 +98,13 @@ func Test_invoicesdk_WebhookAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test WebhookAPIService InvoiceV1WebhookhistoryIdGet", func(t *testing.T) {
+	t.Run("Test WebhookAPIService WebhookhistoryIdGet", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
 		var id int32
 
-		resp, httpRes, err := apiClient.WebhookAPI.InvoiceV1WebhookhistoryIdGet(context.Background(), id).Execute()
+		resp, httpRes, err := apiClient.WebhookAPI.WebhookhistoryIdGet(context.Background(), id).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

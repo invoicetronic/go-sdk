@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**InvoiceV1LogGet**](LogAPI.md#InvoiceV1LogGet) | **Get** /invoice/v1/log | List events
-[**InvoiceV1LogIdGet**](LogAPI.md#InvoiceV1LogIdGet) | **Get** /invoice/v1/log/{id} | Get an event by id
+[**LogGet**](LogAPI.md#LogGet) | **Get** /log | List events
+[**LogIdGet**](LogAPI.md#LogIdGet) | **Get** /log/{id} | Get an event by id
 
 
 
-## InvoiceV1LogGet
+## LogGet
 
-> []Event InvoiceV1LogGet(ctx).CompanyId(companyId).Endpoint(endpoint).Method(method).ApiVerion(apiVerion).StatusCode(statusCode).DateCreatedFrom(dateCreatedFrom).DateCreatedTo(dateCreatedTo).Page(page).PageSize(pageSize).Execute()
+> []Event LogGet(ctx).CompanyId(companyId).Endpoint(endpoint).Method(method).ApiVerion(apiVerion).StatusCode(statusCode).DateCreatedFrom(dateCreatedFrom).DateCreatedTo(dateCreatedTo).Page(page).PageSize(pageSize).Sort(sort).Query(query).Success(success).DateTimeFrom(dateTimeFrom).DateTimeTo(dateTimeTo).Execute()
 
 List events
 
@@ -40,16 +40,21 @@ func main() {
 	dateCreatedTo := time.Now() // time.Time | UTC ISO 8601 (2024-11-29T12:34:56Z) (optional)
 	page := int32(56) // int32 | Page number. Defaults to 1. (optional) (default to 1)
 	pageSize := int32(56) // int32 | Items per page. Defaults to 50. Cannot be greater than 200. (optional) (default to 100)
+	sort := "sort_example" // string | Sort by field. Prefix with '-' for descending order. (optional)
+	query := "query_example" // string |  (optional)
+	success := true // bool |  (optional)
+	dateTimeFrom := time.Now() // time.Time | Date and time of the event (optional)
+	dateTimeTo := time.Now() // time.Time | Date and time of the event (optional)
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.LogAPI.InvoiceV1LogGet(context.Background()).CompanyId(companyId).Endpoint(endpoint).Method(method).ApiVerion(apiVerion).StatusCode(statusCode).DateCreatedFrom(dateCreatedFrom).DateCreatedTo(dateCreatedTo).Page(page).PageSize(pageSize).Execute()
+	resp, r, err := apiClient.LogAPI.LogGet(context.Background()).CompanyId(companyId).Endpoint(endpoint).Method(method).ApiVerion(apiVerion).StatusCode(statusCode).DateCreatedFrom(dateCreatedFrom).DateCreatedTo(dateCreatedTo).Page(page).PageSize(pageSize).Sort(sort).Query(query).Success(success).DateTimeFrom(dateTimeFrom).DateTimeTo(dateTimeTo).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `LogAPI.InvoiceV1LogGet``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LogAPI.LogGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `InvoiceV1LogGet`: []Event
-	fmt.Fprintf(os.Stdout, "Response from `LogAPI.InvoiceV1LogGet`: %v\n", resp)
+	// response from `LogGet`: []Event
+	fmt.Fprintf(os.Stdout, "Response from `LogAPI.LogGet`: %v\n", resp)
 }
 ```
 
@@ -59,7 +64,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiInvoiceV1LogGetRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiLogGetRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -73,6 +78,11 @@ Name | Type | Description  | Notes
  **dateCreatedTo** | **time.Time** | UTC ISO 8601 (2024-11-29T12:34:56Z) | 
  **page** | **int32** | Page number. Defaults to 1. | [default to 1]
  **pageSize** | **int32** | Items per page. Defaults to 50. Cannot be greater than 200. | [default to 100]
+ **sort** | **string** | Sort by field. Prefix with &#39;-&#39; for descending order. | 
+ **query** | **string** |  | 
+ **success** | **bool** |  | 
+ **dateTimeFrom** | **time.Time** | Date and time of the event | 
+ **dateTimeTo** | **time.Time** | Date and time of the event | 
 
 ### Return type
 
@@ -92,9 +102,9 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## InvoiceV1LogIdGet
+## LogIdGet
 
-> Event InvoiceV1LogIdGet(ctx, id).Execute()
+> Event LogIdGet(ctx, id).Execute()
 
 Get an event by id
 
@@ -117,13 +127,13 @@ func main() {
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.LogAPI.InvoiceV1LogIdGet(context.Background(), id).Execute()
+	resp, r, err := apiClient.LogAPI.LogIdGet(context.Background(), id).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `LogAPI.InvoiceV1LogIdGet``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LogAPI.LogIdGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `InvoiceV1LogIdGet`: Event
-	fmt.Fprintf(os.Stdout, "Response from `LogAPI.InvoiceV1LogIdGet`: %v\n", resp)
+	// response from `LogIdGet`: Event
+	fmt.Fprintf(os.Stdout, "Response from `LogAPI.LogIdGet`: %v\n", resp)
 }
 ```
 
@@ -137,7 +147,7 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiInvoiceV1LogIdGetRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiLogIdGetRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

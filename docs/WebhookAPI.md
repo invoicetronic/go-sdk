@@ -4,19 +4,19 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**InvoiceV1WebhookGet**](WebhookAPI.md#InvoiceV1WebhookGet) | **Get** /invoice/v1/webhook | List webhooks
-[**InvoiceV1WebhookIdDelete**](WebhookAPI.md#InvoiceV1WebhookIdDelete) | **Delete** /invoice/v1/webhook/{id} | Delete a webhook by id
-[**InvoiceV1WebhookIdGet**](WebhookAPI.md#InvoiceV1WebhookIdGet) | **Get** /invoice/v1/webhook/{id} | Get a webhook by id
-[**InvoiceV1WebhookPost**](WebhookAPI.md#InvoiceV1WebhookPost) | **Post** /invoice/v1/webhook | Add a webhook
-[**InvoiceV1WebhookPut**](WebhookAPI.md#InvoiceV1WebhookPut) | **Put** /invoice/v1/webhook | Update a webhook
-[**InvoiceV1WebhookhistoryGet**](WebhookAPI.md#InvoiceV1WebhookhistoryGet) | **Get** /invoice/v1/webhookhistory | List webhook history items
-[**InvoiceV1WebhookhistoryIdGet**](WebhookAPI.md#InvoiceV1WebhookhistoryIdGet) | **Get** /invoice/v1/webhookhistory/{id} | Get a webhook history item by id
+[**WebhookGet**](WebhookAPI.md#WebhookGet) | **Get** /webhook | List webhooks
+[**WebhookIdDelete**](WebhookAPI.md#WebhookIdDelete) | **Delete** /webhook/{id} | Delete a webhook by id
+[**WebhookIdGet**](WebhookAPI.md#WebhookIdGet) | **Get** /webhook/{id} | Get a webhook by id
+[**WebhookPost**](WebhookAPI.md#WebhookPost) | **Post** /webhook | Add a webhook
+[**WebhookPut**](WebhookAPI.md#WebhookPut) | **Put** /webhook | Update a webhook
+[**WebhookhistoryGet**](WebhookAPI.md#WebhookhistoryGet) | **Get** /webhookhistory | List webhook history items
+[**WebhookhistoryIdGet**](WebhookAPI.md#WebhookhistoryIdGet) | **Get** /webhookhistory/{id} | Get a webhook history item by id
 
 
 
-## InvoiceV1WebhookGet
+## WebhookGet
 
-> []WebHook InvoiceV1WebhookGet(ctx).Page(page).PageSize(pageSize).Execute()
+> []WebHook WebhookGet(ctx).Page(page).PageSize(pageSize).Sort(sort).Execute()
 
 List webhooks
 
@@ -37,16 +37,17 @@ import (
 func main() {
 	page := int32(56) // int32 | Page number. Defaults to 1. (optional) (default to 1)
 	pageSize := int32(56) // int32 | Items per page. Defaults to 50. Cannot be greater than 200. (optional) (default to 100)
+	sort := "sort_example" // string | Sort by field. Prefix with '-' for descending order. (optional)
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.WebhookAPI.InvoiceV1WebhookGet(context.Background()).Page(page).PageSize(pageSize).Execute()
+	resp, r, err := apiClient.WebhookAPI.WebhookGet(context.Background()).Page(page).PageSize(pageSize).Sort(sort).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.InvoiceV1WebhookGet``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.WebhookGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `InvoiceV1WebhookGet`: []WebHook
-	fmt.Fprintf(os.Stdout, "Response from `WebhookAPI.InvoiceV1WebhookGet`: %v\n", resp)
+	// response from `WebhookGet`: []WebHook
+	fmt.Fprintf(os.Stdout, "Response from `WebhookAPI.WebhookGet`: %v\n", resp)
 }
 ```
 
@@ -56,13 +57,14 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiInvoiceV1WebhookGetRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiWebhookGetRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **page** | **int32** | Page number. Defaults to 1. | [default to 1]
  **pageSize** | **int32** | Items per page. Defaults to 50. Cannot be greater than 200. | [default to 100]
+ **sort** | **string** | Sort by field. Prefix with &#39;-&#39; for descending order. | 
 
 ### Return type
 
@@ -82,9 +84,9 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## InvoiceV1WebhookIdDelete
+## WebhookIdDelete
 
-> WebHook InvoiceV1WebhookIdDelete(ctx, id).Execute()
+> WebHook WebhookIdDelete(ctx, id).Execute()
 
 Delete a webhook by id
 
@@ -107,13 +109,13 @@ func main() {
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.WebhookAPI.InvoiceV1WebhookIdDelete(context.Background(), id).Execute()
+	resp, r, err := apiClient.WebhookAPI.WebhookIdDelete(context.Background(), id).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.InvoiceV1WebhookIdDelete``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.WebhookIdDelete``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `InvoiceV1WebhookIdDelete`: WebHook
-	fmt.Fprintf(os.Stdout, "Response from `WebhookAPI.InvoiceV1WebhookIdDelete`: %v\n", resp)
+	// response from `WebhookIdDelete`: WebHook
+	fmt.Fprintf(os.Stdout, "Response from `WebhookAPI.WebhookIdDelete`: %v\n", resp)
 }
 ```
 
@@ -127,7 +129,7 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiInvoiceV1WebhookIdDeleteRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiWebhookIdDeleteRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -152,9 +154,9 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## InvoiceV1WebhookIdGet
+## WebhookIdGet
 
-> WebHook InvoiceV1WebhookIdGet(ctx, id).Execute()
+> WebHook WebhookIdGet(ctx, id).Execute()
 
 Get a webhook by id
 
@@ -177,13 +179,13 @@ func main() {
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.WebhookAPI.InvoiceV1WebhookIdGet(context.Background(), id).Execute()
+	resp, r, err := apiClient.WebhookAPI.WebhookIdGet(context.Background(), id).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.InvoiceV1WebhookIdGet``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.WebhookIdGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `InvoiceV1WebhookIdGet`: WebHook
-	fmt.Fprintf(os.Stdout, "Response from `WebhookAPI.InvoiceV1WebhookIdGet`: %v\n", resp)
+	// response from `WebhookIdGet`: WebHook
+	fmt.Fprintf(os.Stdout, "Response from `WebhookAPI.WebhookIdGet`: %v\n", resp)
 }
 ```
 
@@ -197,7 +199,7 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiInvoiceV1WebhookIdGetRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiWebhookIdGetRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -222,9 +224,9 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## InvoiceV1WebhookPost
+## WebhookPost
 
-> WebHook InvoiceV1WebhookPost(ctx).WebHook(webHook).Execute()
+> WebHook WebhookPost(ctx).WebHook(webHook).Execute()
 
 Add a webhook
 
@@ -247,13 +249,13 @@ func main() {
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.WebhookAPI.InvoiceV1WebhookPost(context.Background()).WebHook(webHook).Execute()
+	resp, r, err := apiClient.WebhookAPI.WebhookPost(context.Background()).WebHook(webHook).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.InvoiceV1WebhookPost``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.WebhookPost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `InvoiceV1WebhookPost`: WebHook
-	fmt.Fprintf(os.Stdout, "Response from `WebhookAPI.InvoiceV1WebhookPost`: %v\n", resp)
+	// response from `WebhookPost`: WebHook
+	fmt.Fprintf(os.Stdout, "Response from `WebhookAPI.WebhookPost`: %v\n", resp)
 }
 ```
 
@@ -263,7 +265,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiInvoiceV1WebhookPostRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiWebhookPostRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -288,9 +290,9 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## InvoiceV1WebhookPut
+## WebhookPut
 
-> WebHook InvoiceV1WebhookPut(ctx).WebHook(webHook).Execute()
+> WebHook WebhookPut(ctx).WebHook(webHook).Execute()
 
 Update a webhook
 
@@ -313,13 +315,13 @@ func main() {
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.WebhookAPI.InvoiceV1WebhookPut(context.Background()).WebHook(webHook).Execute()
+	resp, r, err := apiClient.WebhookAPI.WebhookPut(context.Background()).WebHook(webHook).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.InvoiceV1WebhookPut``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.WebhookPut``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `InvoiceV1WebhookPut`: WebHook
-	fmt.Fprintf(os.Stdout, "Response from `WebhookAPI.InvoiceV1WebhookPut`: %v\n", resp)
+	// response from `WebhookPut`: WebHook
+	fmt.Fprintf(os.Stdout, "Response from `WebhookAPI.WebhookPut`: %v\n", resp)
 }
 ```
 
@@ -329,7 +331,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiInvoiceV1WebhookPutRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiWebhookPutRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -354,9 +356,9 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## InvoiceV1WebhookhistoryGet
+## WebhookhistoryGet
 
-> []WebHookHistory InvoiceV1WebhookhistoryGet(ctx).Page(page).PageSize(pageSize).Execute()
+> []WebHookHistory WebhookhistoryGet(ctx).Page(page).PageSize(pageSize).Sort(sort).Execute()
 
 List webhook history items
 
@@ -375,16 +377,17 @@ import (
 func main() {
 	page := int32(56) // int32 | Page number. Defaults to 1. (optional) (default to 1)
 	pageSize := int32(56) // int32 | Items per page. Defaults to 50. Cannot be greater than 200. (optional) (default to 100)
+	sort := "sort_example" // string | Sort by field. Prefix with '-' for descending order. (optional)
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.WebhookAPI.InvoiceV1WebhookhistoryGet(context.Background()).Page(page).PageSize(pageSize).Execute()
+	resp, r, err := apiClient.WebhookAPI.WebhookhistoryGet(context.Background()).Page(page).PageSize(pageSize).Sort(sort).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.InvoiceV1WebhookhistoryGet``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.WebhookhistoryGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `InvoiceV1WebhookhistoryGet`: []WebHookHistory
-	fmt.Fprintf(os.Stdout, "Response from `WebhookAPI.InvoiceV1WebhookhistoryGet`: %v\n", resp)
+	// response from `WebhookhistoryGet`: []WebHookHistory
+	fmt.Fprintf(os.Stdout, "Response from `WebhookAPI.WebhookhistoryGet`: %v\n", resp)
 }
 ```
 
@@ -394,13 +397,14 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiInvoiceV1WebhookhistoryGetRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiWebhookhistoryGetRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **page** | **int32** | Page number. Defaults to 1. | [default to 1]
  **pageSize** | **int32** | Items per page. Defaults to 50. Cannot be greater than 200. | [default to 100]
+ **sort** | **string** | Sort by field. Prefix with &#39;-&#39; for descending order. | 
 
 ### Return type
 
@@ -420,9 +424,9 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## InvoiceV1WebhookhistoryIdGet
+## WebhookhistoryIdGet
 
-> WebHookHistory InvoiceV1WebhookhistoryIdGet(ctx, id).Execute()
+> WebHookHistory WebhookhistoryIdGet(ctx, id).Execute()
 
 Get a webhook history item by id
 
@@ -443,13 +447,13 @@ func main() {
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.WebhookAPI.InvoiceV1WebhookhistoryIdGet(context.Background(), id).Execute()
+	resp, r, err := apiClient.WebhookAPI.WebhookhistoryIdGet(context.Background(), id).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.InvoiceV1WebhookhistoryIdGet``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.WebhookhistoryIdGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `InvoiceV1WebhookhistoryIdGet`: WebHookHistory
-	fmt.Fprintf(os.Stdout, "Response from `WebhookAPI.InvoiceV1WebhookhistoryIdGet`: %v\n", resp)
+	// response from `WebhookhistoryIdGet`: WebHookHistory
+	fmt.Fprintf(os.Stdout, "Response from `WebhookAPI.WebhookhistoryIdGet`: %v\n", resp)
 }
 ```
 
@@ -463,7 +467,7 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiInvoiceV1WebhookhistoryIdGetRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiWebhookhistoryIdGetRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

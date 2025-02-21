@@ -1,9 +1,9 @@
 /*
-Italian eInvoice API
+Italian eInvoice API v1
 
-The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. The API also provides advanced features as encryption at rest, invoice validation, multiple upload formats, webhooks, event logging, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
+The [Italian eInvoice API][2] is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. The API also provides advanced features as encryption at rest, invoice validation, multiple upload formats, webhooks, event logging, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
-API version: 1.0.0
+API version: 1
 Contact: support@invoicetronic.com
 */
 
@@ -25,7 +25,7 @@ import (
 // LogAPIService LogAPI service
 type LogAPIService service
 
-type ApiInvoiceV1LogGetRequest struct {
+type ApiLogGetRequest struct {
 	ctx context.Context
 	ApiService *LogAPIService
 	companyId *int32
@@ -37,74 +37,107 @@ type ApiInvoiceV1LogGetRequest struct {
 	dateCreatedTo *time.Time
 	page *int32
 	pageSize *int32
+	sort *string
+	query *string
+	success *bool
+	dateTimeFrom *time.Time
+	dateTimeTo *time.Time
 }
 
 // Company id
-func (r ApiInvoiceV1LogGetRequest) CompanyId(companyId int32) ApiInvoiceV1LogGetRequest {
+func (r ApiLogGetRequest) CompanyId(companyId int32) ApiLogGetRequest {
 	r.companyId = &companyId
 	return r
 }
 
-func (r ApiInvoiceV1LogGetRequest) Endpoint(endpoint string) ApiInvoiceV1LogGetRequest {
+func (r ApiLogGetRequest) Endpoint(endpoint string) ApiLogGetRequest {
 	r.endpoint = &endpoint
 	return r
 }
 
-func (r ApiInvoiceV1LogGetRequest) Method(method string) ApiInvoiceV1LogGetRequest {
+func (r ApiLogGetRequest) Method(method string) ApiLogGetRequest {
 	r.method = &method
 	return r
 }
 
 // Api version
-func (r ApiInvoiceV1LogGetRequest) ApiVerion(apiVerion int32) ApiInvoiceV1LogGetRequest {
+func (r ApiLogGetRequest) ApiVerion(apiVerion int32) ApiLogGetRequest {
 	r.apiVerion = &apiVerion
 	return r
 }
 
 // Response status code
-func (r ApiInvoiceV1LogGetRequest) StatusCode(statusCode int32) ApiInvoiceV1LogGetRequest {
+func (r ApiLogGetRequest) StatusCode(statusCode int32) ApiLogGetRequest {
 	r.statusCode = &statusCode
 	return r
 }
 
 // UTC ISO 8601 (2024-11-29T12:34:56Z)
-func (r ApiInvoiceV1LogGetRequest) DateCreatedFrom(dateCreatedFrom time.Time) ApiInvoiceV1LogGetRequest {
+func (r ApiLogGetRequest) DateCreatedFrom(dateCreatedFrom time.Time) ApiLogGetRequest {
 	r.dateCreatedFrom = &dateCreatedFrom
 	return r
 }
 
 // UTC ISO 8601 (2024-11-29T12:34:56Z)
-func (r ApiInvoiceV1LogGetRequest) DateCreatedTo(dateCreatedTo time.Time) ApiInvoiceV1LogGetRequest {
+func (r ApiLogGetRequest) DateCreatedTo(dateCreatedTo time.Time) ApiLogGetRequest {
 	r.dateCreatedTo = &dateCreatedTo
 	return r
 }
 
 // Page number. Defaults to 1.
-func (r ApiInvoiceV1LogGetRequest) Page(page int32) ApiInvoiceV1LogGetRequest {
+func (r ApiLogGetRequest) Page(page int32) ApiLogGetRequest {
 	r.page = &page
 	return r
 }
 
 // Items per page. Defaults to 50. Cannot be greater than 200.
-func (r ApiInvoiceV1LogGetRequest) PageSize(pageSize int32) ApiInvoiceV1LogGetRequest {
+func (r ApiLogGetRequest) PageSize(pageSize int32) ApiLogGetRequest {
 	r.pageSize = &pageSize
 	return r
 }
 
-func (r ApiInvoiceV1LogGetRequest) Execute() ([]Event, *http.Response, error) {
-	return r.ApiService.InvoiceV1LogGetExecute(r)
+// Sort by field. Prefix with &#39;-&#39; for descending order.
+func (r ApiLogGetRequest) Sort(sort string) ApiLogGetRequest {
+	r.sort = &sort
+	return r
+}
+
+func (r ApiLogGetRequest) Query(query string) ApiLogGetRequest {
+	r.query = &query
+	return r
+}
+
+func (r ApiLogGetRequest) Success(success bool) ApiLogGetRequest {
+	r.success = &success
+	return r
+}
+
+// Date and time of the event
+func (r ApiLogGetRequest) DateTimeFrom(dateTimeFrom time.Time) ApiLogGetRequest {
+	r.dateTimeFrom = &dateTimeFrom
+	return r
+}
+
+// Date and time of the event
+func (r ApiLogGetRequest) DateTimeTo(dateTimeTo time.Time) ApiLogGetRequest {
+	r.dateTimeTo = &dateTimeTo
+	return r
+}
+
+func (r ApiLogGetRequest) Execute() ([]Event, *http.Response, error) {
+	return r.ApiService.LogGetExecute(r)
 }
 
 /*
-InvoiceV1LogGet List events
+LogGet List events
 
 Every API operation is logged and can be retrieved here.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvoiceV1LogGetRequest
+ @return ApiLogGetRequest
 */
-func (a *LogAPIService) InvoiceV1LogGet(ctx context.Context) ApiInvoiceV1LogGetRequest {
-	return ApiInvoiceV1LogGetRequest{
+func (a *LogAPIService) LogGet(ctx context.Context) ApiLogGetRequest {
+	return ApiLogGetRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -112,7 +145,7 @@ func (a *LogAPIService) InvoiceV1LogGet(ctx context.Context) ApiInvoiceV1LogGetR
 
 // Execute executes the request
 //  @return []Event
-func (a *LogAPIService) InvoiceV1LogGetExecute(r ApiInvoiceV1LogGetRequest) ([]Event, *http.Response, error) {
+func (a *LogAPIService) LogGetExecute(r ApiLogGetRequest) ([]Event, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -120,12 +153,12 @@ func (a *LogAPIService) InvoiceV1LogGetExecute(r ApiInvoiceV1LogGetRequest) ([]E
 		localVarReturnValue  []Event
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogAPIService.InvoiceV1LogGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogAPIService.LogGet")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/log"
+	localVarPath := localBasePath + "/log"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -163,6 +196,21 @@ func (a *LogAPIService) InvoiceV1LogGetExecute(r ApiInvoiceV1LogGetRequest) ([]E
 	} else {
 		var defaultValue int32 = 100
 		r.pageSize = &defaultValue
+	}
+	if r.sort != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", r.sort, "form", "")
+	}
+	if r.query != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "query", r.query, "form", "")
+	}
+	if r.success != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "success", r.success, "form", "")
+	}
+	if r.dateTimeFrom != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "date_time_from", r.dateTimeFrom, "form", "")
+	}
+	if r.dateTimeTo != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "date_time_to", r.dateTimeTo, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -228,27 +276,27 @@ func (a *LogAPIService) InvoiceV1LogGetExecute(r ApiInvoiceV1LogGetRequest) ([]E
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1LogIdGetRequest struct {
+type ApiLogIdGetRequest struct {
 	ctx context.Context
 	ApiService *LogAPIService
 	id int32
 }
 
-func (r ApiInvoiceV1LogIdGetRequest) Execute() (*Event, *http.Response, error) {
-	return r.ApiService.InvoiceV1LogIdGetExecute(r)
+func (r ApiLogIdGetRequest) Execute() (*Event, *http.Response, error) {
+	return r.ApiService.LogIdGetExecute(r)
 }
 
 /*
-InvoiceV1LogIdGet Get an event by id
+LogIdGet Get an event by id
 
 Every API operation is logged and can be retrieved here.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id Item id
- @return ApiInvoiceV1LogIdGetRequest
+ @return ApiLogIdGetRequest
 */
-func (a *LogAPIService) InvoiceV1LogIdGet(ctx context.Context, id int32) ApiInvoiceV1LogIdGetRequest {
-	return ApiInvoiceV1LogIdGetRequest{
+func (a *LogAPIService) LogIdGet(ctx context.Context, id int32) ApiLogIdGetRequest {
+	return ApiLogIdGetRequest{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
@@ -257,7 +305,7 @@ func (a *LogAPIService) InvoiceV1LogIdGet(ctx context.Context, id int32) ApiInvo
 
 // Execute executes the request
 //  @return Event
-func (a *LogAPIService) InvoiceV1LogIdGetExecute(r ApiInvoiceV1LogIdGetRequest) (*Event, *http.Response, error) {
+func (a *LogAPIService) LogIdGetExecute(r ApiLogIdGetRequest) (*Event, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -265,12 +313,12 @@ func (a *LogAPIService) InvoiceV1LogIdGetExecute(r ApiInvoiceV1LogIdGetRequest) 
 		localVarReturnValue  *Event
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogAPIService.InvoiceV1LogIdGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogAPIService.LogIdGet")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/log/{id}"
+	localVarPath := localBasePath + "/log/{id}"
 	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)

@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**InvoiceV1UpdateGet**](UpdateAPI.md#InvoiceV1UpdateGet) | **Get** /invoice/v1/update | List updates
-[**InvoiceV1UpdateIdGet**](UpdateAPI.md#InvoiceV1UpdateIdGet) | **Get** /invoice/v1/update/{id} | Get an update by id
+[**UpdateGet**](UpdateAPI.md#UpdateGet) | **Get** /update | List updates
+[**UpdateIdGet**](UpdateAPI.md#UpdateIdGet) | **Get** /update/{id} | Get an update by id
 
 
 
-## InvoiceV1UpdateGet
+## UpdateGet
 
-> []Update InvoiceV1UpdateGet(ctx).CompanyId(companyId).Identifier(identifier).Unread(unread).SendId(sendId).State(state).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).Page(page).PageSize(pageSize).Execute()
+> []Update UpdateGet(ctx).CompanyId(companyId).Identifier(identifier).Unread(unread).SendId(sendId).State(state).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).Page(page).PageSize(pageSize).Sort(sort).Execute()
 
 List updates
 
@@ -42,16 +42,17 @@ func main() {
 	dateSentTo := time.Now() // time.Time | UTC ISO 8601 (2024-11-29T12:34:56Z) (optional)
 	page := int32(56) // int32 | Page number. Defaults to 1. (optional) (default to 1)
 	pageSize := int32(56) // int32 | Items per page. Defaults to 50. Cannot be greater than 200. (optional) (default to 100)
+	sort := "sort_example" // string | Sort by field. Prefix with '-' for descending order. (optional)
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.UpdateAPI.InvoiceV1UpdateGet(context.Background()).CompanyId(companyId).Identifier(identifier).Unread(unread).SendId(sendId).State(state).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).Page(page).PageSize(pageSize).Execute()
+	resp, r, err := apiClient.UpdateAPI.UpdateGet(context.Background()).CompanyId(companyId).Identifier(identifier).Unread(unread).SendId(sendId).State(state).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).Page(page).PageSize(pageSize).Sort(sort).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `UpdateAPI.InvoiceV1UpdateGet``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `UpdateAPI.UpdateGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `InvoiceV1UpdateGet`: []Update
-	fmt.Fprintf(os.Stdout, "Response from `UpdateAPI.InvoiceV1UpdateGet`: %v\n", resp)
+	// response from `UpdateGet`: []Update
+	fmt.Fprintf(os.Stdout, "Response from `UpdateAPI.UpdateGet`: %v\n", resp)
 }
 ```
 
@@ -61,7 +62,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiInvoiceV1UpdateGetRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiUpdateGetRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -77,6 +78,7 @@ Name | Type | Description  | Notes
  **dateSentTo** | **time.Time** | UTC ISO 8601 (2024-11-29T12:34:56Z) | 
  **page** | **int32** | Page number. Defaults to 1. | [default to 1]
  **pageSize** | **int32** | Items per page. Defaults to 50. Cannot be greater than 200. | [default to 100]
+ **sort** | **string** | Sort by field. Prefix with &#39;-&#39; for descending order. | 
 
 ### Return type
 
@@ -96,9 +98,9 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## InvoiceV1UpdateIdGet
+## UpdateIdGet
 
-> Update InvoiceV1UpdateIdGet(ctx, id).Execute()
+> Update UpdateIdGet(ctx, id).Execute()
 
 Get an update by id
 
@@ -121,13 +123,13 @@ func main() {
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.UpdateAPI.InvoiceV1UpdateIdGet(context.Background(), id).Execute()
+	resp, r, err := apiClient.UpdateAPI.UpdateIdGet(context.Background(), id).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `UpdateAPI.InvoiceV1UpdateIdGet``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `UpdateAPI.UpdateIdGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `InvoiceV1UpdateIdGet`: Update
-	fmt.Fprintf(os.Stdout, "Response from `UpdateAPI.InvoiceV1UpdateIdGet`: %v\n", resp)
+	// response from `UpdateIdGet`: Update
+	fmt.Fprintf(os.Stdout, "Response from `UpdateAPI.UpdateIdGet`: %v\n", resp)
 }
 ```
 
@@ -141,7 +143,7 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiInvoiceV1UpdateIdGetRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiUpdateIdGetRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

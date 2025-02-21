@@ -1,9 +1,9 @@
 /*
-Italian eInvoice API
+Italian eInvoice API v1
 
-The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. The API also provides advanced features as encryption at rest, invoice validation, multiple upload formats, webhooks, event logging, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
+The [Italian eInvoice API][2] is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. The API also provides advanced features as encryption at rest, invoice validation, multiple upload formats, webhooks, event logging, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
-API version: 1.0.0
+API version: 1
 Contact: support@invoicetronic.com
 */
 
@@ -25,7 +25,7 @@ import (
 // ReceiveAPIService ReceiveAPI service
 type ReceiveAPIService service
 
-type ApiInvoiceV1ReceiveGetRequest struct {
+type ApiReceiveGetRequest struct {
 	ctx context.Context
 	ApiService *ReceiveAPIService
 	companyId *int32
@@ -43,112 +43,119 @@ type ApiInvoiceV1ReceiveGetRequest struct {
 	documentNumber *string
 	page *int32
 	pageSize *int32
+	sort *string
 }
 
 // Company id
-func (r ApiInvoiceV1ReceiveGetRequest) CompanyId(companyId int32) ApiInvoiceV1ReceiveGetRequest {
+func (r ApiReceiveGetRequest) CompanyId(companyId int32) ApiReceiveGetRequest {
 	r.companyId = &companyId
 	return r
 }
 
 // SDI identifier.
-func (r ApiInvoiceV1ReceiveGetRequest) Identifier(identifier string) ApiInvoiceV1ReceiveGetRequest {
+func (r ApiReceiveGetRequest) Identifier(identifier string) ApiReceiveGetRequest {
 	r.identifier = &identifier
 	return r
 }
 
 // Unread items only.
-func (r ApiInvoiceV1ReceiveGetRequest) Unread(unread bool) ApiInvoiceV1ReceiveGetRequest {
+func (r ApiReceiveGetRequest) Unread(unread bool) ApiReceiveGetRequest {
 	r.unread = &unread
 	return r
 }
 
 // Vat number or fiscal code.
-func (r ApiInvoiceV1ReceiveGetRequest) Committente(committente string) ApiInvoiceV1ReceiveGetRequest {
+func (r ApiReceiveGetRequest) Committente(committente string) ApiReceiveGetRequest {
 	r.committente = &committente
 	return r
 }
 
 // Vat number or fiscal code.
-func (r ApiInvoiceV1ReceiveGetRequest) Prestatore(prestatore string) ApiInvoiceV1ReceiveGetRequest {
+func (r ApiReceiveGetRequest) Prestatore(prestatore string) ApiReceiveGetRequest {
 	r.prestatore = &prestatore
 	return r
 }
 
 // File name.
-func (r ApiInvoiceV1ReceiveGetRequest) FileName(fileName string) ApiInvoiceV1ReceiveGetRequest {
+func (r ApiReceiveGetRequest) FileName(fileName string) ApiReceiveGetRequest {
 	r.fileName = &fileName
 	return r
 }
 
 // UTC ISO 8601 (2024-11-29T12:34:56Z)
-func (r ApiInvoiceV1ReceiveGetRequest) LastUpdateFrom(lastUpdateFrom time.Time) ApiInvoiceV1ReceiveGetRequest {
+func (r ApiReceiveGetRequest) LastUpdateFrom(lastUpdateFrom time.Time) ApiReceiveGetRequest {
 	r.lastUpdateFrom = &lastUpdateFrom
 	return r
 }
 
 // UTC ISO 8601 (2024-11-29T12:34:56Z)
-func (r ApiInvoiceV1ReceiveGetRequest) LastUpdateTo(lastUpdateTo time.Time) ApiInvoiceV1ReceiveGetRequest {
+func (r ApiReceiveGetRequest) LastUpdateTo(lastUpdateTo time.Time) ApiReceiveGetRequest {
 	r.lastUpdateTo = &lastUpdateTo
 	return r
 }
 
 // UTC ISO 8601 (2024-11-29T12:34:56Z)
-func (r ApiInvoiceV1ReceiveGetRequest) DateSentFrom(dateSentFrom time.Time) ApiInvoiceV1ReceiveGetRequest {
+func (r ApiReceiveGetRequest) DateSentFrom(dateSentFrom time.Time) ApiReceiveGetRequest {
 	r.dateSentFrom = &dateSentFrom
 	return r
 }
 
 // UTC ISO 8601 (2024-11-29T12:34:56Z)
-func (r ApiInvoiceV1ReceiveGetRequest) DateSentTo(dateSentTo time.Time) ApiInvoiceV1ReceiveGetRequest {
+func (r ApiReceiveGetRequest) DateSentTo(dateSentTo time.Time) ApiReceiveGetRequest {
 	r.dateSentTo = &dateSentTo
 	return r
 }
 
 // UTC ISO 8601 (2024-11-29T12:34:56Z)
-func (r ApiInvoiceV1ReceiveGetRequest) DocumentDateFrom(documentDateFrom time.Time) ApiInvoiceV1ReceiveGetRequest {
+func (r ApiReceiveGetRequest) DocumentDateFrom(documentDateFrom time.Time) ApiReceiveGetRequest {
 	r.documentDateFrom = &documentDateFrom
 	return r
 }
 
 // UTC ISO 8601 (2024-11-29T12:34:56Z)
-func (r ApiInvoiceV1ReceiveGetRequest) DocumentDateTo(documentDateTo time.Time) ApiInvoiceV1ReceiveGetRequest {
+func (r ApiReceiveGetRequest) DocumentDateTo(documentDateTo time.Time) ApiReceiveGetRequest {
 	r.documentDateTo = &documentDateTo
 	return r
 }
 
 // Document number.
-func (r ApiInvoiceV1ReceiveGetRequest) DocumentNumber(documentNumber string) ApiInvoiceV1ReceiveGetRequest {
+func (r ApiReceiveGetRequest) DocumentNumber(documentNumber string) ApiReceiveGetRequest {
 	r.documentNumber = &documentNumber
 	return r
 }
 
 // Page number. Defaults to 1.
-func (r ApiInvoiceV1ReceiveGetRequest) Page(page int32) ApiInvoiceV1ReceiveGetRequest {
+func (r ApiReceiveGetRequest) Page(page int32) ApiReceiveGetRequest {
 	r.page = &page
 	return r
 }
 
 // Items per page. Defaults to 50. Cannot be greater than 200.
-func (r ApiInvoiceV1ReceiveGetRequest) PageSize(pageSize int32) ApiInvoiceV1ReceiveGetRequest {
+func (r ApiReceiveGetRequest) PageSize(pageSize int32) ApiReceiveGetRequest {
 	r.pageSize = &pageSize
 	return r
 }
 
-func (r ApiInvoiceV1ReceiveGetRequest) Execute() ([]Receive, *http.Response, error) {
-	return r.ApiService.InvoiceV1ReceiveGetExecute(r)
+// Sort by field. Prefix with &#39;-&#39; for descending order.
+func (r ApiReceiveGetRequest) Sort(sort string) ApiReceiveGetRequest {
+	r.sort = &sort
+	return r
+}
+
+func (r ApiReceiveGetRequest) Execute() ([]Receive, *http.Response, error) {
+	return r.ApiService.ReceiveGetExecute(r)
 }
 
 /*
-InvoiceV1ReceiveGet List incoming invoices
+ReceiveGet List incoming invoices
 
 Receive invoices are the invoices that are received from other companies.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvoiceV1ReceiveGetRequest
+ @return ApiReceiveGetRequest
 */
-func (a *ReceiveAPIService) InvoiceV1ReceiveGet(ctx context.Context) ApiInvoiceV1ReceiveGetRequest {
-	return ApiInvoiceV1ReceiveGetRequest{
+func (a *ReceiveAPIService) ReceiveGet(ctx context.Context) ApiReceiveGetRequest {
+	return ApiReceiveGetRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -156,7 +163,7 @@ func (a *ReceiveAPIService) InvoiceV1ReceiveGet(ctx context.Context) ApiInvoiceV
 
 // Execute executes the request
 //  @return []Receive
-func (a *ReceiveAPIService) InvoiceV1ReceiveGetExecute(r ApiInvoiceV1ReceiveGetRequest) ([]Receive, *http.Response, error) {
+func (a *ReceiveAPIService) ReceiveGetExecute(r ApiReceiveGetRequest) ([]Receive, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -164,12 +171,12 @@ func (a *ReceiveAPIService) InvoiceV1ReceiveGetExecute(r ApiInvoiceV1ReceiveGetR
 		localVarReturnValue  []Receive
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ReceiveAPIService.InvoiceV1ReceiveGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ReceiveAPIService.ReceiveGet")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/receive"
+	localVarPath := localBasePath + "/receive"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -225,6 +232,9 @@ func (a *ReceiveAPIService) InvoiceV1ReceiveGetExecute(r ApiInvoiceV1ReceiveGetR
 	} else {
 		var defaultValue int32 = 100
 		r.pageSize = &defaultValue
+	}
+	if r.sort != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", r.sort, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -290,27 +300,27 @@ func (a *ReceiveAPIService) InvoiceV1ReceiveGetExecute(r ApiInvoiceV1ReceiveGetR
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1ReceiveIdDeleteRequest struct {
+type ApiReceiveIdDeleteRequest struct {
 	ctx context.Context
 	ApiService *ReceiveAPIService
 	id int32
 }
 
-func (r ApiInvoiceV1ReceiveIdDeleteRequest) Execute() (*Receive, *http.Response, error) {
-	return r.ApiService.InvoiceV1ReceiveIdDeleteExecute(r)
+func (r ApiReceiveIdDeleteRequest) Execute() (*Receive, *http.Response, error) {
+	return r.ApiService.ReceiveIdDeleteExecute(r)
 }
 
 /*
-InvoiceV1ReceiveIdDelete Delete an incoming invoice by id
+ReceiveIdDelete Delete an incoming invoice by id
 
 Receive invoices are the invoices that are received from other companies.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id Item id
- @return ApiInvoiceV1ReceiveIdDeleteRequest
+ @return ApiReceiveIdDeleteRequest
 */
-func (a *ReceiveAPIService) InvoiceV1ReceiveIdDelete(ctx context.Context, id int32) ApiInvoiceV1ReceiveIdDeleteRequest {
-	return ApiInvoiceV1ReceiveIdDeleteRequest{
+func (a *ReceiveAPIService) ReceiveIdDelete(ctx context.Context, id int32) ApiReceiveIdDeleteRequest {
+	return ApiReceiveIdDeleteRequest{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
@@ -319,7 +329,7 @@ func (a *ReceiveAPIService) InvoiceV1ReceiveIdDelete(ctx context.Context, id int
 
 // Execute executes the request
 //  @return Receive
-func (a *ReceiveAPIService) InvoiceV1ReceiveIdDeleteExecute(r ApiInvoiceV1ReceiveIdDeleteRequest) (*Receive, *http.Response, error) {
+func (a *ReceiveAPIService) ReceiveIdDeleteExecute(r ApiReceiveIdDeleteRequest) (*Receive, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
@@ -327,12 +337,12 @@ func (a *ReceiveAPIService) InvoiceV1ReceiveIdDeleteExecute(r ApiInvoiceV1Receiv
 		localVarReturnValue  *Receive
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ReceiveAPIService.InvoiceV1ReceiveIdDelete")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ReceiveAPIService.ReceiveIdDelete")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/receive/{id}"
+	localVarPath := localBasePath + "/receive/{id}"
 	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
@@ -415,27 +425,27 @@ func (a *ReceiveAPIService) InvoiceV1ReceiveIdDeleteExecute(r ApiInvoiceV1Receiv
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1ReceiveIdGetRequest struct {
+type ApiReceiveIdGetRequest struct {
 	ctx context.Context
 	ApiService *ReceiveAPIService
 	id int32
 }
 
-func (r ApiInvoiceV1ReceiveIdGetRequest) Execute() (*Receive, *http.Response, error) {
-	return r.ApiService.InvoiceV1ReceiveIdGetExecute(r)
+func (r ApiReceiveIdGetRequest) Execute() (*Receive, *http.Response, error) {
+	return r.ApiService.ReceiveIdGetExecute(r)
 }
 
 /*
-InvoiceV1ReceiveIdGet Get an incoming invoice by id
+ReceiveIdGet Get an incoming invoice by id
 
 Receive invoices are the invoices that are received from other companies.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id Item id
- @return ApiInvoiceV1ReceiveIdGetRequest
+ @return ApiReceiveIdGetRequest
 */
-func (a *ReceiveAPIService) InvoiceV1ReceiveIdGet(ctx context.Context, id int32) ApiInvoiceV1ReceiveIdGetRequest {
-	return ApiInvoiceV1ReceiveIdGetRequest{
+func (a *ReceiveAPIService) ReceiveIdGet(ctx context.Context, id int32) ApiReceiveIdGetRequest {
+	return ApiReceiveIdGetRequest{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
@@ -444,7 +454,7 @@ func (a *ReceiveAPIService) InvoiceV1ReceiveIdGet(ctx context.Context, id int32)
 
 // Execute executes the request
 //  @return Receive
-func (a *ReceiveAPIService) InvoiceV1ReceiveIdGetExecute(r ApiInvoiceV1ReceiveIdGetRequest) (*Receive, *http.Response, error) {
+func (a *ReceiveAPIService) ReceiveIdGetExecute(r ApiReceiveIdGetRequest) (*Receive, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -452,12 +462,12 @@ func (a *ReceiveAPIService) InvoiceV1ReceiveIdGetExecute(r ApiInvoiceV1ReceiveId
 		localVarReturnValue  *Receive
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ReceiveAPIService.InvoiceV1ReceiveIdGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ReceiveAPIService.ReceiveIdGet")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/receive/{id}"
+	localVarPath := localBasePath + "/receive/{id}"
 	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)

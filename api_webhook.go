@@ -1,9 +1,9 @@
 /*
-Italian eInvoice API
+Italian eInvoice API v1
 
-The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. The API also provides advanced features as encryption at rest, invoice validation, multiple upload formats, webhooks, event logging, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
+The [Italian eInvoice API][2] is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. The API also provides advanced features as encryption at rest, invoice validation, multiple upload formats, webhooks, event logging, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
-API version: 1.0.0
+API version: 1
 Contact: support@invoicetronic.com
 */
 
@@ -24,39 +24,46 @@ import (
 // WebhookAPIService WebhookAPI service
 type WebhookAPIService service
 
-type ApiInvoiceV1WebhookGetRequest struct {
+type ApiWebhookGetRequest struct {
 	ctx context.Context
 	ApiService *WebhookAPIService
 	page *int32
 	pageSize *int32
+	sort *string
 }
 
 // Page number. Defaults to 1.
-func (r ApiInvoiceV1WebhookGetRequest) Page(page int32) ApiInvoiceV1WebhookGetRequest {
+func (r ApiWebhookGetRequest) Page(page int32) ApiWebhookGetRequest {
 	r.page = &page
 	return r
 }
 
 // Items per page. Defaults to 50. Cannot be greater than 200.
-func (r ApiInvoiceV1WebhookGetRequest) PageSize(pageSize int32) ApiInvoiceV1WebhookGetRequest {
+func (r ApiWebhookGetRequest) PageSize(pageSize int32) ApiWebhookGetRequest {
 	r.pageSize = &pageSize
 	return r
 }
 
-func (r ApiInvoiceV1WebhookGetRequest) Execute() ([]WebHook, *http.Response, error) {
-	return r.ApiService.InvoiceV1WebhookGetExecute(r)
+// Sort by field. Prefix with &#39;-&#39; for descending order.
+func (r ApiWebhookGetRequest) Sort(sort string) ApiWebhookGetRequest {
+	r.sort = &sort
+	return r
+}
+
+func (r ApiWebhookGetRequest) Execute() ([]WebHook, *http.Response, error) {
+	return r.ApiService.WebhookGetExecute(r)
 }
 
 /*
-InvoiceV1WebhookGet List webhooks
+WebhookGet List webhooks
 
 Webhooks are used to notify external services about write events that occur in the API. You can subscribe to specific events and receive a notification when they occur.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvoiceV1WebhookGetRequest
+ @return ApiWebhookGetRequest
 */
-func (a *WebhookAPIService) InvoiceV1WebhookGet(ctx context.Context) ApiInvoiceV1WebhookGetRequest {
-	return ApiInvoiceV1WebhookGetRequest{
+func (a *WebhookAPIService) WebhookGet(ctx context.Context) ApiWebhookGetRequest {
+	return ApiWebhookGetRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -64,7 +71,7 @@ func (a *WebhookAPIService) InvoiceV1WebhookGet(ctx context.Context) ApiInvoiceV
 
 // Execute executes the request
 //  @return []WebHook
-func (a *WebhookAPIService) InvoiceV1WebhookGetExecute(r ApiInvoiceV1WebhookGetRequest) ([]WebHook, *http.Response, error) {
+func (a *WebhookAPIService) WebhookGetExecute(r ApiWebhookGetRequest) ([]WebHook, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -72,12 +79,12 @@ func (a *WebhookAPIService) InvoiceV1WebhookGetExecute(r ApiInvoiceV1WebhookGetR
 		localVarReturnValue  []WebHook
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebhookAPIService.InvoiceV1WebhookGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebhookAPIService.WebhookGet")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/webhook"
+	localVarPath := localBasePath + "/webhook"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -94,6 +101,9 @@ func (a *WebhookAPIService) InvoiceV1WebhookGetExecute(r ApiInvoiceV1WebhookGetR
 	} else {
 		var defaultValue int32 = 100
 		r.pageSize = &defaultValue
+	}
+	if r.sort != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", r.sort, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -159,27 +169,27 @@ func (a *WebhookAPIService) InvoiceV1WebhookGetExecute(r ApiInvoiceV1WebhookGetR
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1WebhookIdDeleteRequest struct {
+type ApiWebhookIdDeleteRequest struct {
 	ctx context.Context
 	ApiService *WebhookAPIService
 	id int32
 }
 
-func (r ApiInvoiceV1WebhookIdDeleteRequest) Execute() (*WebHook, *http.Response, error) {
-	return r.ApiService.InvoiceV1WebhookIdDeleteExecute(r)
+func (r ApiWebhookIdDeleteRequest) Execute() (*WebHook, *http.Response, error) {
+	return r.ApiService.WebhookIdDeleteExecute(r)
 }
 
 /*
-InvoiceV1WebhookIdDelete Delete a webhook by id
+WebhookIdDelete Delete a webhook by id
 
 Webhooks are used to notify external services about write events that occur in the API. You can subscribe to specific events and receive a notification when they occur.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id Item id
- @return ApiInvoiceV1WebhookIdDeleteRequest
+ @return ApiWebhookIdDeleteRequest
 */
-func (a *WebhookAPIService) InvoiceV1WebhookIdDelete(ctx context.Context, id int32) ApiInvoiceV1WebhookIdDeleteRequest {
-	return ApiInvoiceV1WebhookIdDeleteRequest{
+func (a *WebhookAPIService) WebhookIdDelete(ctx context.Context, id int32) ApiWebhookIdDeleteRequest {
+	return ApiWebhookIdDeleteRequest{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
@@ -188,7 +198,7 @@ func (a *WebhookAPIService) InvoiceV1WebhookIdDelete(ctx context.Context, id int
 
 // Execute executes the request
 //  @return WebHook
-func (a *WebhookAPIService) InvoiceV1WebhookIdDeleteExecute(r ApiInvoiceV1WebhookIdDeleteRequest) (*WebHook, *http.Response, error) {
+func (a *WebhookAPIService) WebhookIdDeleteExecute(r ApiWebhookIdDeleteRequest) (*WebHook, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
@@ -196,12 +206,12 @@ func (a *WebhookAPIService) InvoiceV1WebhookIdDeleteExecute(r ApiInvoiceV1Webhoo
 		localVarReturnValue  *WebHook
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebhookAPIService.InvoiceV1WebhookIdDelete")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebhookAPIService.WebhookIdDelete")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/webhook/{id}"
+	localVarPath := localBasePath + "/webhook/{id}"
 	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
@@ -284,27 +294,27 @@ func (a *WebhookAPIService) InvoiceV1WebhookIdDeleteExecute(r ApiInvoiceV1Webhoo
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1WebhookIdGetRequest struct {
+type ApiWebhookIdGetRequest struct {
 	ctx context.Context
 	ApiService *WebhookAPIService
 	id int32
 }
 
-func (r ApiInvoiceV1WebhookIdGetRequest) Execute() (*WebHook, *http.Response, error) {
-	return r.ApiService.InvoiceV1WebhookIdGetExecute(r)
+func (r ApiWebhookIdGetRequest) Execute() (*WebHook, *http.Response, error) {
+	return r.ApiService.WebhookIdGetExecute(r)
 }
 
 /*
-InvoiceV1WebhookIdGet Get a webhook by id
+WebhookIdGet Get a webhook by id
 
 Webhooks are used to notify external services about write events that occur in the API. You can subscribe to specific events and receive a notification when they occur.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id Item id
- @return ApiInvoiceV1WebhookIdGetRequest
+ @return ApiWebhookIdGetRequest
 */
-func (a *WebhookAPIService) InvoiceV1WebhookIdGet(ctx context.Context, id int32) ApiInvoiceV1WebhookIdGetRequest {
-	return ApiInvoiceV1WebhookIdGetRequest{
+func (a *WebhookAPIService) WebhookIdGet(ctx context.Context, id int32) ApiWebhookIdGetRequest {
+	return ApiWebhookIdGetRequest{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
@@ -313,7 +323,7 @@ func (a *WebhookAPIService) InvoiceV1WebhookIdGet(ctx context.Context, id int32)
 
 // Execute executes the request
 //  @return WebHook
-func (a *WebhookAPIService) InvoiceV1WebhookIdGetExecute(r ApiInvoiceV1WebhookIdGetRequest) (*WebHook, *http.Response, error) {
+func (a *WebhookAPIService) WebhookIdGetExecute(r ApiWebhookIdGetRequest) (*WebHook, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -321,12 +331,12 @@ func (a *WebhookAPIService) InvoiceV1WebhookIdGetExecute(r ApiInvoiceV1WebhookId
 		localVarReturnValue  *WebHook
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebhookAPIService.InvoiceV1WebhookIdGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebhookAPIService.WebhookIdGet")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/webhook/{id}"
+	localVarPath := localBasePath + "/webhook/{id}"
 	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
@@ -387,31 +397,31 @@ func (a *WebhookAPIService) InvoiceV1WebhookIdGetExecute(r ApiInvoiceV1WebhookId
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1WebhookPostRequest struct {
+type ApiWebhookPostRequest struct {
 	ctx context.Context
 	ApiService *WebhookAPIService
 	webHook *WebHook
 }
 
-func (r ApiInvoiceV1WebhookPostRequest) WebHook(webHook WebHook) ApiInvoiceV1WebhookPostRequest {
+func (r ApiWebhookPostRequest) WebHook(webHook WebHook) ApiWebhookPostRequest {
 	r.webHook = &webHook
 	return r
 }
 
-func (r ApiInvoiceV1WebhookPostRequest) Execute() (*WebHook, *http.Response, error) {
-	return r.ApiService.InvoiceV1WebhookPostExecute(r)
+func (r ApiWebhookPostRequest) Execute() (*WebHook, *http.Response, error) {
+	return r.ApiService.WebhookPostExecute(r)
 }
 
 /*
-InvoiceV1WebhookPost Add a webhook
+WebhookPost Add a webhook
 
 Webhooks are used to notify external services about write events that occur in the API. You can subscribe to specific events and receive a notification when they occur.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvoiceV1WebhookPostRequest
+ @return ApiWebhookPostRequest
 */
-func (a *WebhookAPIService) InvoiceV1WebhookPost(ctx context.Context) ApiInvoiceV1WebhookPostRequest {
-	return ApiInvoiceV1WebhookPostRequest{
+func (a *WebhookAPIService) WebhookPost(ctx context.Context) ApiWebhookPostRequest {
+	return ApiWebhookPostRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -419,7 +429,7 @@ func (a *WebhookAPIService) InvoiceV1WebhookPost(ctx context.Context) ApiInvoice
 
 // Execute executes the request
 //  @return WebHook
-func (a *WebhookAPIService) InvoiceV1WebhookPostExecute(r ApiInvoiceV1WebhookPostRequest) (*WebHook, *http.Response, error) {
+func (a *WebhookAPIService) WebhookPostExecute(r ApiWebhookPostRequest) (*WebHook, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -427,12 +437,12 @@ func (a *WebhookAPIService) InvoiceV1WebhookPostExecute(r ApiInvoiceV1WebhookPos
 		localVarReturnValue  *WebHook
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebhookAPIService.InvoiceV1WebhookPost")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebhookAPIService.WebhookPost")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/webhook"
+	localVarPath := localBasePath + "/webhook"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -518,31 +528,31 @@ func (a *WebhookAPIService) InvoiceV1WebhookPostExecute(r ApiInvoiceV1WebhookPos
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1WebhookPutRequest struct {
+type ApiWebhookPutRequest struct {
 	ctx context.Context
 	ApiService *WebhookAPIService
 	webHook *WebHook
 }
 
-func (r ApiInvoiceV1WebhookPutRequest) WebHook(webHook WebHook) ApiInvoiceV1WebhookPutRequest {
+func (r ApiWebhookPutRequest) WebHook(webHook WebHook) ApiWebhookPutRequest {
 	r.webHook = &webHook
 	return r
 }
 
-func (r ApiInvoiceV1WebhookPutRequest) Execute() (*WebHook, *http.Response, error) {
-	return r.ApiService.InvoiceV1WebhookPutExecute(r)
+func (r ApiWebhookPutRequest) Execute() (*WebHook, *http.Response, error) {
+	return r.ApiService.WebhookPutExecute(r)
 }
 
 /*
-InvoiceV1WebhookPut Update a webhook
+WebhookPut Update a webhook
 
 Webhooks are used to notify external services about write events that occur in the API. You can subscribe to specific events and receive a notification when they occur.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvoiceV1WebhookPutRequest
+ @return ApiWebhookPutRequest
 */
-func (a *WebhookAPIService) InvoiceV1WebhookPut(ctx context.Context) ApiInvoiceV1WebhookPutRequest {
-	return ApiInvoiceV1WebhookPutRequest{
+func (a *WebhookAPIService) WebhookPut(ctx context.Context) ApiWebhookPutRequest {
+	return ApiWebhookPutRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -550,7 +560,7 @@ func (a *WebhookAPIService) InvoiceV1WebhookPut(ctx context.Context) ApiInvoiceV
 
 // Execute executes the request
 //  @return WebHook
-func (a *WebhookAPIService) InvoiceV1WebhookPutExecute(r ApiInvoiceV1WebhookPutRequest) (*WebHook, *http.Response, error) {
+func (a *WebhookAPIService) WebhookPutExecute(r ApiWebhookPutRequest) (*WebHook, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -558,12 +568,12 @@ func (a *WebhookAPIService) InvoiceV1WebhookPutExecute(r ApiInvoiceV1WebhookPutR
 		localVarReturnValue  *WebHook
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebhookAPIService.InvoiceV1WebhookPut")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebhookAPIService.WebhookPut")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/webhook"
+	localVarPath := localBasePath + "/webhook"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -649,37 +659,44 @@ func (a *WebhookAPIService) InvoiceV1WebhookPutExecute(r ApiInvoiceV1WebhookPutR
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1WebhookhistoryGetRequest struct {
+type ApiWebhookhistoryGetRequest struct {
 	ctx context.Context
 	ApiService *WebhookAPIService
 	page *int32
 	pageSize *int32
+	sort *string
 }
 
 // Page number. Defaults to 1.
-func (r ApiInvoiceV1WebhookhistoryGetRequest) Page(page int32) ApiInvoiceV1WebhookhistoryGetRequest {
+func (r ApiWebhookhistoryGetRequest) Page(page int32) ApiWebhookhistoryGetRequest {
 	r.page = &page
 	return r
 }
 
 // Items per page. Defaults to 50. Cannot be greater than 200.
-func (r ApiInvoiceV1WebhookhistoryGetRequest) PageSize(pageSize int32) ApiInvoiceV1WebhookhistoryGetRequest {
+func (r ApiWebhookhistoryGetRequest) PageSize(pageSize int32) ApiWebhookhistoryGetRequest {
 	r.pageSize = &pageSize
 	return r
 }
 
-func (r ApiInvoiceV1WebhookhistoryGetRequest) Execute() ([]WebHookHistory, *http.Response, error) {
-	return r.ApiService.InvoiceV1WebhookhistoryGetExecute(r)
+// Sort by field. Prefix with &#39;-&#39; for descending order.
+func (r ApiWebhookhistoryGetRequest) Sort(sort string) ApiWebhookhistoryGetRequest {
+	r.sort = &sort
+	return r
+}
+
+func (r ApiWebhookhistoryGetRequest) Execute() ([]WebHookHistory, *http.Response, error) {
+	return r.ApiService.WebhookhistoryGetExecute(r)
 }
 
 /*
-InvoiceV1WebhookhistoryGet List webhook history items
+WebhookhistoryGet List webhook history items
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvoiceV1WebhookhistoryGetRequest
+ @return ApiWebhookhistoryGetRequest
 */
-func (a *WebhookAPIService) InvoiceV1WebhookhistoryGet(ctx context.Context) ApiInvoiceV1WebhookhistoryGetRequest {
-	return ApiInvoiceV1WebhookhistoryGetRequest{
+func (a *WebhookAPIService) WebhookhistoryGet(ctx context.Context) ApiWebhookhistoryGetRequest {
+	return ApiWebhookhistoryGetRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -687,7 +704,7 @@ func (a *WebhookAPIService) InvoiceV1WebhookhistoryGet(ctx context.Context) ApiI
 
 // Execute executes the request
 //  @return []WebHookHistory
-func (a *WebhookAPIService) InvoiceV1WebhookhistoryGetExecute(r ApiInvoiceV1WebhookhistoryGetRequest) ([]WebHookHistory, *http.Response, error) {
+func (a *WebhookAPIService) WebhookhistoryGetExecute(r ApiWebhookhistoryGetRequest) ([]WebHookHistory, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -695,12 +712,12 @@ func (a *WebhookAPIService) InvoiceV1WebhookhistoryGetExecute(r ApiInvoiceV1Webh
 		localVarReturnValue  []WebHookHistory
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebhookAPIService.InvoiceV1WebhookhistoryGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebhookAPIService.WebhookhistoryGet")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/webhookhistory"
+	localVarPath := localBasePath + "/webhookhistory"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -718,6 +735,9 @@ func (a *WebhookAPIService) InvoiceV1WebhookhistoryGetExecute(r ApiInvoiceV1Webh
 		var defaultValue int32 = 100
 		r.pageSize = &defaultValue
 	}
+	if r.sort != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", r.sort, "form", "")
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -782,25 +802,25 @@ func (a *WebhookAPIService) InvoiceV1WebhookhistoryGetExecute(r ApiInvoiceV1Webh
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1WebhookhistoryIdGetRequest struct {
+type ApiWebhookhistoryIdGetRequest struct {
 	ctx context.Context
 	ApiService *WebhookAPIService
 	id int32
 }
 
-func (r ApiInvoiceV1WebhookhistoryIdGetRequest) Execute() (*WebHookHistory, *http.Response, error) {
-	return r.ApiService.InvoiceV1WebhookhistoryIdGetExecute(r)
+func (r ApiWebhookhistoryIdGetRequest) Execute() (*WebHookHistory, *http.Response, error) {
+	return r.ApiService.WebhookhistoryIdGetExecute(r)
 }
 
 /*
-InvoiceV1WebhookhistoryIdGet Get a webhook history item by id
+WebhookhistoryIdGet Get a webhook history item by id
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id Item id
- @return ApiInvoiceV1WebhookhistoryIdGetRequest
+ @return ApiWebhookhistoryIdGetRequest
 */
-func (a *WebhookAPIService) InvoiceV1WebhookhistoryIdGet(ctx context.Context, id int32) ApiInvoiceV1WebhookhistoryIdGetRequest {
-	return ApiInvoiceV1WebhookhistoryIdGetRequest{
+func (a *WebhookAPIService) WebhookhistoryIdGet(ctx context.Context, id int32) ApiWebhookhistoryIdGetRequest {
+	return ApiWebhookhistoryIdGetRequest{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
@@ -809,7 +829,7 @@ func (a *WebhookAPIService) InvoiceV1WebhookhistoryIdGet(ctx context.Context, id
 
 // Execute executes the request
 //  @return WebHookHistory
-func (a *WebhookAPIService) InvoiceV1WebhookhistoryIdGetExecute(r ApiInvoiceV1WebhookhistoryIdGetRequest) (*WebHookHistory, *http.Response, error) {
+func (a *WebhookAPIService) WebhookhistoryIdGetExecute(r ApiWebhookhistoryIdGetRequest) (*WebHookHistory, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -817,12 +837,12 @@ func (a *WebhookAPIService) InvoiceV1WebhookhistoryIdGetExecute(r ApiInvoiceV1We
 		localVarReturnValue  *WebHookHistory
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebhookAPIService.InvoiceV1WebhookhistoryIdGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebhookAPIService.WebhookhistoryIdGet")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/webhookhistory/{id}"
+	localVarPath := localBasePath + "/webhookhistory/{id}"
 	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)

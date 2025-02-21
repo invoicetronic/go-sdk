@@ -4,17 +4,17 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**InvoiceV1CompanyGet**](CompanyAPI.md#InvoiceV1CompanyGet) | **Get** /invoice/v1/company | List companies
-[**InvoiceV1CompanyIdDelete**](CompanyAPI.md#InvoiceV1CompanyIdDelete) | **Delete** /invoice/v1/company/{id} | Delete a company
-[**InvoiceV1CompanyIdGet**](CompanyAPI.md#InvoiceV1CompanyIdGet) | **Get** /invoice/v1/company/{id} | Get a company by id
-[**InvoiceV1CompanyPost**](CompanyAPI.md#InvoiceV1CompanyPost) | **Post** /invoice/v1/company | Add a company
-[**InvoiceV1CompanyPut**](CompanyAPI.md#InvoiceV1CompanyPut) | **Put** /invoice/v1/company | Update a company
+[**CompanyGet**](CompanyAPI.md#CompanyGet) | **Get** /company | List companies
+[**CompanyIdDelete**](CompanyAPI.md#CompanyIdDelete) | **Delete** /company/{id} | Delete a company
+[**CompanyIdGet**](CompanyAPI.md#CompanyIdGet) | **Get** /company/{id} | Get a company by id
+[**CompanyPost**](CompanyAPI.md#CompanyPost) | **Post** /company | Add a company
+[**CompanyPut**](CompanyAPI.md#CompanyPut) | **Put** /company | Update a company
 
 
 
-## InvoiceV1CompanyGet
+## CompanyGet
 
-> []Company InvoiceV1CompanyGet(ctx).Page(page).PageSize(pageSize).Execute()
+> []Company CompanyGet(ctx).Page(page).PageSize(pageSize).Sort(sort).Execute()
 
 List companies
 
@@ -35,16 +35,17 @@ import (
 func main() {
 	page := int32(56) // int32 | Page number. Defaults to 1. (optional) (default to 1)
 	pageSize := int32(56) // int32 | Items per page. Defaults to 50. Cannot be greater than 200. (optional) (default to 100)
+	sort := "sort_example" // string | Sort by field. Prefix with '-' for descending order. (optional)
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.CompanyAPI.InvoiceV1CompanyGet(context.Background()).Page(page).PageSize(pageSize).Execute()
+	resp, r, err := apiClient.CompanyAPI.CompanyGet(context.Background()).Page(page).PageSize(pageSize).Sort(sort).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `CompanyAPI.InvoiceV1CompanyGet``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `CompanyAPI.CompanyGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `InvoiceV1CompanyGet`: []Company
-	fmt.Fprintf(os.Stdout, "Response from `CompanyAPI.InvoiceV1CompanyGet`: %v\n", resp)
+	// response from `CompanyGet`: []Company
+	fmt.Fprintf(os.Stdout, "Response from `CompanyAPI.CompanyGet`: %v\n", resp)
 }
 ```
 
@@ -54,13 +55,14 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiInvoiceV1CompanyGetRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiCompanyGetRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **page** | **int32** | Page number. Defaults to 1. | [default to 1]
  **pageSize** | **int32** | Items per page. Defaults to 50. Cannot be greater than 200. | [default to 100]
+ **sort** | **string** | Sort by field. Prefix with &#39;-&#39; for descending order. | 
 
 ### Return type
 
@@ -80,9 +82,9 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## InvoiceV1CompanyIdDelete
+## CompanyIdDelete
 
-> Company InvoiceV1CompanyIdDelete(ctx, id).Execute()
+> Company CompanyIdDelete(ctx, id).Execute()
 
 Delete a company
 
@@ -105,13 +107,13 @@ func main() {
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.CompanyAPI.InvoiceV1CompanyIdDelete(context.Background(), id).Execute()
+	resp, r, err := apiClient.CompanyAPI.CompanyIdDelete(context.Background(), id).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `CompanyAPI.InvoiceV1CompanyIdDelete``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `CompanyAPI.CompanyIdDelete``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `InvoiceV1CompanyIdDelete`: Company
-	fmt.Fprintf(os.Stdout, "Response from `CompanyAPI.InvoiceV1CompanyIdDelete`: %v\n", resp)
+	// response from `CompanyIdDelete`: Company
+	fmt.Fprintf(os.Stdout, "Response from `CompanyAPI.CompanyIdDelete`: %v\n", resp)
 }
 ```
 
@@ -125,7 +127,7 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiInvoiceV1CompanyIdDeleteRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiCompanyIdDeleteRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -150,9 +152,9 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## InvoiceV1CompanyIdGet
+## CompanyIdGet
 
-> Company InvoiceV1CompanyIdGet(ctx, id).Execute()
+> Company CompanyIdGet(ctx, id).Execute()
 
 Get a company by id
 
@@ -175,13 +177,13 @@ func main() {
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.CompanyAPI.InvoiceV1CompanyIdGet(context.Background(), id).Execute()
+	resp, r, err := apiClient.CompanyAPI.CompanyIdGet(context.Background(), id).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `CompanyAPI.InvoiceV1CompanyIdGet``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `CompanyAPI.CompanyIdGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `InvoiceV1CompanyIdGet`: Company
-	fmt.Fprintf(os.Stdout, "Response from `CompanyAPI.InvoiceV1CompanyIdGet`: %v\n", resp)
+	// response from `CompanyIdGet`: Company
+	fmt.Fprintf(os.Stdout, "Response from `CompanyAPI.CompanyIdGet`: %v\n", resp)
 }
 ```
 
@@ -195,7 +197,7 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiInvoiceV1CompanyIdGetRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiCompanyIdGetRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -220,9 +222,9 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## InvoiceV1CompanyPost
+## CompanyPost
 
-> Company InvoiceV1CompanyPost(ctx).Company(company).Execute()
+> Company CompanyPost(ctx).Company(company).Execute()
 
 Add a company
 
@@ -245,13 +247,13 @@ func main() {
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.CompanyAPI.InvoiceV1CompanyPost(context.Background()).Company(company).Execute()
+	resp, r, err := apiClient.CompanyAPI.CompanyPost(context.Background()).Company(company).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `CompanyAPI.InvoiceV1CompanyPost``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `CompanyAPI.CompanyPost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `InvoiceV1CompanyPost`: Company
-	fmt.Fprintf(os.Stdout, "Response from `CompanyAPI.InvoiceV1CompanyPost`: %v\n", resp)
+	// response from `CompanyPost`: Company
+	fmt.Fprintf(os.Stdout, "Response from `CompanyAPI.CompanyPost`: %v\n", resp)
 }
 ```
 
@@ -261,7 +263,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiInvoiceV1CompanyPostRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiCompanyPostRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -286,9 +288,9 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## InvoiceV1CompanyPut
+## CompanyPut
 
-> Company InvoiceV1CompanyPut(ctx).Company(company).Execute()
+> Company CompanyPut(ctx).Company(company).Execute()
 
 Update a company
 
@@ -311,13 +313,13 @@ func main() {
 
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.CompanyAPI.InvoiceV1CompanyPut(context.Background()).Company(company).Execute()
+	resp, r, err := apiClient.CompanyAPI.CompanyPut(context.Background()).Company(company).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `CompanyAPI.InvoiceV1CompanyPut``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `CompanyAPI.CompanyPut``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `InvoiceV1CompanyPut`: Company
-	fmt.Fprintf(os.Stdout, "Response from `CompanyAPI.InvoiceV1CompanyPut`: %v\n", resp)
+	// response from `CompanyPut`: Company
+	fmt.Fprintf(os.Stdout, "Response from `CompanyAPI.CompanyPut`: %v\n", resp)
 }
 ```
 
@@ -327,7 +329,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiInvoiceV1CompanyPutRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiCompanyPutRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

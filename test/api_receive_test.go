@@ -1,5 +1,5 @@
 /*
-Italian eInvoice API
+Italian eInvoice API v1
 
 Testing ReceiveAPIService
 
@@ -22,11 +22,11 @@ func Test_invoicesdk_ReceiveAPIService(t *testing.T) {
 	configuration := invoicesdk.NewConfiguration()
 	apiClient := invoicesdk.NewAPIClient(configuration)
 
-	t.Run("Test ReceiveAPIService InvoiceV1ReceiveGet", func(t *testing.T) {
+	t.Run("Test ReceiveAPIService ReceiveGet", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ReceiveAPI.InvoiceV1ReceiveGet(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ReceiveAPI.ReceiveGet(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,13 +34,13 @@ func Test_invoicesdk_ReceiveAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test ReceiveAPIService InvoiceV1ReceiveIdDelete", func(t *testing.T) {
+	t.Run("Test ReceiveAPIService ReceiveIdDelete", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
 		var id int32
 
-		resp, httpRes, err := apiClient.ReceiveAPI.InvoiceV1ReceiveIdDelete(context.Background(), id).Execute()
+		resp, httpRes, err := apiClient.ReceiveAPI.ReceiveIdDelete(context.Background(), id).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -48,13 +48,13 @@ func Test_invoicesdk_ReceiveAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test ReceiveAPIService InvoiceV1ReceiveIdGet", func(t *testing.T) {
+	t.Run("Test ReceiveAPIService ReceiveIdGet", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
 		var id int32
 
-		resp, httpRes, err := apiClient.ReceiveAPI.InvoiceV1ReceiveIdGet(context.Background(), id).Execute()
+		resp, httpRes, err := apiClient.ReceiveAPI.ReceiveIdGet(context.Background(), id).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

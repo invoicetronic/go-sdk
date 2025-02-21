@@ -1,9 +1,9 @@
 /*
-Italian eInvoice API
+Italian eInvoice API v1
 
-The Italian eInvoice API is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. The API also provides advanced features as encryption at rest, invoice validation, multiple upload formats, webhooks, event logging, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
+The [Italian eInvoice API][2] is a RESTful API that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed by Invoicetronic to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. The API also provides advanced features as encryption at rest, invoice validation, multiple upload formats, webhooks, event logging, client SDKs for commonly used languages, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
-API version: 1.0.0
+API version: 1
 Contact: support@invoicetronic.com
 */
 
@@ -24,40 +24,47 @@ import (
 // CompanyAPIService CompanyAPI service
 type CompanyAPIService service
 
-type ApiInvoiceV1CompanyGetRequest struct {
+type ApiCompanyGetRequest struct {
 	ctx context.Context
 	ApiService *CompanyAPIService
 	page *int32
 	pageSize *int32
+	sort *string
 }
 
 // Page number. Defaults to 1.
-func (r ApiInvoiceV1CompanyGetRequest) Page(page int32) ApiInvoiceV1CompanyGetRequest {
+func (r ApiCompanyGetRequest) Page(page int32) ApiCompanyGetRequest {
 	r.page = &page
 	return r
 }
 
 // Items per page. Defaults to 50. Cannot be greater than 200.
-func (r ApiInvoiceV1CompanyGetRequest) PageSize(pageSize int32) ApiInvoiceV1CompanyGetRequest {
+func (r ApiCompanyGetRequest) PageSize(pageSize int32) ApiCompanyGetRequest {
 	r.pageSize = &pageSize
 	return r
 }
 
-func (r ApiInvoiceV1CompanyGetRequest) Execute() ([]Company, *http.Response, error) {
-	return r.ApiService.InvoiceV1CompanyGetExecute(r)
+// Sort by field. Prefix with &#39;-&#39; for descending order.
+func (r ApiCompanyGetRequest) Sort(sort string) ApiCompanyGetRequest {
+	r.sort = &sort
+	return r
+}
+
+func (r ApiCompanyGetRequest) Execute() ([]Company, *http.Response, error) {
+	return r.ApiService.CompanyGetExecute(r)
 }
 
 /*
-InvoiceV1CompanyGet List companies
+CompanyGet List companies
 
 Companies are the entities that send and receive invoices. As you send invoices, companies are added as needed. **You
 can only receive invoices for existing companies**.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvoiceV1CompanyGetRequest
+ @return ApiCompanyGetRequest
 */
-func (a *CompanyAPIService) InvoiceV1CompanyGet(ctx context.Context) ApiInvoiceV1CompanyGetRequest {
-	return ApiInvoiceV1CompanyGetRequest{
+func (a *CompanyAPIService) CompanyGet(ctx context.Context) ApiCompanyGetRequest {
+	return ApiCompanyGetRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -65,7 +72,7 @@ func (a *CompanyAPIService) InvoiceV1CompanyGet(ctx context.Context) ApiInvoiceV
 
 // Execute executes the request
 //  @return []Company
-func (a *CompanyAPIService) InvoiceV1CompanyGetExecute(r ApiInvoiceV1CompanyGetRequest) ([]Company, *http.Response, error) {
+func (a *CompanyAPIService) CompanyGetExecute(r ApiCompanyGetRequest) ([]Company, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -73,12 +80,12 @@ func (a *CompanyAPIService) InvoiceV1CompanyGetExecute(r ApiInvoiceV1CompanyGetR
 		localVarReturnValue  []Company
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CompanyAPIService.InvoiceV1CompanyGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CompanyAPIService.CompanyGet")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/company"
+	localVarPath := localBasePath + "/company"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -95,6 +102,9 @@ func (a *CompanyAPIService) InvoiceV1CompanyGetExecute(r ApiInvoiceV1CompanyGetR
 	} else {
 		var defaultValue int32 = 100
 		r.pageSize = &defaultValue
+	}
+	if r.sort != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", r.sort, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -160,28 +170,28 @@ func (a *CompanyAPIService) InvoiceV1CompanyGetExecute(r ApiInvoiceV1CompanyGetR
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1CompanyIdDeleteRequest struct {
+type ApiCompanyIdDeleteRequest struct {
 	ctx context.Context
 	ApiService *CompanyAPIService
 	id int32
 }
 
-func (r ApiInvoiceV1CompanyIdDeleteRequest) Execute() (*Company, *http.Response, error) {
-	return r.ApiService.InvoiceV1CompanyIdDeleteExecute(r)
+func (r ApiCompanyIdDeleteRequest) Execute() (*Company, *http.Response, error) {
+	return r.ApiService.CompanyIdDeleteExecute(r)
 }
 
 /*
-InvoiceV1CompanyIdDelete Delete a company
+CompanyIdDelete Delete a company
 
 Companies are the entities that send and receive invoices. As you send invoices, companies are added as needed. **You
 can only receive invoices for existing companies**.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id Item id
- @return ApiInvoiceV1CompanyIdDeleteRequest
+ @return ApiCompanyIdDeleteRequest
 */
-func (a *CompanyAPIService) InvoiceV1CompanyIdDelete(ctx context.Context, id int32) ApiInvoiceV1CompanyIdDeleteRequest {
-	return ApiInvoiceV1CompanyIdDeleteRequest{
+func (a *CompanyAPIService) CompanyIdDelete(ctx context.Context, id int32) ApiCompanyIdDeleteRequest {
+	return ApiCompanyIdDeleteRequest{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
@@ -190,7 +200,7 @@ func (a *CompanyAPIService) InvoiceV1CompanyIdDelete(ctx context.Context, id int
 
 // Execute executes the request
 //  @return Company
-func (a *CompanyAPIService) InvoiceV1CompanyIdDeleteExecute(r ApiInvoiceV1CompanyIdDeleteRequest) (*Company, *http.Response, error) {
+func (a *CompanyAPIService) CompanyIdDeleteExecute(r ApiCompanyIdDeleteRequest) (*Company, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
@@ -198,12 +208,12 @@ func (a *CompanyAPIService) InvoiceV1CompanyIdDeleteExecute(r ApiInvoiceV1Compan
 		localVarReturnValue  *Company
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CompanyAPIService.InvoiceV1CompanyIdDelete")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CompanyAPIService.CompanyIdDelete")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/company/{id}"
+	localVarPath := localBasePath + "/company/{id}"
 	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
@@ -286,28 +296,28 @@ func (a *CompanyAPIService) InvoiceV1CompanyIdDeleteExecute(r ApiInvoiceV1Compan
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1CompanyIdGetRequest struct {
+type ApiCompanyIdGetRequest struct {
 	ctx context.Context
 	ApiService *CompanyAPIService
 	id int32
 }
 
-func (r ApiInvoiceV1CompanyIdGetRequest) Execute() (*Company, *http.Response, error) {
-	return r.ApiService.InvoiceV1CompanyIdGetExecute(r)
+func (r ApiCompanyIdGetRequest) Execute() (*Company, *http.Response, error) {
+	return r.ApiService.CompanyIdGetExecute(r)
 }
 
 /*
-InvoiceV1CompanyIdGet Get a company by id
+CompanyIdGet Get a company by id
 
 Companies are the entities that send and receive invoices. As you send invoices, companies are added as needed. **You
 can only receive invoices for existing companies**.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id Item id
- @return ApiInvoiceV1CompanyIdGetRequest
+ @return ApiCompanyIdGetRequest
 */
-func (a *CompanyAPIService) InvoiceV1CompanyIdGet(ctx context.Context, id int32) ApiInvoiceV1CompanyIdGetRequest {
-	return ApiInvoiceV1CompanyIdGetRequest{
+func (a *CompanyAPIService) CompanyIdGet(ctx context.Context, id int32) ApiCompanyIdGetRequest {
+	return ApiCompanyIdGetRequest{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
@@ -316,7 +326,7 @@ func (a *CompanyAPIService) InvoiceV1CompanyIdGet(ctx context.Context, id int32)
 
 // Execute executes the request
 //  @return Company
-func (a *CompanyAPIService) InvoiceV1CompanyIdGetExecute(r ApiInvoiceV1CompanyIdGetRequest) (*Company, *http.Response, error) {
+func (a *CompanyAPIService) CompanyIdGetExecute(r ApiCompanyIdGetRequest) (*Company, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -324,12 +334,12 @@ func (a *CompanyAPIService) InvoiceV1CompanyIdGetExecute(r ApiInvoiceV1CompanyId
 		localVarReturnValue  *Company
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CompanyAPIService.InvoiceV1CompanyIdGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CompanyAPIService.CompanyIdGet")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/company/{id}"
+	localVarPath := localBasePath + "/company/{id}"
 	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
@@ -390,32 +400,32 @@ func (a *CompanyAPIService) InvoiceV1CompanyIdGetExecute(r ApiInvoiceV1CompanyId
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1CompanyPostRequest struct {
+type ApiCompanyPostRequest struct {
 	ctx context.Context
 	ApiService *CompanyAPIService
 	company *Company
 }
 
-func (r ApiInvoiceV1CompanyPostRequest) Company(company Company) ApiInvoiceV1CompanyPostRequest {
+func (r ApiCompanyPostRequest) Company(company Company) ApiCompanyPostRequest {
 	r.company = &company
 	return r
 }
 
-func (r ApiInvoiceV1CompanyPostRequest) Execute() (*Company, *http.Response, error) {
-	return r.ApiService.InvoiceV1CompanyPostExecute(r)
+func (r ApiCompanyPostRequest) Execute() (*Company, *http.Response, error) {
+	return r.ApiService.CompanyPostExecute(r)
 }
 
 /*
-InvoiceV1CompanyPost Add a company
+CompanyPost Add a company
 
 Companies are the entities that send and receive invoices. As you send invoices, companies are added as needed. **You
 can only receive invoices for existing companies**.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvoiceV1CompanyPostRequest
+ @return ApiCompanyPostRequest
 */
-func (a *CompanyAPIService) InvoiceV1CompanyPost(ctx context.Context) ApiInvoiceV1CompanyPostRequest {
-	return ApiInvoiceV1CompanyPostRequest{
+func (a *CompanyAPIService) CompanyPost(ctx context.Context) ApiCompanyPostRequest {
+	return ApiCompanyPostRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -423,7 +433,7 @@ func (a *CompanyAPIService) InvoiceV1CompanyPost(ctx context.Context) ApiInvoice
 
 // Execute executes the request
 //  @return Company
-func (a *CompanyAPIService) InvoiceV1CompanyPostExecute(r ApiInvoiceV1CompanyPostRequest) (*Company, *http.Response, error) {
+func (a *CompanyAPIService) CompanyPostExecute(r ApiCompanyPostRequest) (*Company, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -431,12 +441,12 @@ func (a *CompanyAPIService) InvoiceV1CompanyPostExecute(r ApiInvoiceV1CompanyPos
 		localVarReturnValue  *Company
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CompanyAPIService.InvoiceV1CompanyPost")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CompanyAPIService.CompanyPost")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/company"
+	localVarPath := localBasePath + "/company"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -522,32 +532,32 @@ func (a *CompanyAPIService) InvoiceV1CompanyPostExecute(r ApiInvoiceV1CompanyPos
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiInvoiceV1CompanyPutRequest struct {
+type ApiCompanyPutRequest struct {
 	ctx context.Context
 	ApiService *CompanyAPIService
 	company *Company
 }
 
-func (r ApiInvoiceV1CompanyPutRequest) Company(company Company) ApiInvoiceV1CompanyPutRequest {
+func (r ApiCompanyPutRequest) Company(company Company) ApiCompanyPutRequest {
 	r.company = &company
 	return r
 }
 
-func (r ApiInvoiceV1CompanyPutRequest) Execute() (*Company, *http.Response, error) {
-	return r.ApiService.InvoiceV1CompanyPutExecute(r)
+func (r ApiCompanyPutRequest) Execute() (*Company, *http.Response, error) {
+	return r.ApiService.CompanyPutExecute(r)
 }
 
 /*
-InvoiceV1CompanyPut Update a company
+CompanyPut Update a company
 
 Companies are the entities that send and receive invoices. As you send invoices, companies are added as needed. **You
 can only receive invoices for existing companies**.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvoiceV1CompanyPutRequest
+ @return ApiCompanyPutRequest
 */
-func (a *CompanyAPIService) InvoiceV1CompanyPut(ctx context.Context) ApiInvoiceV1CompanyPutRequest {
-	return ApiInvoiceV1CompanyPutRequest{
+func (a *CompanyAPIService) CompanyPut(ctx context.Context) ApiCompanyPutRequest {
+	return ApiCompanyPutRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -555,7 +565,7 @@ func (a *CompanyAPIService) InvoiceV1CompanyPut(ctx context.Context) ApiInvoiceV
 
 // Execute executes the request
 //  @return Company
-func (a *CompanyAPIService) InvoiceV1CompanyPutExecute(r ApiInvoiceV1CompanyPutRequest) (*Company, *http.Response, error) {
+func (a *CompanyAPIService) CompanyPutExecute(r ApiCompanyPutRequest) (*Company, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -563,12 +573,12 @@ func (a *CompanyAPIService) InvoiceV1CompanyPutExecute(r ApiInvoiceV1CompanyPutR
 		localVarReturnValue  *Company
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CompanyAPIService.InvoiceV1CompanyPut")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CompanyAPIService.CompanyPut")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/invoice/v1/company"
+	localVarPath := localBasePath + "/company"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
