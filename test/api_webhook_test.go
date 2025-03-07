@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
-	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/go-sdk"
 )
 
 func Test_invoicetronicsdk_WebhookAPIService(t *testing.T) {

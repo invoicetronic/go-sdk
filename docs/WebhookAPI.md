@@ -31,7 +31,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/go-sdk"
 )
 
 func main() {
@@ -101,7 +101,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/go-sdk"
 )
 
 func main() {
@@ -171,7 +171,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/go-sdk"
 )
 
 func main() {
@@ -241,7 +241,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/go-sdk"
 )
 
 func main() {
@@ -307,7 +307,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/go-sdk"
 )
 
 func main() {
@@ -373,7 +373,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/go-sdk"
 )
 
 func main() {
@@ -443,7 +443,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/go-sdk"
 )
 
 func main() {

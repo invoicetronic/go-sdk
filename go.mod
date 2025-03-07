@@ -1,4 +1,4 @@
-module github.com/invoicetronic/invoice-go-sdk
+module github.com/invoicetronic/go-sdk
 
 go 1.18
 
