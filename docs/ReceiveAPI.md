@@ -28,7 +28,7 @@ import (
 	"fmt"
 	"os"
     "time"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
@@ -49,8 +49,8 @@ func main() {
 	pageSize := int32(56) // int32 | Items per page. Defaults to 50. Cannot be greater than 200. (optional) (default to 100)
 	sort := "sort_example" // string | Sort by field. Prefix with '-' for descending order. (optional)
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.ReceiveAPI.ReceiveGet(context.Background()).CompanyId(companyId).Identifier(identifier).Unread(unread).Committente(committente).Prestatore(prestatore).FileName(fileName).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).DocumentDateFrom(documentDateFrom).DocumentDateTo(documentDateTo).DocumentNumber(documentNumber).Page(page).PageSize(pageSize).Sort(sort).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ReceiveAPI.ReceiveGet``: %v\n", err)
@@ -124,14 +124,14 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
 	id := int32(56) // int32 | Item id
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.ReceiveAPI.ReceiveIdDelete(context.Background(), id).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ReceiveAPI.ReceiveIdDelete``: %v\n", err)
@@ -194,14 +194,14 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
 	id := int32(56) // int32 | Item id
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.ReceiveAPI.ReceiveIdGet(context.Background(), id).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ReceiveAPI.ReceiveIdGet``: %v\n", err)

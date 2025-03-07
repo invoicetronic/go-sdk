@@ -1,7 +1,7 @@
 /*
 Invoicetronic API
 
-Testing UpdateAPIService
+Testing StatusAPIService
 
 */
 
@@ -17,30 +17,16 @@ import (
 	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
-func Test_invoicetronicsdk_UpdateAPIService(t *testing.T) {
+func Test_invoicetronicsdk_StatusAPIService(t *testing.T) {
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 
-	t.Run("Test UpdateAPIService UpdateGet", func(t *testing.T) {
+	t.Run("Test StatusAPIService StatusGet", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.UpdateAPI.UpdateGet(context.Background()).Execute()
-
-		require.Nil(t, err)
-		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
-
-	})
-
-	t.Run("Test UpdateAPIService UpdateIdGet", func(t *testing.T) {
-
-		t.Skip("skip test")  // remove to run test
-
-		var id int32
-
-		resp, httpRes, err := apiClient.UpdateAPI.UpdateIdGet(context.Background(), id).Execute()
+		resp, httpRes, err := apiClient.StatusAPI.StatusGet(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

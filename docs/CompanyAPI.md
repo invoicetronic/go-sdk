@@ -29,7 +29,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
@@ -37,8 +37,8 @@ func main() {
 	pageSize := int32(56) // int32 | Items per page. Defaults to 50. Cannot be greater than 200. (optional) (default to 100)
 	sort := "sort_example" // string | Sort by field. Prefix with '-' for descending order. (optional)
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.CompanyAPI.CompanyGet(context.Background()).Page(page).PageSize(pageSize).Sort(sort).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `CompanyAPI.CompanyGet``: %v\n", err)
@@ -99,14 +99,14 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
 	id := int32(56) // int32 | Item id
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.CompanyAPI.CompanyIdDelete(context.Background(), id).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `CompanyAPI.CompanyIdDelete``: %v\n", err)
@@ -169,14 +169,14 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
 	id := int32(56) // int32 | Item id
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.CompanyAPI.CompanyIdGet(context.Background(), id).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `CompanyAPI.CompanyIdGet``: %v\n", err)
@@ -239,14 +239,14 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
-	company := *invoicesdk.NewCompany("IT01234567891", "RSSMRA70A01F205V", "Mario Rossi Srl") // Company | 
+	company := *invoicetronicsdk.NewCompany("IT01234567891", "RSSMRA70A01F205V", "Mario Rossi Srl") // Company | 
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.CompanyAPI.CompanyPost(context.Background()).Company(company).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `CompanyAPI.CompanyPost``: %v\n", err)
@@ -305,14 +305,14 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
-	company := *invoicesdk.NewCompany("IT01234567891", "RSSMRA70A01F205V", "Mario Rossi Srl") // Company | 
+	company := *invoicetronicsdk.NewCompany("IT01234567891", "RSSMRA70A01F205V", "Mario Rossi Srl") // Company | 
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.CompanyAPI.CompanyPut(context.Background()).Company(company).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `CompanyAPI.CompanyPut``: %v\n", err)

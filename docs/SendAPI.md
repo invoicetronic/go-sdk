@@ -34,7 +34,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
@@ -42,8 +42,8 @@ func main() {
 	validate := true // bool | Validate the document first, and reject it on failure. (optional) (default to false)
 	signature := "signature_example" // string | Whether to digitally sign the document. (optional) (default to "Auto")
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.SendAPI.SendFilePost(context.Background()).File(file).Validate(validate).Signature(signature).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendFilePost``: %v\n", err)
@@ -105,7 +105,7 @@ import (
 	"fmt"
 	"os"
     "time"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
@@ -125,8 +125,8 @@ func main() {
 	pageSize := int32(56) // int32 | Items per page. Defaults to 50. Cannot be greater than 200. (optional) (default to 100)
 	sort := "sort_example" // string | Sort by field. Prefix with '-' for descending order. (optional)
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.SendAPI.SendGet(context.Background()).CompanyId(companyId).Identifier(identifier).Committente(committente).Prestatore(prestatore).FileName(fileName).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).DocumentDateFrom(documentDateFrom).DocumentDateTo(documentDateTo).DocumentNumber(documentNumber).Page(page).PageSize(pageSize).Sort(sort).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendGet``: %v\n", err)
@@ -199,14 +199,14 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
 	id := int32(56) // int32 | Item id
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.SendAPI.SendIdGet(context.Background(), id).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendIdGet``: %v\n", err)
@@ -269,16 +269,16 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
-	fatturaOrdinaria := *invoicesdk.NewFatturaOrdinaria() // FatturaOrdinaria | 
+	fatturaOrdinaria := *invoicetronicsdk.NewFatturaOrdinaria() // FatturaOrdinaria | 
 	validate := true // bool | Validate the document first, and reject it on failure. (optional) (default to false)
 	signature := "signature_example" // string | Whether to digitally sign the document. (optional) (default to "Auto")
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.SendAPI.SendJsonPost(context.Background()).FatturaOrdinaria(fatturaOrdinaria).Validate(validate).Signature(signature).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendJsonPost``: %v\n", err)
@@ -339,16 +339,16 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
-	send := *invoicesdk.NewSend() // Send | 
+	send := *invoicetronicsdk.NewSend() // Send | 
 	validate := true // bool | Validate the document first, and reject it on failure. (optional) (default to false)
 	signature := "signature_example" // string | Whether to digitally sign the document. (optional) (default to "Auto")
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.SendAPI.SendPost(context.Background()).Send(send).Validate(validate).Signature(signature).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendPost``: %v\n", err)
@@ -409,14 +409,14 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
 	files := []*os.File{"TODO"} // []*os.File | 
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	r, err := apiClient.SendAPI.SendValidateFilesPost(context.Background()).Files(files).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendValidateFilesPost``: %v\n", err)
@@ -473,14 +473,14 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
-	fatturaOrdinaria := *invoicesdk.NewFatturaOrdinaria() // FatturaOrdinaria | 
+	fatturaOrdinaria := *invoicetronicsdk.NewFatturaOrdinaria() // FatturaOrdinaria | 
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	r, err := apiClient.SendAPI.SendValidateJsonPost(context.Background()).FatturaOrdinaria(fatturaOrdinaria).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendValidateJsonPost``: %v\n", err)
@@ -537,14 +537,14 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
-	send := *invoicesdk.NewSend() // Send | 
+	send := *invoicetronicsdk.NewSend() // Send | 
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	r, err := apiClient.SendAPI.SendValidatePost(context.Background()).Send(send).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendValidatePost``: %v\n", err)
@@ -601,14 +601,14 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
-	fatturaOrdinaria := *invoicesdk.NewFatturaOrdinaria() // FatturaOrdinaria | 
+	fatturaOrdinaria := *invoicetronicsdk.NewFatturaOrdinaria() // FatturaOrdinaria | 
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	r, err := apiClient.SendAPI.SendValidateXmlPost(context.Background()).FatturaOrdinaria(fatturaOrdinaria).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendValidateXmlPost``: %v\n", err)
@@ -665,16 +665,16 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
-	fatturaOrdinaria := *invoicesdk.NewFatturaOrdinaria() // FatturaOrdinaria | 
+	fatturaOrdinaria := *invoicetronicsdk.NewFatturaOrdinaria() // FatturaOrdinaria | 
 	validate := true // bool | Validate the document first, and reject it on failure. (optional) (default to false)
 	signature := "signature_example" // string | Whether to digitally sign the document. (optional) (default to "Auto")
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.SendAPI.SendXmlPost(context.Background()).FatturaOrdinaria(fatturaOrdinaria).Validate(validate).Signature(signature).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendXmlPost``: %v\n", err)

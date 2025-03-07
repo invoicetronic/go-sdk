@@ -31,7 +31,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
@@ -39,8 +39,8 @@ func main() {
 	pageSize := int32(56) // int32 | Items per page. Defaults to 50. Cannot be greater than 200. (optional) (default to 100)
 	sort := "sort_example" // string | Sort by field. Prefix with '-' for descending order. (optional)
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.WebhookAPI.WebhookGet(context.Background()).Page(page).PageSize(pageSize).Sort(sort).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.WebhookGet``: %v\n", err)
@@ -101,14 +101,14 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
 	id := int32(56) // int32 | Item id
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.WebhookAPI.WebhookIdDelete(context.Background(), id).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.WebhookIdDelete``: %v\n", err)
@@ -171,14 +171,14 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
 	id := int32(56) // int32 | Item id
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.WebhookAPI.WebhookIdGet(context.Background(), id).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.WebhookIdGet``: %v\n", err)
@@ -241,14 +241,14 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
-	webHook := *invoicesdk.NewWebHook() // WebHook | 
+	webHook := *invoicetronicsdk.NewWebHook() // WebHook | 
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.WebhookAPI.WebhookPost(context.Background()).WebHook(webHook).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.WebhookPost``: %v\n", err)
@@ -307,14 +307,14 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
-	webHook := *invoicesdk.NewWebHook() // WebHook | 
+	webHook := *invoicetronicsdk.NewWebHook() // WebHook | 
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.WebhookAPI.WebhookPut(context.Background()).WebHook(webHook).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.WebhookPut``: %v\n", err)
@@ -362,6 +362,8 @@ Name | Type | Description  | Notes
 
 List webhook history items
 
+
+
 ### Example
 
 ```go
@@ -371,7 +373,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
@@ -379,8 +381,8 @@ func main() {
 	pageSize := int32(56) // int32 | Items per page. Defaults to 50. Cannot be greater than 200. (optional) (default to 100)
 	sort := "sort_example" // string | Sort by field. Prefix with '-' for descending order. (optional)
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.WebhookAPI.WebhookhistoryGet(context.Background()).Page(page).PageSize(pageSize).Sort(sort).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.WebhookhistoryGet``: %v\n", err)
@@ -430,6 +432,8 @@ Name | Type | Description  | Notes
 
 Get a webhook history item by id
 
+
+
 ### Example
 
 ```go
@@ -439,14 +443,14 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
 	id := int32(56) // int32 | Item id
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.WebhookAPI.WebhookhistoryIdGet(context.Background(), id).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.WebhookhistoryIdGet``: %v\n", err)

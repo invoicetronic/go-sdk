@@ -27,7 +27,7 @@ import (
 	"fmt"
 	"os"
     "time"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
@@ -46,8 +46,8 @@ func main() {
 	dateTimeFrom := time.Now() // time.Time | Date and time of the event (optional)
 	dateTimeTo := time.Now() // time.Time | Date and time of the event (optional)
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.LogAPI.LogGet(context.Background()).CompanyId(companyId).Endpoint(endpoint).Method(method).ApiVerion(apiVerion).StatusCode(statusCode).DateCreatedFrom(dateCreatedFrom).DateCreatedTo(dateCreatedTo).Page(page).PageSize(pageSize).Sort(sort).Query(query).Success(success).DateTimeFrom(dateTimeFrom).DateTimeTo(dateTimeTo).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `LogAPI.LogGet``: %v\n", err)
@@ -119,14 +119,14 @@ import (
 	"context"
 	"fmt"
 	"os"
-	invoicesdk "github.com/invoicetronic/invoice-go-sdk"
+	invoicetronicsdk "github.com/invoicetronic/invoice-go-sdk"
 )
 
 func main() {
 	id := int32(56) // int32 | Item id
 
-	configuration := invoicesdk.NewConfiguration()
-	apiClient := invoicesdk.NewAPIClient(configuration)
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
 	resp, r, err := apiClient.LogAPI.LogIdGet(context.Background(), id).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `LogAPI.LogIdGet``: %v\n", err)
