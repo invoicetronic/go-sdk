@@ -58,7 +58,7 @@ Class | Method | HTTP request | Description
 *SendAPI* | [**SendIdGet**](docs/SendAPI.md#sendidget) | **Get** /send/{id} | Get a invoice by id
 *SendAPI* | [**SendJsonPost**](docs/SendAPI.md#sendjsonpost) | **Post** /send/json | Add an invoice by json
 *SendAPI* | [**SendPost**](docs/SendAPI.md#sendpost) | **Post** /send | Add an invoice
-*SendAPI* | [**SendValidateFilesPost**](docs/SendAPI.md#sendvalidatefilespost) | **Post** /send/validate/files | Validate an invoice by file
+*SendAPI* | [**SendValidateFilePost**](docs/SendAPI.md#sendvalidatefilepost) | **Post** /send/validate/file | Validate an invoice file
 *SendAPI* | [**SendValidateJsonPost**](docs/SendAPI.md#sendvalidatejsonpost) | **Post** /send/validate/json | Validate an invoice by json
 *SendAPI* | [**SendValidatePost**](docs/SendAPI.md#sendvalidatepost) | **Post** /send/validate | Validate an invoice
 *SendAPI* | [**SendValidateXmlPost**](docs/SendAPI.md#sendvalidatexmlpost) | **Post** /send/validate/xml | Validate an invoice by xml

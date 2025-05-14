@@ -84,11 +84,11 @@ func Test_invoicetronicsdk_SendAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test SendAPIService SendValidateFilesPost", func(t *testing.T) {
+	t.Run("Test SendAPIService SendValidateFilePost", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		httpRes, err := apiClient.SendAPI.SendValidateFilesPost(context.Background()).Execute()
+		httpRes, err := apiClient.SendAPI.SendValidateFilePost(context.Background()).Execute()
 
 		require.Nil(t, err)
 		assert.Equal(t, 200, httpRes.StatusCode)

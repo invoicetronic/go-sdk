@@ -9,7 +9,7 @@ Method | HTTP request | Description
 [**SendIdGet**](SendAPI.md#SendIdGet) | **Get** /send/{id} | Get a invoice by id
 [**SendJsonPost**](SendAPI.md#SendJsonPost) | **Post** /send/json | Add an invoice by json
 [**SendPost**](SendAPI.md#SendPost) | **Post** /send | Add an invoice
-[**SendValidateFilesPost**](SendAPI.md#SendValidateFilesPost) | **Post** /send/validate/files | Validate an invoice by file
+[**SendValidateFilePost**](SendAPI.md#SendValidateFilePost) | **Post** /send/validate/file | Validate an invoice file
 [**SendValidateJsonPost**](SendAPI.md#SendValidateJsonPost) | **Post** /send/validate/json | Validate an invoice by json
 [**SendValidatePost**](SendAPI.md#SendValidatePost) | **Post** /send/validate | Validate an invoice
 [**SendValidateXmlPost**](SendAPI.md#SendValidateXmlPost) | **Post** /send/validate/xml | Validate an invoice by xml
@@ -392,11 +392,11 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## SendValidateFilesPost
+## SendValidateFilePost
 
-> SendValidateFilesPost(ctx).Files(files).Execute()
+> SendValidateFilePost(ctx).File(file).Execute()
 
-Validate an invoice by file
+Validate an invoice file
 
 
 
@@ -413,13 +413,13 @@ import (
 )
 
 func main() {
-	files := []*os.File{"TODO"} // []*os.File | 
+	file := os.NewFile(1234, "some_file") // *os.File | 
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
-	r, err := apiClient.SendAPI.SendValidateFilesPost(context.Background()).Files(files).Execute()
+	r, err := apiClient.SendAPI.SendValidateFilePost(context.Background()).File(file).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendValidateFilesPost``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendValidateFilePost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
 }
@@ -431,12 +431,12 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiSendValidateFilesPostRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiSendValidateFilePostRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **files** | **[]*os.File** |  | 
+ **file** | ***os.File** |  | 
 
 ### Return type
 

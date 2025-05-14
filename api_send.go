@@ -878,56 +878,56 @@ func (a *SendAPIService) SendPostExecute(r ApiSendPostRequest) (*Send, *http.Res
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiSendValidateFilesPostRequest struct {
+type ApiSendValidateFilePostRequest struct {
 	ctx context.Context
 	ApiService *SendAPIService
-	files []*os.File
+	file *os.File
 }
 
-func (r ApiSendValidateFilesPostRequest) Files(files []*os.File) ApiSendValidateFilesPostRequest {
-	r.files = files
+func (r ApiSendValidateFilePostRequest) File(file *os.File) ApiSendValidateFilePostRequest {
+	r.file = file
 	return r
 }
 
-func (r ApiSendValidateFilesPostRequest) Execute() (*http.Response, error) {
-	return r.ApiService.SendValidateFilesPostExecute(r)
+func (r ApiSendValidateFilePostRequest) Execute() (*http.Response, error) {
+	return r.ApiService.SendValidateFilePostExecute(r)
 }
 
 /*
-SendValidateFilesPost Validate an invoice by file
+SendValidateFilePost Validate an invoice file
 
 Send invoices are the invoices that are sent to the SDI. They are preserved for two years in the live environment and 15 days in the Sandbox.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiSendValidateFilesPostRequest
+ @return ApiSendValidateFilePostRequest
 */
-func (a *SendAPIService) SendValidateFilesPost(ctx context.Context) ApiSendValidateFilesPostRequest {
-	return ApiSendValidateFilesPostRequest{
+func (a *SendAPIService) SendValidateFilePost(ctx context.Context) ApiSendValidateFilePostRequest {
+	return ApiSendValidateFilePostRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-func (a *SendAPIService) SendValidateFilesPostExecute(r ApiSendValidateFilesPostRequest) (*http.Response, error) {
+func (a *SendAPIService) SendValidateFilePostExecute(r ApiSendValidateFilePostRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.SendValidateFilesPost")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.SendValidateFilePost")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/send/validate/files"
+	localVarPath := localBasePath + "/send/validate/file"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.files == nil {
-		return nil, reportError("files is required and must be specified")
+	if r.file == nil {
+		return nil, reportError("file is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -947,23 +947,20 @@ func (a *SendAPIService) SendValidateFilesPostExecute(r ApiSendValidateFilesPost
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	var filesLocalVarFormFileName string
-	var filesLocalVarFileName     string
-	var filesLocalVarFileBytes    []byte
+	var fileLocalVarFormFileName string
+	var fileLocalVarFileName     string
+	var fileLocalVarFileBytes    []byte
 
-	filesLocalVarFormFileName = "files"
-	filesLocalVarFile := r.files
+	fileLocalVarFormFileName = "file"
+	fileLocalVarFile := r.file
 
-	if filesLocalVarFile != nil {
-		// loop through the array to prepare multiple files upload
-		for _, filesLocalVarFileValue := range filesLocalVarFile {
-			fbs, _ := io.ReadAll(filesLocalVarFileValue)
+	if fileLocalVarFile != nil {
+		fbs, _ := io.ReadAll(fileLocalVarFile)
 
-			filesLocalVarFileBytes = fbs
-			filesLocalVarFileName = filesLocalVarFileValue.Name()
-			filesLocalVarFileValue.Close()
-			formFiles = append(formFiles, formFile{fileBytes: filesLocalVarFileBytes, fileName: filesLocalVarFileName, formFileName: filesLocalVarFormFileName})
-		}
+		fileLocalVarFileBytes = fbs
+		fileLocalVarFileName = fileLocalVarFile.Name()
+		fileLocalVarFile.Close()
+		formFiles = append(formFiles, formFile{fileBytes: fileLocalVarFileBytes, fileName: fileLocalVarFileName, formFileName: fileLocalVarFormFileName})
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
