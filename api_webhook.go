@@ -27,9 +27,20 @@ type WebhookAPIService service
 type ApiWebhookGetRequest struct {
 	ctx context.Context
 	ApiService *WebhookAPIService
+	companyId *int32
 	page *int32
 	pageSize *int32
 	sort *string
+	description *string
+	enabled *bool
+	events *string
+	url *string
+}
+
+// Company id
+func (r ApiWebhookGetRequest) CompanyId(companyId int32) ApiWebhookGetRequest {
+	r.companyId = &companyId
+	return r
 }
 
 // Page number. Defaults to 1.
@@ -47,6 +58,26 @@ func (r ApiWebhookGetRequest) PageSize(pageSize int32) ApiWebhookGetRequest {
 // Sort by field. Prefix with &#39;-&#39; for descending order.
 func (r ApiWebhookGetRequest) Sort(sort string) ApiWebhookGetRequest {
 	r.sort = &sort
+	return r
+}
+
+func (r ApiWebhookGetRequest) Description(description string) ApiWebhookGetRequest {
+	r.description = &description
+	return r
+}
+
+func (r ApiWebhookGetRequest) Enabled(enabled bool) ApiWebhookGetRequest {
+	r.enabled = &enabled
+	return r
+}
+
+func (r ApiWebhookGetRequest) Events(events string) ApiWebhookGetRequest {
+	r.events = &events
+	return r
+}
+
+func (r ApiWebhookGetRequest) Url(url string) ApiWebhookGetRequest {
+	r.url = &url
 	return r
 }
 
@@ -90,6 +121,9 @@ func (a *WebhookAPIService) WebhookGetExecute(r ApiWebhookGetRequest) ([]WebHook
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if r.companyId != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "company_id", r.companyId, "form", "")
+	}
 	if r.page != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "form", "")
 	} else {
@@ -104,6 +138,18 @@ func (a *WebhookAPIService) WebhookGetExecute(r ApiWebhookGetRequest) ([]WebHook
 	}
 	if r.sort != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", r.sort, "form", "")
+	}
+	if r.description != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "description", r.description, "form", "")
+	}
+	if r.enabled != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "enabled", r.enabled, "form", "")
+	}
+	if r.events != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "events", r.events, "form", "")
+	}
+	if r.url != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "url", r.url, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -665,6 +711,7 @@ type ApiWebhookhistoryGetRequest struct {
 	page *int32
 	pageSize *int32
 	sort *string
+	webhookId *int32
 }
 
 // Page number. Defaults to 1.
@@ -682,6 +729,12 @@ func (r ApiWebhookhistoryGetRequest) PageSize(pageSize int32) ApiWebhookhistoryG
 // Sort by field. Prefix with &#39;-&#39; for descending order.
 func (r ApiWebhookhistoryGetRequest) Sort(sort string) ApiWebhookhistoryGetRequest {
 	r.sort = &sort
+	return r
+}
+
+// WebHook id
+func (r ApiWebhookhistoryGetRequest) WebhookId(webhookId int32) ApiWebhookhistoryGetRequest {
+	r.webhookId = &webhookId
 	return r
 }
 
@@ -739,6 +792,9 @@ func (a *WebhookAPIService) WebhookhistoryGetExecute(r ApiWebhookhistoryGetReque
 	}
 	if r.sort != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", r.sort, "form", "")
+	}
+	if r.webhookId != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "webhook_id", r.webhookId, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}

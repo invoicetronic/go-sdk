@@ -16,7 +16,7 @@ Method | HTTP request | Description
 
 ## WebhookGet
 
-> []WebHook WebhookGet(ctx).Page(page).PageSize(pageSize).Sort(sort).Execute()
+> []WebHook WebhookGet(ctx).CompanyId(companyId).Page(page).PageSize(pageSize).Sort(sort).Description(description).Enabled(enabled).Events(events).Url(url).Execute()
 
 List webhooks
 
@@ -35,13 +35,18 @@ import (
 )
 
 func main() {
+	companyId := int32(56) // int32 | Company id (optional)
 	page := int32(56) // int32 | Page number. Defaults to 1. (optional) (default to 1)
 	pageSize := int32(56) // int32 | Items per page. Defaults to 50. Cannot be greater than 200. (optional) (default to 100)
 	sort := "sort_example" // string | Sort by field. Prefix with '-' for descending order. (optional)
+	description := "description_example" // string |  (optional)
+	enabled := true // bool |  (optional)
+	events := "events_example" // string |  (optional)
+	url := "url_example" // string |  (optional)
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.WebhookAPI.WebhookGet(context.Background()).Page(page).PageSize(pageSize).Sort(sort).Execute()
+	resp, r, err := apiClient.WebhookAPI.WebhookGet(context.Background()).CompanyId(companyId).Page(page).PageSize(pageSize).Sort(sort).Description(description).Enabled(enabled).Events(events).Url(url).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.WebhookGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -62,9 +67,14 @@ Other parameters are passed through a pointer to a apiWebhookGetRequest struct v
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **companyId** | **int32** | Company id | 
  **page** | **int32** | Page number. Defaults to 1. | [default to 1]
  **pageSize** | **int32** | Items per page. Defaults to 50. Cannot be greater than 200. | [default to 100]
  **sort** | **string** | Sort by field. Prefix with &#39;-&#39; for descending order. | 
+ **description** | **string** |  | 
+ **enabled** | **bool** |  | 
+ **events** | **string** |  | 
+ **url** | **string** |  | 
 
 ### Return type
 
@@ -358,7 +368,7 @@ Name | Type | Description  | Notes
 
 ## WebhookhistoryGet
 
-> []WebHookHistory WebhookhistoryGet(ctx).Page(page).PageSize(pageSize).Sort(sort).Execute()
+> []WebHookHistory WebhookhistoryGet(ctx).Page(page).PageSize(pageSize).Sort(sort).WebhookId(webhookId).Execute()
 
 List webhook history items
 
@@ -380,10 +390,11 @@ func main() {
 	page := int32(56) // int32 | Page number. Defaults to 1. (optional) (default to 1)
 	pageSize := int32(56) // int32 | Items per page. Defaults to 50. Cannot be greater than 200. (optional) (default to 100)
 	sort := "sort_example" // string | Sort by field. Prefix with '-' for descending order. (optional)
+	webhookId := int32(56) // int32 | WebHook id (optional)
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.WebhookAPI.WebhookhistoryGet(context.Background()).Page(page).PageSize(pageSize).Sort(sort).Execute()
+	resp, r, err := apiClient.WebhookAPI.WebhookhistoryGet(context.Background()).Page(page).PageSize(pageSize).Sort(sort).WebhookId(webhookId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `WebhookAPI.WebhookhistoryGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -407,6 +418,7 @@ Name | Type | Description  | Notes
  **page** | **int32** | Page number. Defaults to 1. | [default to 1]
  **pageSize** | **int32** | Items per page. Defaults to 50. Cannot be greater than 200. | [default to 100]
  **sort** | **string** | Sort by field. Prefix with &#39;-&#39; for descending order. | 
+ **webhookId** | **int32** | WebHook id | 
 
 ### Return type
 

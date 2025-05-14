@@ -33,7 +33,7 @@ type WebHook struct {
 	CompanyId NullableInt32 `json:"company_id,omitempty"`
 	// The url of your application's endpoint that will receive a POST request when the webhook is fired.
 	Url NullableString `json:"url,omitempty"`
-	// Wetehr the webhooks is enabled or not. On creation, this is set to `true`.
+	// Wether the webhook is enabled. On creation, this is set to `true`.
 	Enabled *bool `json:"enabled,omitempty"`
 	// The secret used to generate webhook signatures, only returned on creation. You should store this value securely and validate it on every call, to ensure that the caller is InvoicetronicApi.
 	Secret NullableString `json:"secret,omitempty"`

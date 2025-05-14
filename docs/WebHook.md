@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **UserId** | Pointer to **int32** | User id. | [optional] 
 **CompanyId** | Pointer to **NullableInt32** | Company id. | [optional] 
 **Url** | Pointer to **NullableString** | The url of your application&#39;s endpoint that will receive a POST request when the webhook is fired. | [optional] 
-**Enabled** | Pointer to **bool** | Wetehr the webhooks is enabled or not. On creation, this is set to &#x60;true&#x60;. | [optional] 
+**Enabled** | Pointer to **bool** | Wether the webhook is enabled. On creation, this is set to &#x60;true&#x60;. | [optional] 
 **Secret** | Pointer to **NullableString** | The secret used to generate webhook signatures, only returned on creation. You should store this value securely and validate it on every call, to ensure that the caller is InvoicetronicApi. | [optional] 
 **Description** | Pointer to **NullableString** | An optional description. | [optional] 
 **Events** | Pointer to **[]string** | List of events to that trigger the webhook.  See Invoicetronic.SupportedEvents.Available for a list of valid event names. | [optional] 
