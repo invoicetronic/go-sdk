@@ -49,6 +49,10 @@ type Update struct {
 	Errors []Error `json:"errors,omitempty"`
 	// Wether the item has been read at least once.
 	IsRead *bool `json:"is_read,omitempty"`
+	// Metadata from the Send item this update refers to.
+	MetaData map[string]string `json:"meta_data,omitempty"`
+	// Invoice references from the Send item this update refers to.
+	Documents []DocumentData `json:"documents,omitempty"`
 }
 
 // NewUpdate instantiates a new Update object
@@ -557,6 +561,72 @@ func (o *Update) SetIsRead(v bool) {
 	o.IsRead = &v
 }
 
+// GetMetaData returns the MetaData field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *Update) GetMetaData() map[string]string {
+	if o == nil {
+		var ret map[string]string
+		return ret
+	}
+	return o.MetaData
+}
+
+// GetMetaDataOk returns a tuple with the MetaData field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *Update) GetMetaDataOk() (*map[string]string, bool) {
+	if o == nil || IsNil(o.MetaData) {
+		return nil, false
+	}
+	return &o.MetaData, true
+}
+
+// HasMetaData returns a boolean if a field has been set.
+func (o *Update) HasMetaData() bool {
+	if o != nil && !IsNil(o.MetaData) {
+		return true
+	}
+
+	return false
+}
+
+// SetMetaData gets a reference to the given map[string]string and assigns it to the MetaData field.
+func (o *Update) SetMetaData(v map[string]string) {
+	o.MetaData = v
+}
+
+// GetDocuments returns the Documents field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *Update) GetDocuments() []DocumentData {
+	if o == nil {
+		var ret []DocumentData
+		return ret
+	}
+	return o.Documents
+}
+
+// GetDocumentsOk returns a tuple with the Documents field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *Update) GetDocumentsOk() ([]DocumentData, bool) {
+	if o == nil || IsNil(o.Documents) {
+		return nil, false
+	}
+	return o.Documents, true
+}
+
+// HasDocuments returns a boolean if a field has been set.
+func (o *Update) HasDocuments() bool {
+	if o != nil && !IsNil(o.Documents) {
+		return true
+	}
+
+	return false
+}
+
+// SetDocuments gets a reference to the given []DocumentData and assigns it to the Documents field.
+func (o *Update) SetDocuments(v []DocumentData) {
+	o.Documents = v
+}
+
 func (o Update) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -608,6 +678,12 @@ func (o Update) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.IsRead) {
 		toSerialize["is_read"] = o.IsRead
+	}
+	if o.MetaData != nil {
+		toSerialize["meta_data"] = o.MetaData
+	}
+	if o.Documents != nil {
+		toSerialize["documents"] = o.Documents
 	}
 	return toSerialize, nil
 }

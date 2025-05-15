@@ -18,6 +18,8 @@ Name | Type | Description | Notes
 **MessageId** | Pointer to **NullableString** | SDI message id. | [optional] 
 **Errors** | Pointer to [**[]Error**](Error.md) | SDI errors, if any. | [optional] 
 **IsRead** | Pointer to **bool** | Wether the item has been read at least once. | [optional] 
+**MetaData** | Pointer to **map[string]string** | Metadata from the Send item this update refers to. | [optional] 
+**Documents** | Pointer to [**[]DocumentData**](DocumentData.md) | Invoice references from the Send item this update refers to. | [optional] 
 
 ## Methods
 
@@ -438,6 +440,76 @@ SetIsRead sets IsRead field to given value.
 
 HasIsRead returns a boolean if a field has been set.
 
+### GetMetaData
+
+`func (o *Update) GetMetaData() map[string]string`
+
+GetMetaData returns the MetaData field if non-nil, zero value otherwise.
+
+### GetMetaDataOk
+
+`func (o *Update) GetMetaDataOk() (*map[string]string, bool)`
+
+GetMetaDataOk returns a tuple with the MetaData field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetMetaData
+
+`func (o *Update) SetMetaData(v map[string]string)`
+
+SetMetaData sets MetaData field to given value.
+
+### HasMetaData
+
+`func (o *Update) HasMetaData() bool`
+
+HasMetaData returns a boolean if a field has been set.
+
+### SetMetaDataNil
+
+`func (o *Update) SetMetaDataNil(b bool)`
+
+ SetMetaDataNil sets the value for MetaData to be an explicit nil
+
+### UnsetMetaData
+`func (o *Update) UnsetMetaData()`
+
+UnsetMetaData ensures that no value is present for MetaData, not even an explicit nil
+### GetDocuments
+
+`func (o *Update) GetDocuments() []DocumentData`
+
+GetDocuments returns the Documents field if non-nil, zero value otherwise.
+
+### GetDocumentsOk
+
+`func (o *Update) GetDocumentsOk() (*[]DocumentData, bool)`
+
+GetDocumentsOk returns a tuple with the Documents field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDocuments
+
+`func (o *Update) SetDocuments(v []DocumentData)`
+
+SetDocuments sets Documents field to given value.
+
+### HasDocuments
+
+`func (o *Update) HasDocuments() bool`
+
+HasDocuments returns a boolean if a field has been set.
+
+### SetDocumentsNil
+
+`func (o *Update) SetDocumentsNil(b bool)`
+
+ SetDocumentsNil sets the value for Documents to be an explicit nil
+
+### UnsetDocuments
+`func (o *Update) UnsetDocuments()`
+
+UnsetDocuments ensures that no value is present for Documents, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
