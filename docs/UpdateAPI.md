@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 ## UpdateGet
 
-> []Update UpdateGet(ctx).CompanyId(companyId).Identifier(identifier).Unread(unread).SendId(sendId).State(state).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).Page(page).PageSize(pageSize).Sort(sort).Execute()
+> []Update UpdateGet(ctx).CompanyId(companyId).Identifier(identifier).Prestatore(prestatore).Unread(unread).SendId(sendId).State(state).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).Page(page).PageSize(pageSize).Sort(sort).Execute()
 
 List updates
 
@@ -33,6 +33,7 @@ import (
 func main() {
 	companyId := int32(56) // int32 | Company id (optional)
 	identifier := "identifier_example" // string | SDI identifier. (optional)
+	prestatore := "prestatore_example" // string | Vat number or fiscal code. (optional)
 	unread := true // bool | Unread items only. (optional)
 	sendId := int32(56) // int32 | Send item's id. (optional)
 	state := "state_example" // string | SDI state (optional)
@@ -46,7 +47,7 @@ func main() {
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.UpdateAPI.UpdateGet(context.Background()).CompanyId(companyId).Identifier(identifier).Unread(unread).SendId(sendId).State(state).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).Page(page).PageSize(pageSize).Sort(sort).Execute()
+	resp, r, err := apiClient.UpdateAPI.UpdateGet(context.Background()).CompanyId(companyId).Identifier(identifier).Prestatore(prestatore).Unread(unread).SendId(sendId).State(state).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).Page(page).PageSize(pageSize).Sort(sort).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `UpdateAPI.UpdateGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -69,6 +70,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **companyId** | **int32** | Company id | 
  **identifier** | **string** | SDI identifier. | 
+ **prestatore** | **string** | Vat number or fiscal code. | 
  **unread** | **bool** | Unread items only. | 
  **sendId** | **int32** | Send item&#39;s id. | 
  **state** | **string** | SDI state | 

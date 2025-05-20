@@ -30,6 +30,7 @@ type ApiUpdateGetRequest struct {
 	ApiService *UpdateAPIService
 	companyId *int32
 	identifier *string
+	prestatore *string
 	unread *bool
 	sendId *int32
 	state *string
@@ -51,6 +52,12 @@ func (r ApiUpdateGetRequest) CompanyId(companyId int32) ApiUpdateGetRequest {
 // SDI identifier.
 func (r ApiUpdateGetRequest) Identifier(identifier string) ApiUpdateGetRequest {
 	r.identifier = &identifier
+	return r
+}
+
+// Vat number or fiscal code.
+func (r ApiUpdateGetRequest) Prestatore(prestatore string) ApiUpdateGetRequest {
+	r.prestatore = &prestatore
 	return r
 }
 
@@ -159,6 +166,9 @@ func (a *UpdateAPIService) UpdateGetExecute(r ApiUpdateGetRequest) ([]Update, *h
 	}
 	if r.identifier != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "identifier", r.identifier, "form", "")
+	}
+	if r.prestatore != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "prestatore", r.prestatore, "form", "")
 	}
 	if r.unread != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "unread", r.unread, "form", "")

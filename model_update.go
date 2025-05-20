@@ -53,6 +53,8 @@ type Update struct {
 	MetaData map[string]string `json:"meta_data,omitempty"`
 	// Invoice references from the Send item this update refers to.
 	Documents []DocumentData `json:"documents,omitempty"`
+	// Prestatore reference from the Send item this status refers to.
+	Prestatore NullableString `json:"prestatore,omitempty"`
 }
 
 // NewUpdate instantiates a new Update object
@@ -627,6 +629,48 @@ func (o *Update) SetDocuments(v []DocumentData) {
 	o.Documents = v
 }
 
+// GetPrestatore returns the Prestatore field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *Update) GetPrestatore() string {
+	if o == nil || IsNil(o.Prestatore.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.Prestatore.Get()
+}
+
+// GetPrestatoreOk returns a tuple with the Prestatore field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *Update) GetPrestatoreOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Prestatore.Get(), o.Prestatore.IsSet()
+}
+
+// HasPrestatore returns a boolean if a field has been set.
+func (o *Update) HasPrestatore() bool {
+	if o != nil && o.Prestatore.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetPrestatore gets a reference to the given NullableString and assigns it to the Prestatore field.
+func (o *Update) SetPrestatore(v string) {
+	o.Prestatore.Set(&v)
+}
+// SetPrestatoreNil sets the value for Prestatore to be an explicit nil
+func (o *Update) SetPrestatoreNil() {
+	o.Prestatore.Set(nil)
+}
+
+// UnsetPrestatore ensures that no value is present for Prestatore, not even an explicit nil
+func (o *Update) UnsetPrestatore() {
+	o.Prestatore.Unset()
+}
+
 func (o Update) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -684,6 +728,9 @@ func (o Update) ToMap() (map[string]interface{}, error) {
 	}
 	if o.Documents != nil {
 		toSerialize["documents"] = o.Documents
+	}
+	if o.Prestatore.IsSet() {
+		toSerialize["prestatore"] = o.Prestatore.Get()
 	}
 	return toSerialize, nil
 }

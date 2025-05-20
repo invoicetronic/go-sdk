@@ -20,6 +20,7 @@ Name | Type | Description | Notes
 **IsRead** | Pointer to **bool** | Wether the item has been read at least once. | [optional] 
 **MetaData** | Pointer to **map[string]string** | Metadata from the Send item this update refers to. | [optional] 
 **Documents** | Pointer to [**[]DocumentData**](DocumentData.md) | Invoice references from the Send item this update refers to. | [optional] 
+**Prestatore** | Pointer to **NullableString** | Prestatore reference from the Send item this status refers to. | [optional] 
 
 ## Methods
 
@@ -510,6 +511,41 @@ HasDocuments returns a boolean if a field has been set.
 `func (o *Update) UnsetDocuments()`
 
 UnsetDocuments ensures that no value is present for Documents, not even an explicit nil
+### GetPrestatore
+
+`func (o *Update) GetPrestatore() string`
+
+GetPrestatore returns the Prestatore field if non-nil, zero value otherwise.
+
+### GetPrestatoreOk
+
+`func (o *Update) GetPrestatoreOk() (*string, bool)`
+
+GetPrestatoreOk returns a tuple with the Prestatore field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPrestatore
+
+`func (o *Update) SetPrestatore(v string)`
+
+SetPrestatore sets Prestatore field to given value.
+
+### HasPrestatore
+
+`func (o *Update) HasPrestatore() bool`
+
+HasPrestatore returns a boolean if a field has been set.
+
+### SetPrestatoreNil
+
+`func (o *Update) SetPrestatoreNil(b bool)`
+
+ SetPrestatoreNil sets the value for Prestatore to be an explicit nil
+
+### UnsetPrestatore
+`func (o *Update) UnsetPrestatore()`
+
+UnsetPrestatore ensures that no value is present for Prestatore, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
