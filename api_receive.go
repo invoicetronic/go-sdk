@@ -41,6 +41,7 @@ type ApiReceiveGetRequest struct {
 	documentDateFrom *time.Time
 	documentDateTo *time.Time
 	documentNumber *string
+	includePayload *bool
 	page *int32
 	pageSize *int32
 	sort *string
@@ -121,6 +122,12 @@ func (r ApiReceiveGetRequest) DocumentDateTo(documentDateTo time.Time) ApiReceiv
 // Document number.
 func (r ApiReceiveGetRequest) DocumentNumber(documentNumber string) ApiReceiveGetRequest {
 	r.documentNumber = &documentNumber
+	return r
+}
+
+// Include payload in the response. Defaults to false.
+func (r ApiReceiveGetRequest) IncludePayload(includePayload bool) ApiReceiveGetRequest {
+	r.includePayload = &includePayload
 	return r
 }
 
@@ -220,6 +227,9 @@ func (a *ReceiveAPIService) ReceiveGetExecute(r ApiReceiveGetRequest) ([]Receive
 	}
 	if r.documentNumber != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "document_number", r.documentNumber, "form", "")
+	}
+	if r.includePayload != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "include_payload", r.includePayload, "form", "")
 	}
 	if r.page != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "form", "")

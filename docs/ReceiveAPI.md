@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 ## ReceiveGet
 
-> []Receive ReceiveGet(ctx).CompanyId(companyId).Identifier(identifier).Unread(unread).Committente(committente).Prestatore(prestatore).FileName(fileName).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).DocumentDateFrom(documentDateFrom).DocumentDateTo(documentDateTo).DocumentNumber(documentNumber).Page(page).PageSize(pageSize).Sort(sort).Execute()
+> []Receive ReceiveGet(ctx).CompanyId(companyId).Identifier(identifier).Unread(unread).Committente(committente).Prestatore(prestatore).FileName(fileName).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).DocumentDateFrom(documentDateFrom).DocumentDateTo(documentDateTo).DocumentNumber(documentNumber).IncludePayload(includePayload).Page(page).PageSize(pageSize).Sort(sort).Execute()
 
 List incoming invoices
 
@@ -45,13 +45,14 @@ func main() {
 	documentDateFrom := time.Now() // time.Time | UTC ISO 8601 (2024-11-29T12:34:56Z) (optional)
 	documentDateTo := time.Now() // time.Time | UTC ISO 8601 (2024-11-29T12:34:56Z) (optional)
 	documentNumber := "documentNumber_example" // string | Document number. (optional)
+	includePayload := true // bool | Include payload in the response. Defaults to false. (optional)
 	page := int32(56) // int32 | Page number. Defaults to 1. (optional) (default to 1)
 	pageSize := int32(56) // int32 | Items per page. Defaults to 50. Cannot be greater than 200. (optional) (default to 100)
 	sort := "sort_example" // string | Sort by field. Prefix with '-' for descending order. (optional)
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.ReceiveAPI.ReceiveGet(context.Background()).CompanyId(companyId).Identifier(identifier).Unread(unread).Committente(committente).Prestatore(prestatore).FileName(fileName).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).DocumentDateFrom(documentDateFrom).DocumentDateTo(documentDateTo).DocumentNumber(documentNumber).Page(page).PageSize(pageSize).Sort(sort).Execute()
+	resp, r, err := apiClient.ReceiveAPI.ReceiveGet(context.Background()).CompanyId(companyId).Identifier(identifier).Unread(unread).Committente(committente).Prestatore(prestatore).FileName(fileName).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).DocumentDateFrom(documentDateFrom).DocumentDateTo(documentDateTo).DocumentNumber(documentNumber).IncludePayload(includePayload).Page(page).PageSize(pageSize).Sort(sort).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ReceiveAPI.ReceiveGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -85,6 +86,7 @@ Name | Type | Description  | Notes
  **documentDateFrom** | **time.Time** | UTC ISO 8601 (2024-11-29T12:34:56Z) | 
  **documentDateTo** | **time.Time** | UTC ISO 8601 (2024-11-29T12:34:56Z) | 
  **documentNumber** | **string** | Document number. | 
+ **includePayload** | **bool** | Include payload in the response. Defaults to false. | 
  **page** | **int32** | Page number. Defaults to 1. | [default to 1]
  **pageSize** | **int32** | Items per page. Defaults to 50. Cannot be greater than 200. | [default to 100]
  **sort** | **string** | Sort by field. Prefix with &#39;-&#39; for descending order. | 

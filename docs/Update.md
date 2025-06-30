@@ -10,17 +10,13 @@ Name | Type | Description | Notes
 **UserId** | Pointer to **int32** | User id. | [optional] 
 **CompanyId** | Pointer to **int32** | Company id. | [optional] 
 **SendId** | Pointer to **int32** | Send id. This is the id of the sent invoice to which this update refers to. | [optional] 
-**DateSent** | Pointer to **NullableTime** | When the document was sent to the SDI. | [optional] 
 **LastUpdate** | Pointer to **time.Time** | Last update from SDI. | [optional] 
-**Identifier** | Pointer to **NullableString** | SDI identifier. This is set by the SDI and it is unique within the SDI system. | [optional] 
 **State** | Pointer to **string** | State of the document. Theses are the possible values, as per the SDI documentation: | [optional] 
 **Description** | Pointer to **NullableString** | Description for the state. | [optional] 
 **MessageId** | Pointer to **NullableString** | SDI message id. | [optional] 
 **Errors** | Pointer to [**[]Error**](Error.md) | SDI errors, if any. | [optional] 
 **IsRead** | Pointer to **bool** | Wether the item has been read at least once. | [optional] 
-**MetaData** | Pointer to **map[string]string** | Metadata from the Send item this update refers to. | [optional] 
-**Documents** | Pointer to [**[]DocumentData**](DocumentData.md) | Invoice references from the Send item this update refers to. | [optional] 
-**Prestatore** | Pointer to **NullableString** | Prestatore reference from the Send item this status refers to. | [optional] 
+**Send** | Pointer to [**SendReduced**](SendReduced.md) |  | [optional] 
 
 ## Methods
 
@@ -191,41 +187,6 @@ SetSendId sets SendId field to given value.
 
 HasSendId returns a boolean if a field has been set.
 
-### GetDateSent
-
-`func (o *Update) GetDateSent() time.Time`
-
-GetDateSent returns the DateSent field if non-nil, zero value otherwise.
-
-### GetDateSentOk
-
-`func (o *Update) GetDateSentOk() (*time.Time, bool)`
-
-GetDateSentOk returns a tuple with the DateSent field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetDateSent
-
-`func (o *Update) SetDateSent(v time.Time)`
-
-SetDateSent sets DateSent field to given value.
-
-### HasDateSent
-
-`func (o *Update) HasDateSent() bool`
-
-HasDateSent returns a boolean if a field has been set.
-
-### SetDateSentNil
-
-`func (o *Update) SetDateSentNil(b bool)`
-
- SetDateSentNil sets the value for DateSent to be an explicit nil
-
-### UnsetDateSent
-`func (o *Update) UnsetDateSent()`
-
-UnsetDateSent ensures that no value is present for DateSent, not even an explicit nil
 ### GetLastUpdate
 
 `func (o *Update) GetLastUpdate() time.Time`
@@ -251,41 +212,6 @@ SetLastUpdate sets LastUpdate field to given value.
 
 HasLastUpdate returns a boolean if a field has been set.
 
-### GetIdentifier
-
-`func (o *Update) GetIdentifier() string`
-
-GetIdentifier returns the Identifier field if non-nil, zero value otherwise.
-
-### GetIdentifierOk
-
-`func (o *Update) GetIdentifierOk() (*string, bool)`
-
-GetIdentifierOk returns a tuple with the Identifier field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetIdentifier
-
-`func (o *Update) SetIdentifier(v string)`
-
-SetIdentifier sets Identifier field to given value.
-
-### HasIdentifier
-
-`func (o *Update) HasIdentifier() bool`
-
-HasIdentifier returns a boolean if a field has been set.
-
-### SetIdentifierNil
-
-`func (o *Update) SetIdentifierNil(b bool)`
-
- SetIdentifierNil sets the value for Identifier to be an explicit nil
-
-### UnsetIdentifier
-`func (o *Update) UnsetIdentifier()`
-
-UnsetIdentifier ensures that no value is present for Identifier, not even an explicit nil
 ### GetState
 
 `func (o *Update) GetState() string`
@@ -441,111 +367,31 @@ SetIsRead sets IsRead field to given value.
 
 HasIsRead returns a boolean if a field has been set.
 
-### GetMetaData
+### GetSend
 
-`func (o *Update) GetMetaData() map[string]string`
+`func (o *Update) GetSend() SendReduced`
 
-GetMetaData returns the MetaData field if non-nil, zero value otherwise.
+GetSend returns the Send field if non-nil, zero value otherwise.
 
-### GetMetaDataOk
+### GetSendOk
 
-`func (o *Update) GetMetaDataOk() (*map[string]string, bool)`
+`func (o *Update) GetSendOk() (*SendReduced, bool)`
 
-GetMetaDataOk returns a tuple with the MetaData field if it's non-nil, zero value otherwise
+GetSendOk returns a tuple with the Send field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetMetaData
+### SetSend
 
-`func (o *Update) SetMetaData(v map[string]string)`
+`func (o *Update) SetSend(v SendReduced)`
 
-SetMetaData sets MetaData field to given value.
+SetSend sets Send field to given value.
 
-### HasMetaData
+### HasSend
 
-`func (o *Update) HasMetaData() bool`
+`func (o *Update) HasSend() bool`
 
-HasMetaData returns a boolean if a field has been set.
+HasSend returns a boolean if a field has been set.
 
-### SetMetaDataNil
-
-`func (o *Update) SetMetaDataNil(b bool)`
-
- SetMetaDataNil sets the value for MetaData to be an explicit nil
-
-### UnsetMetaData
-`func (o *Update) UnsetMetaData()`
-
-UnsetMetaData ensures that no value is present for MetaData, not even an explicit nil
-### GetDocuments
-
-`func (o *Update) GetDocuments() []DocumentData`
-
-GetDocuments returns the Documents field if non-nil, zero value otherwise.
-
-### GetDocumentsOk
-
-`func (o *Update) GetDocumentsOk() (*[]DocumentData, bool)`
-
-GetDocumentsOk returns a tuple with the Documents field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetDocuments
-
-`func (o *Update) SetDocuments(v []DocumentData)`
-
-SetDocuments sets Documents field to given value.
-
-### HasDocuments
-
-`func (o *Update) HasDocuments() bool`
-
-HasDocuments returns a boolean if a field has been set.
-
-### SetDocumentsNil
-
-`func (o *Update) SetDocumentsNil(b bool)`
-
- SetDocumentsNil sets the value for Documents to be an explicit nil
-
-### UnsetDocuments
-`func (o *Update) UnsetDocuments()`
-
-UnsetDocuments ensures that no value is present for Documents, not even an explicit nil
-### GetPrestatore
-
-`func (o *Update) GetPrestatore() string`
-
-GetPrestatore returns the Prestatore field if non-nil, zero value otherwise.
-
-### GetPrestatoreOk
-
-`func (o *Update) GetPrestatoreOk() (*string, bool)`
-
-GetPrestatoreOk returns a tuple with the Prestatore field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetPrestatore
-
-`func (o *Update) SetPrestatore(v string)`
-
-SetPrestatore sets Prestatore field to given value.
-
-### HasPrestatore
-
-`func (o *Update) HasPrestatore() bool`
-
-HasPrestatore returns a boolean if a field has been set.
-
-### SetPrestatoreNil
-
-`func (o *Update) SetPrestatoreNil(b bool)`
-
- SetPrestatoreNil sets the value for Prestatore to be an explicit nil
-
-### UnsetPrestatore
-`func (o *Update) UnsetPrestatore()`
-
-UnsetPrestatore ensures that no value is present for Prestatore, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

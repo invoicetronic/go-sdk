@@ -211,6 +211,7 @@ type ApiSendGetRequest struct {
 	documentDateFrom *time.Time
 	documentDateTo *time.Time
 	documentNumber *string
+	includePayload *bool
 	page *int32
 	pageSize *int32
 	sort *string
@@ -285,6 +286,12 @@ func (r ApiSendGetRequest) DocumentDateTo(documentDateTo time.Time) ApiSendGetRe
 // Document number.
 func (r ApiSendGetRequest) DocumentNumber(documentNumber string) ApiSendGetRequest {
 	r.documentNumber = &documentNumber
+	return r
+}
+
+// Include payload in the response. Defaults to false.
+func (r ApiSendGetRequest) IncludePayload(includePayload bool) ApiSendGetRequest {
+	r.includePayload = &includePayload
 	return r
 }
 
@@ -381,6 +388,9 @@ func (a *SendAPIService) SendGetExecute(r ApiSendGetRequest) ([]Send, *http.Resp
 	}
 	if r.documentNumber != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "document_number", r.documentNumber, "form", "")
+	}
+	if r.includePayload != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "include_payload", r.includePayload, "form", "")
 	}
 	if r.page != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "form", "")

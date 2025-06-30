@@ -33,12 +33,8 @@ type Update struct {
 	CompanyId *int32 `json:"company_id,omitempty"`
 	// Send id. This is the id of the sent invoice to which this update refers to.
 	SendId *int32 `json:"send_id,omitempty"`
-	// When the document was sent to the SDI.
-	DateSent NullableTime `json:"date_sent,omitempty"`
 	// Last update from SDI.
 	LastUpdate *time.Time `json:"last_update,omitempty"`
-	// SDI identifier. This is set by the SDI and it is unique within the SDI system.
-	Identifier NullableString `json:"identifier,omitempty"`
 	// State of the document. Theses are the possible values, as per the SDI documentation:
 	State *string `json:"state,omitempty"`
 	// Description for the state.
@@ -49,12 +45,7 @@ type Update struct {
 	Errors []Error `json:"errors,omitempty"`
 	// Wether the item has been read at least once.
 	IsRead *bool `json:"is_read,omitempty"`
-	// Metadata from the Send item this update refers to.
-	MetaData map[string]string `json:"meta_data,omitempty"`
-	// Invoice references from the Send item this update refers to.
-	Documents []DocumentData `json:"documents,omitempty"`
-	// Prestatore reference from the Send item this status refers to.
-	Prestatore NullableString `json:"prestatore,omitempty"`
+	Send *SendReduced `json:"send,omitempty"`
 }
 
 // NewUpdate instantiates a new Update object
@@ -266,48 +257,6 @@ func (o *Update) SetSendId(v int32) {
 	o.SendId = &v
 }
 
-// GetDateSent returns the DateSent field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *Update) GetDateSent() time.Time {
-	if o == nil || IsNil(o.DateSent.Get()) {
-		var ret time.Time
-		return ret
-	}
-	return *o.DateSent.Get()
-}
-
-// GetDateSentOk returns a tuple with the DateSent field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *Update) GetDateSentOk() (*time.Time, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return o.DateSent.Get(), o.DateSent.IsSet()
-}
-
-// HasDateSent returns a boolean if a field has been set.
-func (o *Update) HasDateSent() bool {
-	if o != nil && o.DateSent.IsSet() {
-		return true
-	}
-
-	return false
-}
-
-// SetDateSent gets a reference to the given NullableTime and assigns it to the DateSent field.
-func (o *Update) SetDateSent(v time.Time) {
-	o.DateSent.Set(&v)
-}
-// SetDateSentNil sets the value for DateSent to be an explicit nil
-func (o *Update) SetDateSentNil() {
-	o.DateSent.Set(nil)
-}
-
-// UnsetDateSent ensures that no value is present for DateSent, not even an explicit nil
-func (o *Update) UnsetDateSent() {
-	o.DateSent.Unset()
-}
-
 // GetLastUpdate returns the LastUpdate field value if set, zero value otherwise.
 func (o *Update) GetLastUpdate() time.Time {
 	if o == nil || IsNil(o.LastUpdate) {
@@ -338,48 +287,6 @@ func (o *Update) HasLastUpdate() bool {
 // SetLastUpdate gets a reference to the given time.Time and assigns it to the LastUpdate field.
 func (o *Update) SetLastUpdate(v time.Time) {
 	o.LastUpdate = &v
-}
-
-// GetIdentifier returns the Identifier field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *Update) GetIdentifier() string {
-	if o == nil || IsNil(o.Identifier.Get()) {
-		var ret string
-		return ret
-	}
-	return *o.Identifier.Get()
-}
-
-// GetIdentifierOk returns a tuple with the Identifier field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *Update) GetIdentifierOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return o.Identifier.Get(), o.Identifier.IsSet()
-}
-
-// HasIdentifier returns a boolean if a field has been set.
-func (o *Update) HasIdentifier() bool {
-	if o != nil && o.Identifier.IsSet() {
-		return true
-	}
-
-	return false
-}
-
-// SetIdentifier gets a reference to the given NullableString and assigns it to the Identifier field.
-func (o *Update) SetIdentifier(v string) {
-	o.Identifier.Set(&v)
-}
-// SetIdentifierNil sets the value for Identifier to be an explicit nil
-func (o *Update) SetIdentifierNil() {
-	o.Identifier.Set(nil)
-}
-
-// UnsetIdentifier ensures that no value is present for Identifier, not even an explicit nil
-func (o *Update) UnsetIdentifier() {
-	o.Identifier.Unset()
 }
 
 // GetState returns the State field value if set, zero value otherwise.
@@ -563,112 +470,36 @@ func (o *Update) SetIsRead(v bool) {
 	o.IsRead = &v
 }
 
-// GetMetaData returns the MetaData field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *Update) GetMetaData() map[string]string {
-	if o == nil {
-		var ret map[string]string
+// GetSend returns the Send field value if set, zero value otherwise.
+func (o *Update) GetSend() SendReduced {
+	if o == nil || IsNil(o.Send) {
+		var ret SendReduced
 		return ret
 	}
-	return o.MetaData
+	return *o.Send
 }
 
-// GetMetaDataOk returns a tuple with the MetaData field value if set, nil otherwise
+// GetSendOk returns a tuple with the Send field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *Update) GetMetaDataOk() (*map[string]string, bool) {
-	if o == nil || IsNil(o.MetaData) {
+func (o *Update) GetSendOk() (*SendReduced, bool) {
+	if o == nil || IsNil(o.Send) {
 		return nil, false
 	}
-	return &o.MetaData, true
+	return o.Send, true
 }
 
-// HasMetaData returns a boolean if a field has been set.
-func (o *Update) HasMetaData() bool {
-	if o != nil && !IsNil(o.MetaData) {
+// HasSend returns a boolean if a field has been set.
+func (o *Update) HasSend() bool {
+	if o != nil && !IsNil(o.Send) {
 		return true
 	}
 
 	return false
 }
 
-// SetMetaData gets a reference to the given map[string]string and assigns it to the MetaData field.
-func (o *Update) SetMetaData(v map[string]string) {
-	o.MetaData = v
-}
-
-// GetDocuments returns the Documents field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *Update) GetDocuments() []DocumentData {
-	if o == nil {
-		var ret []DocumentData
-		return ret
-	}
-	return o.Documents
-}
-
-// GetDocumentsOk returns a tuple with the Documents field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *Update) GetDocumentsOk() ([]DocumentData, bool) {
-	if o == nil || IsNil(o.Documents) {
-		return nil, false
-	}
-	return o.Documents, true
-}
-
-// HasDocuments returns a boolean if a field has been set.
-func (o *Update) HasDocuments() bool {
-	if o != nil && !IsNil(o.Documents) {
-		return true
-	}
-
-	return false
-}
-
-// SetDocuments gets a reference to the given []DocumentData and assigns it to the Documents field.
-func (o *Update) SetDocuments(v []DocumentData) {
-	o.Documents = v
-}
-
-// GetPrestatore returns the Prestatore field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *Update) GetPrestatore() string {
-	if o == nil || IsNil(o.Prestatore.Get()) {
-		var ret string
-		return ret
-	}
-	return *o.Prestatore.Get()
-}
-
-// GetPrestatoreOk returns a tuple with the Prestatore field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *Update) GetPrestatoreOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return o.Prestatore.Get(), o.Prestatore.IsSet()
-}
-
-// HasPrestatore returns a boolean if a field has been set.
-func (o *Update) HasPrestatore() bool {
-	if o != nil && o.Prestatore.IsSet() {
-		return true
-	}
-
-	return false
-}
-
-// SetPrestatore gets a reference to the given NullableString and assigns it to the Prestatore field.
-func (o *Update) SetPrestatore(v string) {
-	o.Prestatore.Set(&v)
-}
-// SetPrestatoreNil sets the value for Prestatore to be an explicit nil
-func (o *Update) SetPrestatoreNil() {
-	o.Prestatore.Set(nil)
-}
-
-// UnsetPrestatore ensures that no value is present for Prestatore, not even an explicit nil
-func (o *Update) UnsetPrestatore() {
-	o.Prestatore.Unset()
+// SetSend gets a reference to the given SendReduced and assigns it to the Send field.
+func (o *Update) SetSend(v SendReduced) {
+	o.Send = &v
 }
 
 func (o Update) MarshalJSON() ([]byte, error) {
@@ -699,14 +530,8 @@ func (o Update) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.SendId) {
 		toSerialize["send_id"] = o.SendId
 	}
-	if o.DateSent.IsSet() {
-		toSerialize["date_sent"] = o.DateSent.Get()
-	}
 	if !IsNil(o.LastUpdate) {
 		toSerialize["last_update"] = o.LastUpdate
-	}
-	if o.Identifier.IsSet() {
-		toSerialize["identifier"] = o.Identifier.Get()
 	}
 	if !IsNil(o.State) {
 		toSerialize["state"] = o.State
@@ -723,14 +548,8 @@ func (o Update) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.IsRead) {
 		toSerialize["is_read"] = o.IsRead
 	}
-	if o.MetaData != nil {
-		toSerialize["meta_data"] = o.MetaData
-	}
-	if o.Documents != nil {
-		toSerialize["documents"] = o.Documents
-	}
-	if o.Prestatore.IsSet() {
-		toSerialize["prestatore"] = o.Prestatore.Get()
+	if !IsNil(o.Send) {
+		toSerialize["send"] = o.Send
 	}
 	return toSerialize, nil
 }
