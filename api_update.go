@@ -103,13 +103,13 @@ func (r ApiUpdateGetRequest) DateSentTo(dateSentTo time.Time) ApiUpdateGetReques
 	return r
 }
 
-// Page number. Defaults to 1.
+// Page number.
 func (r ApiUpdateGetRequest) Page(page int32) ApiUpdateGetRequest {
 	r.page = &page
 	return r
 }
 
-// Items per page. Defaults to 50. Cannot be greater than 200.
+// Items per page. Cannot be greater than 200.
 func (r ApiUpdateGetRequest) PageSize(pageSize int32) ApiUpdateGetRequest {
 	r.pageSize = &pageSize
 	return r

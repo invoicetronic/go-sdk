@@ -43,13 +43,13 @@ func (r ApiWebhookGetRequest) CompanyId(companyId int32) ApiWebhookGetRequest {
 	return r
 }
 
-// Page number. Defaults to 1.
+// Page number.
 func (r ApiWebhookGetRequest) Page(page int32) ApiWebhookGetRequest {
 	r.page = &page
 	return r
 }
 
-// Items per page. Defaults to 50. Cannot be greater than 200.
+// Items per page. Cannot be greater than 200.
 func (r ApiWebhookGetRequest) PageSize(pageSize int32) ApiWebhookGetRequest {
 	r.pageSize = &pageSize
 	return r
@@ -714,13 +714,13 @@ type ApiWebhookhistoryGetRequest struct {
 	webhookId *int32
 }
 
-// Page number. Defaults to 1.
+// Page number.
 func (r ApiWebhookhistoryGetRequest) Page(page int32) ApiWebhookhistoryGetRequest {
 	r.page = &page
 	return r
 }
 
-// Items per page. Defaults to 50. Cannot be greater than 200.
+// Items per page. Cannot be greater than 200.
 func (r ApiWebhookhistoryGetRequest) PageSize(pageSize int32) ApiWebhookhistoryGetRequest {
 	r.pageSize = &pageSize
 	return r

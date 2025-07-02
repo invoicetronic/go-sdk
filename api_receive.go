@@ -131,13 +131,13 @@ func (r ApiReceiveGetRequest) IncludePayload(includePayload bool) ApiReceiveGetR
 	return r
 }
 
-// Page number. Defaults to 1.
+// Page number.
 func (r ApiReceiveGetRequest) Page(page int32) ApiReceiveGetRequest {
 	r.page = &page
 	return r
 }
 
-// Items per page. Defaults to 50. Cannot be greater than 200.
+// Items per page. Cannot be greater than 200.
 func (r ApiReceiveGetRequest) PageSize(pageSize int32) ApiReceiveGetRequest {
 	r.pageSize = &pageSize
 	return r

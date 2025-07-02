@@ -36,8 +36,8 @@ import (
 
 func main() {
 	companyId := int32(56) // int32 | Company id (optional)
-	page := int32(56) // int32 | Page number. Defaults to 1. (optional) (default to 1)
-	pageSize := int32(56) // int32 | Items per page. Defaults to 50. Cannot be greater than 200. (optional) (default to 100)
+	page := int32(56) // int32 | Page number. (optional) (default to 1)
+	pageSize := int32(56) // int32 | Items per page. Cannot be greater than 200. (optional) (default to 100)
 	sort := "sort_example" // string | Sort by field. Prefix with '-' for descending order. (optional)
 	description := "description_example" // string |  (optional)
 	enabled := true // bool |  (optional)
@@ -68,8 +68,8 @@ Other parameters are passed through a pointer to a apiWebhookGetRequest struct v
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **companyId** | **int32** | Company id | 
- **page** | **int32** | Page number. Defaults to 1. | [default to 1]
- **pageSize** | **int32** | Items per page. Defaults to 50. Cannot be greater than 200. | [default to 100]
+ **page** | **int32** | Page number. | [default to 1]
+ **pageSize** | **int32** | Items per page. Cannot be greater than 200. | [default to 100]
  **sort** | **string** | Sort by field. Prefix with &#39;-&#39; for descending order. | 
  **description** | **string** |  | 
  **enabled** | **bool** |  | 
@@ -387,8 +387,8 @@ import (
 )
 
 func main() {
-	page := int32(56) // int32 | Page number. Defaults to 1. (optional) (default to 1)
-	pageSize := int32(56) // int32 | Items per page. Defaults to 50. Cannot be greater than 200. (optional) (default to 100)
+	page := int32(56) // int32 | Page number. (optional) (default to 1)
+	pageSize := int32(56) // int32 | Items per page. Cannot be greater than 200. (optional) (default to 100)
 	sort := "sort_example" // string | Sort by field. Prefix with '-' for descending order. (optional)
 	webhookId := int32(56) // int32 | WebHook id (optional)
 
@@ -415,8 +415,8 @@ Other parameters are passed through a pointer to a apiWebhookhistoryGetRequest s
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **page** | **int32** | Page number. Defaults to 1. | [default to 1]
- **pageSize** | **int32** | Items per page. Defaults to 50. Cannot be greater than 200. | [default to 100]
+ **page** | **int32** | Page number. | [default to 1]
+ **pageSize** | **int32** | Items per page. Cannot be greater than 200. | [default to 100]
  **sort** | **string** | Sort by field. Prefix with &#39;-&#39; for descending order. | 
  **webhookId** | **int32** | WebHook id | 
 

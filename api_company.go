@@ -32,13 +32,13 @@ type ApiCompanyGetRequest struct {
 	sort *string
 }
 
-// Page number. Defaults to 1.
+// Page number.
 func (r ApiCompanyGetRequest) Page(page int32) ApiCompanyGetRequest {
 	r.page = &page
 	return r
 }
 
-// Items per page. Defaults to 50. Cannot be greater than 200.
+// Items per page. Cannot be greater than 200.
 func (r ApiCompanyGetRequest) PageSize(pageSize int32) ApiCompanyGetRequest {
 	r.pageSize = &pageSize
 	return r

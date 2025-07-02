@@ -84,13 +84,13 @@ func (r ApiLogGetRequest) DateCreatedTo(dateCreatedTo time.Time) ApiLogGetReques
 	return r
 }
 
-// Page number. Defaults to 1.
+// Page number.
 func (r ApiLogGetRequest) Page(page int32) ApiLogGetRequest {
 	r.page = &page
 	return r
 }
 
-// Items per page. Defaults to 50. Cannot be greater than 200.
+// Items per page. Cannot be greater than 200.
 func (r ApiLogGetRequest) PageSize(pageSize int32) ApiLogGetRequest {
 	r.pageSize = &pageSize
 	return r
