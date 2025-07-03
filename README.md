@@ -56,6 +56,7 @@ Class | Method | HTTP request | Description
 *SendAPI* | [**SendFilePost**](docs/SendAPI.md#sendfilepost) | **Post** /send/file | Add an invoice by file
 *SendAPI* | [**SendGet**](docs/SendAPI.md#sendget) | **Get** /send | List invoices
 *SendAPI* | [**SendIdGet**](docs/SendAPI.md#sendidget) | **Get** /send/{id} | Get a invoice by id
+*SendAPI* | [**SendIdentifierGet**](docs/SendAPI.md#sendidentifierget) | **Get** /send/{identifier} | Get a invoice by identifier
 *SendAPI* | [**SendJsonPost**](docs/SendAPI.md#sendjsonpost) | **Post** /send/json | Add an invoice by json
 *SendAPI* | [**SendPost**](docs/SendAPI.md#sendpost) | **Post** /send | Add an invoice
 *SendAPI* | [**SendValidateFilePost**](docs/SendAPI.md#sendvalidatefilepost) | **Post** /send/validate/file | Validate an invoice file
@@ -176,5 +177,5 @@ Each of these functions takes a value of the given basic type and returns a poin
 
 ## Author
 
-support@invoicetronic.com
+info@invoicetronic.com
 

@@ -7,6 +7,7 @@ Method | HTTP request | Description
 [**SendFilePost**](SendAPI.md#SendFilePost) | **Post** /send/file | Add an invoice by file
 [**SendGet**](SendAPI.md#SendGet) | **Get** /send | List invoices
 [**SendIdGet**](SendAPI.md#SendIdGet) | **Get** /send/{id} | Get a invoice by id
+[**SendIdentifierGet**](SendAPI.md#SendIdentifierGet) | **Get** /send/{identifier} | Get a invoice by identifier
 [**SendJsonPost**](SendAPI.md#SendJsonPost) | **Post** /send/json | Add an invoice by json
 [**SendPost**](SendAPI.md#SendPost) | **Post** /send | Add an invoice
 [**SendValidateFilePost**](SendAPI.md#SendValidateFilePost) | **Post** /send/validate/file | Validate an invoice file
@@ -186,7 +187,7 @@ Name | Type | Description  | Notes
 
 ## SendIdGet
 
-> Send SendIdGet(ctx, id).Execute()
+> Send SendIdGet(ctx, id).IncludePayload(includePayload).Execute()
 
 Get a invoice by id
 
@@ -206,10 +207,11 @@ import (
 
 func main() {
 	id := int32(56) // int32 | Item id
+	includePayload := true // bool |  (optional) (default to false)
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.SendAPI.SendIdGet(context.Background(), id).Execute()
+	resp, r, err := apiClient.SendAPI.SendIdGet(context.Background(), id).IncludePayload(includePayload).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendIdGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -235,6 +237,79 @@ Other parameters are passed through a pointer to a apiSendIdGetRequest struct vi
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **includePayload** | **bool** |  | [default to false]
+
+### Return type
+
+[**Send**](Send.md)
+
+### Authorization
+
+[Basic](../README.md#Basic)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## SendIdentifierGet
+
+> Send SendIdentifierGet(ctx, identifier).IncludePayload(includePayload).Execute()
+
+Get a invoice by identifier
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	invoicetronicsdk "github.com/invoicetronic/go-sdk"
+)
+
+func main() {
+	identifier := "identifier_example" // string | 
+	includePayload := true // bool |  (optional) (default to false)
+
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
+	resp, r, err := apiClient.SendAPI.SendIdentifierGet(context.Background(), identifier).IncludePayload(includePayload).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendIdentifierGet``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `SendIdentifierGet`: Send
+	fmt.Fprintf(os.Stdout, "Response from `SendAPI.SendIdentifierGet`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**identifier** | **string** |  | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiSendIdentifierGetRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **includePayload** | **bool** |  | [default to false]
 
 ### Return type
 

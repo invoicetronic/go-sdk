@@ -181,7 +181,7 @@ Name | Type | Description  | Notes
 
 ## ReceiveIdGet
 
-> Receive ReceiveIdGet(ctx, id).Execute()
+> Receive ReceiveIdGet(ctx, id).IncludePayload(includePayload).Execute()
 
 Get an incoming invoice by id
 
@@ -201,10 +201,11 @@ import (
 
 func main() {
 	id := int32(56) // int32 | Item id
+	includePayload := true // bool |  (optional) (default to false)
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.ReceiveAPI.ReceiveIdGet(context.Background(), id).Execute()
+	resp, r, err := apiClient.ReceiveAPI.ReceiveIdGet(context.Background(), id).IncludePayload(includePayload).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ReceiveAPI.ReceiveIdGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -230,6 +231,7 @@ Other parameters are passed through a pointer to a apiReceiveIdGetRequest struct
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **includePayload** | **bool** |  | [default to false]
 
 ### Return type
 
