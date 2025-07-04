@@ -205,6 +205,9 @@ func (a *UpdateAPIService) UpdateGetExecute(r ApiUpdateGetRequest) ([]Update, *h
 	}
 	if r.sort != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", r.sort, "form", "")
+	} else {
+		var defaultValue string = "last_update"
+		r.sort = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
