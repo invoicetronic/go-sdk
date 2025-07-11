@@ -37,8 +37,6 @@ type Company struct {
 	FiscalCode string `json:"fiscal_code"`
 	// Name
 	Name string `json:"name"`
-	// Holds the last unique value used to generate a XML filename. This is automatically updated by the system   when a raw XML file is uploaded. Normally, you do not need or want to change this value.
-	Counter *int32 `json:"counter,omitempty"`
 }
 
 type _Company Company
@@ -263,38 +261,6 @@ func (o *Company) SetName(v string) {
 	o.Name = v
 }
 
-// GetCounter returns the Counter field value if set, zero value otherwise.
-func (o *Company) GetCounter() int32 {
-	if o == nil || IsNil(o.Counter) {
-		var ret int32
-		return ret
-	}
-	return *o.Counter
-}
-
-// GetCounterOk returns a tuple with the Counter field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *Company) GetCounterOk() (*int32, bool) {
-	if o == nil || IsNil(o.Counter) {
-		return nil, false
-	}
-	return o.Counter, true
-}
-
-// HasCounter returns a boolean if a field has been set.
-func (o *Company) HasCounter() bool {
-	if o != nil && !IsNil(o.Counter) {
-		return true
-	}
-
-	return false
-}
-
-// SetCounter gets a reference to the given int32 and assigns it to the Counter field.
-func (o *Company) SetCounter(v int32) {
-	o.Counter = &v
-}
-
 func (o Company) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -320,9 +286,6 @@ func (o Company) ToMap() (map[string]interface{}, error) {
 	toSerialize["vat"] = o.Vat
 	toSerialize["fiscal_code"] = o.FiscalCode
 	toSerialize["name"] = o.Name
-	if !IsNil(o.Counter) {
-		toSerialize["counter"] = o.Counter
-	}
 	return toSerialize, nil
 }
 

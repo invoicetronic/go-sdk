@@ -442,6 +442,7 @@ type ApiReceiveIdGetRequest struct {
 	includePayload *bool
 }
 
+// Include payload in the response. Defaults to false.
 func (r ApiReceiveIdGetRequest) IncludePayload(includePayload bool) ApiReceiveIdGetRequest {
 	r.includePayload = &includePayload
 	return r
@@ -491,7 +492,7 @@ func (a *ReceiveAPIService) ReceiveIdGetExecute(r ApiReceiveIdGetRequest) (*Rece
 	localVarFormParams := url.Values{}
 
 	if r.includePayload != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "includePayload", r.includePayload, "form", "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "include_payload", r.includePayload, "form", "")
 	} else {
 		var defaultValue bool = false
 		r.includePayload = &defaultValue

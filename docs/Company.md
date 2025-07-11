@@ -11,7 +11,6 @@ Name | Type | Description | Notes
 **Vat** | **string** | Vat number. Must include the country code. | 
 **FiscalCode** | **string** | Fiscal code. In most cases it&#39;s the same as the vat number. | 
 **Name** | **string** | Name | 
-**Counter** | Pointer to **int32** | Holds the last unique value used to generate a XML filename. This is automatically updated by the system   when a raw XML file is uploaded. Normally, you do not need or want to change this value. | [optional] 
 
 ## Methods
 
@@ -191,31 +190,6 @@ and a boolean to check if the value has been set.
 
 SetName sets Name field to given value.
 
-
-### GetCounter
-
-`func (o *Company) GetCounter() int32`
-
-GetCounter returns the Counter field if non-nil, zero value otherwise.
-
-### GetCounterOk
-
-`func (o *Company) GetCounterOk() (*int32, bool)`
-
-GetCounterOk returns a tuple with the Counter field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetCounter
-
-`func (o *Company) SetCounter(v int32)`
-
-SetCounter sets Counter field to given value.
-
-### HasCounter
-
-`func (o *Company) HasCounter() bool`
-
-HasCounter returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

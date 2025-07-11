@@ -207,7 +207,7 @@ import (
 
 func main() {
 	id := int32(56) // int32 | Item id
-	includePayload := true // bool |  (optional) (default to false)
+	includePayload := true // bool | Include payload in the response. Defaults to false. (optional) (default to false)
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
@@ -237,7 +237,7 @@ Other parameters are passed through a pointer to a apiSendIdGetRequest struct vi
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **includePayload** | **bool** |  | [default to false]
+ **includePayload** | **bool** | Include payload in the response. Defaults to false. | [default to false]
 
 ### Return type
 
@@ -279,7 +279,7 @@ import (
 
 func main() {
 	identifier := "identifier_example" // string | 
-	includePayload := true // bool |  (optional) (default to false)
+	includePayload := true // bool | Include payload in the response. Defaults to false. (optional) (default to false)
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
@@ -309,7 +309,7 @@ Other parameters are passed through a pointer to a apiSendIdentifierGetRequest s
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **includePayload** | **bool** |  | [default to false]
+ **includePayload** | **bool** | Include payload in the response. Defaults to false. | [default to false]
 
 ### Return type
 

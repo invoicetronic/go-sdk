@@ -478,6 +478,7 @@ type ApiSendIdGetRequest struct {
 	includePayload *bool
 }
 
+// Include payload in the response. Defaults to false.
 func (r ApiSendIdGetRequest) IncludePayload(includePayload bool) ApiSendIdGetRequest {
 	r.includePayload = &includePayload
 	return r
@@ -527,7 +528,7 @@ func (a *SendAPIService) SendIdGetExecute(r ApiSendIdGetRequest) (*Send, *http.R
 	localVarFormParams := url.Values{}
 
 	if r.includePayload != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "includePayload", r.includePayload, "form", "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "include_payload", r.includePayload, "form", "")
 	} else {
 		var defaultValue bool = false
 		r.includePayload = &defaultValue
@@ -593,6 +594,7 @@ type ApiSendIdentifierGetRequest struct {
 	includePayload *bool
 }
 
+// Include payload in the response. Defaults to false.
 func (r ApiSendIdentifierGetRequest) IncludePayload(includePayload bool) ApiSendIdentifierGetRequest {
 	r.includePayload = &includePayload
 	return r
@@ -642,7 +644,7 @@ func (a *SendAPIService) SendIdentifierGetExecute(r ApiSendIdentifierGetRequest)
 	localVarFormParams := url.Values{}
 
 	if r.includePayload != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "includePayload", r.includePayload, "form", "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "include_payload", r.includePayload, "form", "")
 	} else {
 		var defaultValue bool = false
 		r.includePayload = &defaultValue
