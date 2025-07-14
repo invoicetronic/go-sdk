@@ -93,7 +93,7 @@ type Configuration struct {
 func NewConfiguration() *Configuration {
 	cfg := &Configuration{
 		DefaultHeader:    make(map[string]string),
-		UserAgent:        "Invoicetronic/main/Go-SDK",
+		UserAgent:        "Invoicetronic/1.0.0/Go-SDK",
 		Debug:            false,
 		Servers:          ServerConfigurations{
 			{
