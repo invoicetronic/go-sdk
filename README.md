@@ -20,21 +20,8 @@ For more information, please visit [https://invoicetronic.com](https://invoicetr
 
 Install the following dependencies:
 
-```sh
-go get github.com/stretchr/testify/assert
-go get golang.org/x/net/context
 ```
-
-Put the package under your project folder and add the following in import:
-
-```go
-import invoicetronicsdk "github.com/invoicetronic/go-sdk"
-```
-
-To use a proxy, set the environment variable `HTTP_PROXY`:
-
-```go
-os.Setenv("HTTP_PROXY", "http://proxy_name:proxy_port")
+go get github.com/invoicetronic/go-sdk
 ```
 
 ## Documentation for API Endpoints
