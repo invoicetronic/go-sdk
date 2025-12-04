@@ -35,8 +35,6 @@ type Event struct {
 	CompanyId NullableInt32 `json:"company_id,omitempty"`
 	// Request method.
 	Method NullableString `json:"method,omitempty"`
-	// Request query.
-	Query NullableString `json:"query,omitempty"`
 	// API endpoint.
 	Endpoint NullableString `json:"endpoint,omitempty"`
 	// Api version.
@@ -47,8 +45,12 @@ type Event struct {
 	DateTime *time.Time `json:"date_time,omitempty"`
 	// Response error.
 	Error NullableString `json:"error,omitempty"`
+	// ID of the resource created or modified by this request.
+	ResourceId NullableInt32 `json:"resource_id,omitempty"`
 	// Wether the request was successful.
 	Success *bool `json:"success,omitempty"`
+	// Request query. Only used for internal logging, not sent to webhooks.
+	Query NullableString `json:"query,omitempty"`
 	// Response payload. It is guaranteed to be cyphered at rest.
 	ResponseBody NullableString `json:"response_body,omitempty"`
 }
@@ -314,48 +316,6 @@ func (o *Event) UnsetMethod() {
 	o.Method.Unset()
 }
 
-// GetQuery returns the Query field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *Event) GetQuery() string {
-	if o == nil || IsNil(o.Query.Get()) {
-		var ret string
-		return ret
-	}
-	return *o.Query.Get()
-}
-
-// GetQueryOk returns a tuple with the Query field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *Event) GetQueryOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return o.Query.Get(), o.Query.IsSet()
-}
-
-// HasQuery returns a boolean if a field has been set.
-func (o *Event) HasQuery() bool {
-	if o != nil && o.Query.IsSet() {
-		return true
-	}
-
-	return false
-}
-
-// SetQuery gets a reference to the given NullableString and assigns it to the Query field.
-func (o *Event) SetQuery(v string) {
-	o.Query.Set(&v)
-}
-// SetQueryNil sets the value for Query to be an explicit nil
-func (o *Event) SetQueryNil() {
-	o.Query.Set(nil)
-}
-
-// UnsetQuery ensures that no value is present for Query, not even an explicit nil
-func (o *Event) UnsetQuery() {
-	o.Query.Unset()
-}
-
 // GetEndpoint returns the Endpoint field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *Event) GetEndpoint() string {
 	if o == nil || IsNil(o.Endpoint.Get()) {
@@ -536,6 +496,48 @@ func (o *Event) UnsetError() {
 	o.Error.Unset()
 }
 
+// GetResourceId returns the ResourceId field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *Event) GetResourceId() int32 {
+	if o == nil || IsNil(o.ResourceId.Get()) {
+		var ret int32
+		return ret
+	}
+	return *o.ResourceId.Get()
+}
+
+// GetResourceIdOk returns a tuple with the ResourceId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *Event) GetResourceIdOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.ResourceId.Get(), o.ResourceId.IsSet()
+}
+
+// HasResourceId returns a boolean if a field has been set.
+func (o *Event) HasResourceId() bool {
+	if o != nil && o.ResourceId.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetResourceId gets a reference to the given NullableInt32 and assigns it to the ResourceId field.
+func (o *Event) SetResourceId(v int32) {
+	o.ResourceId.Set(&v)
+}
+// SetResourceIdNil sets the value for ResourceId to be an explicit nil
+func (o *Event) SetResourceIdNil() {
+	o.ResourceId.Set(nil)
+}
+
+// UnsetResourceId ensures that no value is present for ResourceId, not even an explicit nil
+func (o *Event) UnsetResourceId() {
+	o.ResourceId.Unset()
+}
+
 // GetSuccess returns the Success field value if set, zero value otherwise.
 func (o *Event) GetSuccess() bool {
 	if o == nil || IsNil(o.Success) {
@@ -566,6 +568,48 @@ func (o *Event) HasSuccess() bool {
 // SetSuccess gets a reference to the given bool and assigns it to the Success field.
 func (o *Event) SetSuccess(v bool) {
 	o.Success = &v
+}
+
+// GetQuery returns the Query field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *Event) GetQuery() string {
+	if o == nil || IsNil(o.Query.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.Query.Get()
+}
+
+// GetQueryOk returns a tuple with the Query field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *Event) GetQueryOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Query.Get(), o.Query.IsSet()
+}
+
+// HasQuery returns a boolean if a field has been set.
+func (o *Event) HasQuery() bool {
+	if o != nil && o.Query.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetQuery gets a reference to the given NullableString and assigns it to the Query field.
+func (o *Event) SetQuery(v string) {
+	o.Query.Set(&v)
+}
+// SetQueryNil sets the value for Query to be an explicit nil
+func (o *Event) SetQueryNil() {
+	o.Query.Set(nil)
+}
+
+// UnsetQuery ensures that no value is present for Query, not even an explicit nil
+func (o *Event) UnsetQuery() {
+	o.Query.Unset()
 }
 
 // GetResponseBody returns the ResponseBody field value if set, zero value otherwise (both if not set or set to explicit null).
@@ -641,9 +685,6 @@ func (o Event) ToMap() (map[string]interface{}, error) {
 	if o.Method.IsSet() {
 		toSerialize["method"] = o.Method.Get()
 	}
-	if o.Query.IsSet() {
-		toSerialize["query"] = o.Query.Get()
-	}
 	if o.Endpoint.IsSet() {
 		toSerialize["endpoint"] = o.Endpoint.Get()
 	}
@@ -659,8 +700,14 @@ func (o Event) ToMap() (map[string]interface{}, error) {
 	if o.Error.IsSet() {
 		toSerialize["error"] = o.Error.Get()
 	}
+	if o.ResourceId.IsSet() {
+		toSerialize["resource_id"] = o.ResourceId.Get()
+	}
 	if !IsNil(o.Success) {
 		toSerialize["success"] = o.Success
+	}
+	if o.Query.IsSet() {
+		toSerialize["query"] = o.Query.Get()
 	}
 	if o.ResponseBody.IsSet() {
 		toSerialize["response_body"] = o.ResponseBody.Get()

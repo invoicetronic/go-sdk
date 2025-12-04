@@ -97,14 +97,16 @@ func (a *SendAPIService) SendFilePostExecute(r ApiSendFilePostRequest) (*Send, *
 	if r.validate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "validate", r.validate, "form", "")
 	} else {
-		var defaultValue bool = false
-		r.validate = &defaultValue
+        var defaultValue bool = false
+        parameterAddToHeaderOrQuery(localVarQueryParams, "validate", defaultValue, "form", "")
+        r.validate = &defaultValue
 	}
 	if r.signature != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "signature", r.signature, "form", "")
 	} else {
-		var defaultValue string = "Auto"
-		r.signature = &defaultValue
+        var defaultValue string = "Auto"
+        parameterAddToHeaderOrQuery(localVarQueryParams, "signature", defaultValue, "form", "")
+        r.signature = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"multipart/form-data"}
@@ -395,14 +397,16 @@ func (a *SendAPIService) SendGetExecute(r ApiSendGetRequest) ([]Send, *http.Resp
 	if r.page != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "form", "")
 	} else {
-		var defaultValue int32 = 1
-		r.page = &defaultValue
+        var defaultValue int32 = 1
+        parameterAddToHeaderOrQuery(localVarQueryParams, "page", defaultValue, "form", "")
+        r.page = &defaultValue
 	}
 	if r.pageSize != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "form", "")
 	} else {
-		var defaultValue int32 = 100
-		r.pageSize = &defaultValue
+        var defaultValue int32 = 100
+        parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", defaultValue, "form", "")
+        r.pageSize = &defaultValue
 	}
 	if r.sort != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", r.sort, "form", "")
@@ -530,8 +534,9 @@ func (a *SendAPIService) SendIdGetExecute(r ApiSendIdGetRequest) (*Send, *http.R
 	if r.includePayload != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "include_payload", r.includePayload, "form", "")
 	} else {
-		var defaultValue bool = false
-		r.includePayload = &defaultValue
+        var defaultValue bool = false
+        parameterAddToHeaderOrQuery(localVarQueryParams, "include_payload", defaultValue, "form", "")
+        r.includePayload = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -646,8 +651,9 @@ func (a *SendAPIService) SendIdentifierGetExecute(r ApiSendIdentifierGetRequest)
 	if r.includePayload != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "include_payload", r.includePayload, "form", "")
 	} else {
-		var defaultValue bool = false
-		r.includePayload = &defaultValue
+        var defaultValue bool = false
+        parameterAddToHeaderOrQuery(localVarQueryParams, "include_payload", defaultValue, "form", "")
+        r.includePayload = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -784,14 +790,16 @@ func (a *SendAPIService) SendJsonPostExecute(r ApiSendJsonPostRequest) (*Send, *
 	if r.validate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "validate", r.validate, "form", "")
 	} else {
-		var defaultValue bool = false
-		r.validate = &defaultValue
+        var defaultValue bool = false
+        parameterAddToHeaderOrQuery(localVarQueryParams, "validate", defaultValue, "form", "")
+        r.validate = &defaultValue
 	}
 	if r.signature != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "signature", r.signature, "form", "")
 	} else {
-		var defaultValue string = "Auto"
-		r.signature = &defaultValue
+        var defaultValue string = "Auto"
+        parameterAddToHeaderOrQuery(localVarQueryParams, "signature", defaultValue, "form", "")
+        r.signature = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json"}
@@ -941,14 +949,16 @@ func (a *SendAPIService) SendPostExecute(r ApiSendPostRequest) (*Send, *http.Res
 	if r.validate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "validate", r.validate, "form", "")
 	} else {
-		var defaultValue bool = false
-		r.validate = &defaultValue
+        var defaultValue bool = false
+        parameterAddToHeaderOrQuery(localVarQueryParams, "validate", defaultValue, "form", "")
+        r.validate = &defaultValue
 	}
 	if r.signature != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "signature", r.signature, "form", "")
 	} else {
-		var defaultValue string = "Auto"
-		r.signature = &defaultValue
+        var defaultValue string = "Auto"
+        parameterAddToHeaderOrQuery(localVarQueryParams, "signature", defaultValue, "form", "")
+        r.signature = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json"}
@@ -1591,14 +1601,16 @@ func (a *SendAPIService) SendXmlPostExecute(r ApiSendXmlPostRequest) (*Send, *ht
 	if r.validate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "validate", r.validate, "form", "")
 	} else {
-		var defaultValue bool = false
-		r.validate = &defaultValue
+        var defaultValue bool = false
+        parameterAddToHeaderOrQuery(localVarQueryParams, "validate", defaultValue, "form", "")
+        r.validate = &defaultValue
 	}
 	if r.signature != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "signature", r.signature, "form", "")
 	} else {
-		var defaultValue string = "Auto"
-		r.signature = &defaultValue
+        var defaultValue string = "Auto"
+        parameterAddToHeaderOrQuery(localVarQueryParams, "signature", defaultValue, "form", "")
+        r.signature = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/xml"}

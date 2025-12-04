@@ -11,13 +11,14 @@ Name | Type | Description | Notes
 **ApiKeyId** | Pointer to **int32** | Api key id. | [optional] 
 **CompanyId** | Pointer to **NullableInt32** | Company id. | [optional] 
 **Method** | Pointer to **NullableString** | Request method. | [optional] 
-**Query** | Pointer to **NullableString** | Request query. | [optional] 
 **Endpoint** | Pointer to **NullableString** | API endpoint. | [optional] 
 **ApiVersion** | Pointer to **int32** | Api version. | [optional] 
 **StatusCode** | Pointer to **int32** | Status code returned by the API. | [optional] 
 **DateTime** | Pointer to **time.Time** | Date and time of the request. | [optional] 
 **Error** | Pointer to **NullableString** | Response error. | [optional] 
+**ResourceId** | Pointer to **NullableInt32** | ID of the resource created or modified by this request. | [optional] 
 **Success** | Pointer to **bool** | Wether the request was successful. | [optional] [readonly] 
+**Query** | Pointer to **NullableString** | Request query. Only used for internal logging, not sent to webhooks. | [optional] 
 **ResponseBody** | Pointer to **NullableString** | Response payload. It is guaranteed to be cyphered at rest. | [optional] 
 
 ## Methods
@@ -234,41 +235,6 @@ HasMethod returns a boolean if a field has been set.
 `func (o *Event) UnsetMethod()`
 
 UnsetMethod ensures that no value is present for Method, not even an explicit nil
-### GetQuery
-
-`func (o *Event) GetQuery() string`
-
-GetQuery returns the Query field if non-nil, zero value otherwise.
-
-### GetQueryOk
-
-`func (o *Event) GetQueryOk() (*string, bool)`
-
-GetQueryOk returns a tuple with the Query field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetQuery
-
-`func (o *Event) SetQuery(v string)`
-
-SetQuery sets Query field to given value.
-
-### HasQuery
-
-`func (o *Event) HasQuery() bool`
-
-HasQuery returns a boolean if a field has been set.
-
-### SetQueryNil
-
-`func (o *Event) SetQueryNil(b bool)`
-
- SetQueryNil sets the value for Query to be an explicit nil
-
-### UnsetQuery
-`func (o *Event) UnsetQuery()`
-
-UnsetQuery ensures that no value is present for Query, not even an explicit nil
 ### GetEndpoint
 
 `func (o *Event) GetEndpoint() string`
@@ -414,6 +380,41 @@ HasError returns a boolean if a field has been set.
 `func (o *Event) UnsetError()`
 
 UnsetError ensures that no value is present for Error, not even an explicit nil
+### GetResourceId
+
+`func (o *Event) GetResourceId() int32`
+
+GetResourceId returns the ResourceId field if non-nil, zero value otherwise.
+
+### GetResourceIdOk
+
+`func (o *Event) GetResourceIdOk() (*int32, bool)`
+
+GetResourceIdOk returns a tuple with the ResourceId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetResourceId
+
+`func (o *Event) SetResourceId(v int32)`
+
+SetResourceId sets ResourceId field to given value.
+
+### HasResourceId
+
+`func (o *Event) HasResourceId() bool`
+
+HasResourceId returns a boolean if a field has been set.
+
+### SetResourceIdNil
+
+`func (o *Event) SetResourceIdNil(b bool)`
+
+ SetResourceIdNil sets the value for ResourceId to be an explicit nil
+
+### UnsetResourceId
+`func (o *Event) UnsetResourceId()`
+
+UnsetResourceId ensures that no value is present for ResourceId, not even an explicit nil
 ### GetSuccess
 
 `func (o *Event) GetSuccess() bool`
@@ -439,6 +440,41 @@ SetSuccess sets Success field to given value.
 
 HasSuccess returns a boolean if a field has been set.
 
+### GetQuery
+
+`func (o *Event) GetQuery() string`
+
+GetQuery returns the Query field if non-nil, zero value otherwise.
+
+### GetQueryOk
+
+`func (o *Event) GetQueryOk() (*string, bool)`
+
+GetQueryOk returns a tuple with the Query field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetQuery
+
+`func (o *Event) SetQuery(v string)`
+
+SetQuery sets Query field to given value.
+
+### HasQuery
+
+`func (o *Event) HasQuery() bool`
+
+HasQuery returns a boolean if a field has been set.
+
+### SetQueryNil
+
+`func (o *Event) SetQueryNil(b bool)`
+
+ SetQueryNil sets the value for Query to be an explicit nil
+
+### UnsetQuery
+`func (o *Event) UnsetQuery()`
+
+UnsetQuery ensures that no value is present for Query, not even an explicit nil
 ### GetResponseBody
 
 `func (o *Event) GetResponseBody() string`
