@@ -255,7 +255,7 @@ import (
 )
 
 func main() {
-	webHook := *invoicetronicsdk.NewWebHook() // WebHook | 
+	webHook := *invoicetronicsdk.NewWebHook("Url_example") // WebHook | 
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
@@ -321,7 +321,7 @@ import (
 )
 
 func main() {
-	webHook := *invoicetronicsdk.NewWebHook() // WebHook | 
+	webHook := *invoicetronicsdk.NewWebHook("Url_example") // WebHook | 
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)

@@ -14,6 +14,8 @@ package invoicetronicsdk
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the Send type satisfies the MappedNullable interface at compile time
@@ -42,7 +44,7 @@ type Send struct {
 	// SDI format (FPA12, FPR12, FSM10, ...)
 	Format NullableString `json:"format,omitempty"`
 	// Xml payloaad. This is the actual xml content, as string. On send, it can be base64 encoded. If it's not, it will be encoded before sending. It is guaranteed to be cyphered at rest.
-	Payload NullableString `json:"payload,omitempty"`
+	Payload string `json:"payload"`
 	// Last update from SDI.
 	LastUpdate NullableTime `json:"last_update,omitempty"`
 	// When the invoice was sent to SDI.
@@ -56,12 +58,15 @@ type Send struct {
 	Company *Company `json:"company,omitempty"`
 }
 
+type _Send Send
+
 // NewSend instantiates a new Send object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewSend() *Send {
+func NewSend(payload string) *Send {
 	this := Send{}
+	this.Payload = payload
 	return &this
 }
 
@@ -443,46 +448,28 @@ func (o *Send) UnsetFormat() {
 	o.Format.Unset()
 }
 
-// GetPayload returns the Payload field value if set, zero value otherwise (both if not set or set to explicit null).
+// GetPayload returns the Payload field value
 func (o *Send) GetPayload() string {
-	if o == nil || IsNil(o.Payload.Get()) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Payload.Get()
+
+	return o.Payload
 }
 
-// GetPayloadOk returns a tuple with the Payload field value if set, nil otherwise
+// GetPayloadOk returns a tuple with the Payload field value
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Send) GetPayloadOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.Payload.Get(), o.Payload.IsSet()
+	return &o.Payload, true
 }
 
-// HasPayload returns a boolean if a field has been set.
-func (o *Send) HasPayload() bool {
-	if o != nil && o.Payload.IsSet() {
-		return true
-	}
-
-	return false
-}
-
-// SetPayload gets a reference to the given NullableString and assigns it to the Payload field.
+// SetPayload sets field value
 func (o *Send) SetPayload(v string) {
-	o.Payload.Set(&v)
-}
-// SetPayloadNil sets the value for Payload to be an explicit nil
-func (o *Send) SetPayloadNil() {
-	o.Payload.Set(nil)
-}
-
-// UnsetPayload ensures that no value is present for Payload, not even an explicit nil
-func (o *Send) UnsetPayload() {
-	o.Payload.Unset()
+	o.Payload = v
 }
 
 // GetLastUpdate returns the LastUpdate field value if set, zero value otherwise (both if not set or set to explicit null).
@@ -739,9 +726,7 @@ func (o Send) ToMap() (map[string]interface{}, error) {
 	if o.Format.IsSet() {
 		toSerialize["format"] = o.Format.Get()
 	}
-	if o.Payload.IsSet() {
-		toSerialize["payload"] = o.Payload.Get()
-	}
+	toSerialize["payload"] = o.Payload
 	if o.LastUpdate.IsSet() {
 		toSerialize["last_update"] = o.LastUpdate.Get()
 	}
@@ -761,6 +746,43 @@ func (o Send) ToMap() (map[string]interface{}, error) {
 		toSerialize["company"] = o.Company
 	}
 	return toSerialize, nil
+}
+
+func (o *Send) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"payload",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varSend := _Send{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSend)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Send(varSend)
+
+	return err
 }
 
 type NullableSend struct {

@@ -10,8 +10,8 @@ Name | Type | Description | Notes
 **UserId** | Pointer to **int32** | User id. | [optional] 
 **ApiKeyId** | Pointer to **int32** | Api key id. | [optional] 
 **CompanyId** | Pointer to **NullableInt32** | Company id. | [optional] 
-**Method** | Pointer to **NullableString** | Request method. | [optional] 
-**Endpoint** | Pointer to **NullableString** | API endpoint. | [optional] 
+**Method** | **string** | Request method. | 
+**Endpoint** | **string** | API endpoint. | 
 **ApiVersion** | Pointer to **int32** | Api version. | [optional] 
 **StatusCode** | Pointer to **int32** | Status code returned by the API. | [optional] 
 **DateTime** | Pointer to **time.Time** | Date and time of the request. | [optional] 
@@ -25,7 +25,7 @@ Name | Type | Description | Notes
 
 ### NewEvent
 
-`func NewEvent() *Event`
+`func NewEvent(method string, endpoint string, ) *Event`
 
 NewEvent instantiates a new Event object
 This constructor will assign default values to properties that have it defined,
@@ -219,22 +219,7 @@ and a boolean to check if the value has been set.
 
 SetMethod sets Method field to given value.
 
-### HasMethod
 
-`func (o *Event) HasMethod() bool`
-
-HasMethod returns a boolean if a field has been set.
-
-### SetMethodNil
-
-`func (o *Event) SetMethodNil(b bool)`
-
- SetMethodNil sets the value for Method to be an explicit nil
-
-### UnsetMethod
-`func (o *Event) UnsetMethod()`
-
-UnsetMethod ensures that no value is present for Method, not even an explicit nil
 ### GetEndpoint
 
 `func (o *Event) GetEndpoint() string`
@@ -254,22 +239,7 @@ and a boolean to check if the value has been set.
 
 SetEndpoint sets Endpoint field to given value.
 
-### HasEndpoint
 
-`func (o *Event) HasEndpoint() bool`
-
-HasEndpoint returns a boolean if a field has been set.
-
-### SetEndpointNil
-
-`func (o *Event) SetEndpointNil(b bool)`
-
- SetEndpointNil sets the value for Endpoint to be an explicit nil
-
-### UnsetEndpoint
-`func (o *Event) UnsetEndpoint()`
-
-UnsetEndpoint ensures that no value is present for Endpoint, not even an explicit nil
 ### GetApiVersion
 
 `func (o *Event) GetApiVersion() int32`

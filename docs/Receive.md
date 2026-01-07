@@ -14,7 +14,7 @@ Name | Type | Description | Notes
 **Identifier** | Pointer to **NullableString** | SDI identifier. This is set by the SDI and is guaranted to be unique within the SDI system. | [optional] 
 **FileName** | Pointer to **NullableString** | Xml file name. | [optional] 
 **Format** | Pointer to **NullableString** | SDI format (FPA12, FPR12, FSM10, ...) | [optional] 
-**Payload** | Pointer to **NullableString** | Xml payloaad. This is the actual xml content, as string. On send, it can be base64 encoded. If it&#39;s not, it will be encoded before sending. It is guaranteed to be cyphered at rest. | [optional] 
+**Payload** | **string** | Xml payloaad. This is the actual xml content, as string. On send, it can be base64 encoded. If it&#39;s not, it will be encoded before sending. It is guaranteed to be cyphered at rest. | 
 **LastUpdate** | Pointer to **NullableTime** | Last update from SDI. | [optional] 
 **DateSent** | Pointer to **NullableTime** | When the invoice was sent to SDI. | [optional] 
 **Documents** | Pointer to [**[]DocumentData**](DocumentData.md) | The invoices included in the payload. This is set by the system, based on the xml content. | [optional] 
@@ -26,7 +26,7 @@ Name | Type | Description | Notes
 
 ### NewReceive
 
-`func NewReceive() *Receive`
+`func NewReceive(payload string, ) *Receive`
 
 NewReceive instantiates a new Receive object
 This constructor will assign default values to properties that have it defined,
@@ -360,22 +360,7 @@ and a boolean to check if the value has been set.
 
 SetPayload sets Payload field to given value.
 
-### HasPayload
 
-`func (o *Receive) HasPayload() bool`
-
-HasPayload returns a boolean if a field has been set.
-
-### SetPayloadNil
-
-`func (o *Receive) SetPayloadNil(b bool)`
-
- SetPayloadNil sets the value for Payload to be an explicit nil
-
-### UnsetPayload
-`func (o *Receive) UnsetPayload()`
-
-UnsetPayload ensures that no value is present for Payload, not even an explicit nil
 ### GetLastUpdate
 
 `func (o *Receive) GetLastUpdate() time.Time`

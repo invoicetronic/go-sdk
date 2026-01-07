@@ -14,6 +14,8 @@ package invoicetronicsdk
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the Event type satisfies the MappedNullable interface at compile time
@@ -34,9 +36,9 @@ type Event struct {
 	// Company id.
 	CompanyId NullableInt32 `json:"company_id,omitempty"`
 	// Request method.
-	Method NullableString `json:"method,omitempty"`
+	Method string `json:"method"`
 	// API endpoint.
-	Endpoint NullableString `json:"endpoint,omitempty"`
+	Endpoint string `json:"endpoint"`
 	// Api version.
 	ApiVersion *int32 `json:"api_version,omitempty"`
 	// Status code returned by the API.
@@ -55,12 +57,16 @@ type Event struct {
 	ResponseBody NullableString `json:"response_body,omitempty"`
 }
 
+type _Event Event
+
 // NewEvent instantiates a new Event object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewEvent() *Event {
+func NewEvent(method string, endpoint string) *Event {
 	this := Event{}
+	this.Method = method
+	this.Endpoint = endpoint
 	return &this
 }
 
@@ -274,88 +280,52 @@ func (o *Event) UnsetCompanyId() {
 	o.CompanyId.Unset()
 }
 
-// GetMethod returns the Method field value if set, zero value otherwise (both if not set or set to explicit null).
+// GetMethod returns the Method field value
 func (o *Event) GetMethod() string {
-	if o == nil || IsNil(o.Method.Get()) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Method.Get()
+
+	return o.Method
 }
 
-// GetMethodOk returns a tuple with the Method field value if set, nil otherwise
+// GetMethodOk returns a tuple with the Method field value
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Event) GetMethodOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.Method.Get(), o.Method.IsSet()
+	return &o.Method, true
 }
 
-// HasMethod returns a boolean if a field has been set.
-func (o *Event) HasMethod() bool {
-	if o != nil && o.Method.IsSet() {
-		return true
-	}
-
-	return false
-}
-
-// SetMethod gets a reference to the given NullableString and assigns it to the Method field.
+// SetMethod sets field value
 func (o *Event) SetMethod(v string) {
-	o.Method.Set(&v)
-}
-// SetMethodNil sets the value for Method to be an explicit nil
-func (o *Event) SetMethodNil() {
-	o.Method.Set(nil)
+	o.Method = v
 }
 
-// UnsetMethod ensures that no value is present for Method, not even an explicit nil
-func (o *Event) UnsetMethod() {
-	o.Method.Unset()
-}
-
-// GetEndpoint returns the Endpoint field value if set, zero value otherwise (both if not set or set to explicit null).
+// GetEndpoint returns the Endpoint field value
 func (o *Event) GetEndpoint() string {
-	if o == nil || IsNil(o.Endpoint.Get()) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Endpoint.Get()
+
+	return o.Endpoint
 }
 
-// GetEndpointOk returns a tuple with the Endpoint field value if set, nil otherwise
+// GetEndpointOk returns a tuple with the Endpoint field value
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Event) GetEndpointOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.Endpoint.Get(), o.Endpoint.IsSet()
+	return &o.Endpoint, true
 }
 
-// HasEndpoint returns a boolean if a field has been set.
-func (o *Event) HasEndpoint() bool {
-	if o != nil && o.Endpoint.IsSet() {
-		return true
-	}
-
-	return false
-}
-
-// SetEndpoint gets a reference to the given NullableString and assigns it to the Endpoint field.
+// SetEndpoint sets field value
 func (o *Event) SetEndpoint(v string) {
-	o.Endpoint.Set(&v)
-}
-// SetEndpointNil sets the value for Endpoint to be an explicit nil
-func (o *Event) SetEndpointNil() {
-	o.Endpoint.Set(nil)
-}
-
-// UnsetEndpoint ensures that no value is present for Endpoint, not even an explicit nil
-func (o *Event) UnsetEndpoint() {
-	o.Endpoint.Unset()
+	o.Endpoint = v
 }
 
 // GetApiVersion returns the ApiVersion field value if set, zero value otherwise.
@@ -682,12 +652,8 @@ func (o Event) ToMap() (map[string]interface{}, error) {
 	if o.CompanyId.IsSet() {
 		toSerialize["company_id"] = o.CompanyId.Get()
 	}
-	if o.Method.IsSet() {
-		toSerialize["method"] = o.Method.Get()
-	}
-	if o.Endpoint.IsSet() {
-		toSerialize["endpoint"] = o.Endpoint.Get()
-	}
+	toSerialize["method"] = o.Method
+	toSerialize["endpoint"] = o.Endpoint
 	if !IsNil(o.ApiVersion) {
 		toSerialize["api_version"] = o.ApiVersion
 	}
@@ -713,6 +679,44 @@ func (o Event) ToMap() (map[string]interface{}, error) {
 		toSerialize["response_body"] = o.ResponseBody.Get()
 	}
 	return toSerialize, nil
+}
+
+func (o *Event) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"method",
+		"endpoint",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varEvent := _Event{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varEvent)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Event(varEvent)
+
+	return err
 }
 
 type NullableEvent struct {

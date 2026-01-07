@@ -420,7 +420,7 @@ import (
 )
 
 func main() {
-	send := *invoicetronicsdk.NewSend() // Send | 
+	send := *invoicetronicsdk.NewSend("Payload_example") // Send | 
 	validate := true // bool | Validate the document first, and reject it on failure. (optional) (default to false)
 	signature := "signature_example" // string | Whether to digitally sign the document. (optional) (default to "Auto")
 
@@ -618,7 +618,7 @@ import (
 )
 
 func main() {
-	send := *invoicetronicsdk.NewSend() // Send | 
+	send := *invoicetronicsdk.NewSend("Payload_example") // Send | 
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)

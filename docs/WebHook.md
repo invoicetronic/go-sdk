@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **Version** | Pointer to **int32** | Row version, for optimistic concurrency. It is set automatically. | [optional] 
 **UserId** | Pointer to **int32** | User id. | [optional] 
 **CompanyId** | Pointer to **NullableInt32** | Company id. | [optional] 
-**Url** | Pointer to **NullableString** | The url of your application&#39;s endpoint that will receive a POST request when the webhook is fired. | [optional] 
+**Url** | **string** | The url of your application&#39;s endpoint that will receive a POST request when the webhook is fired. | 
 **Enabled** | Pointer to **bool** | Wether the webhook is enabled. On creation, this is set to &#x60;true&#x60;. | [optional] 
 **Secret** | Pointer to **NullableString** | The secret used to generate webhook signatures, only returned on creation. You should store this value securely and validate it on every call, to ensure that the caller is InvoicetronicApi. | [optional] 
 **Description** | Pointer to **NullableString** | An optional description. | [optional] 
@@ -19,7 +19,7 @@ Name | Type | Description | Notes
 
 ### NewWebHook
 
-`func NewWebHook() *WebHook`
+`func NewWebHook(url string, ) *WebHook`
 
 NewWebHook instantiates a new WebHook object
 This constructor will assign default values to properties that have it defined,
@@ -188,22 +188,7 @@ and a boolean to check if the value has been set.
 
 SetUrl sets Url field to given value.
 
-### HasUrl
 
-`func (o *WebHook) HasUrl() bool`
-
-HasUrl returns a boolean if a field has been set.
-
-### SetUrlNil
-
-`func (o *WebHook) SetUrlNil(b bool)`
-
- SetUrlNil sets the value for Url to be an explicit nil
-
-### UnsetUrl
-`func (o *WebHook) UnsetUrl()`
-
-UnsetUrl ensures that no value is present for Url, not even an explicit nil
 ### GetEnabled
 
 `func (o *WebHook) GetEnabled() bool`

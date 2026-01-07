@@ -14,6 +14,8 @@ package invoicetronicsdk
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the WebHook type satisfies the MappedNullable interface at compile time
@@ -32,7 +34,7 @@ type WebHook struct {
 	// Company id.
 	CompanyId NullableInt32 `json:"company_id,omitempty"`
 	// The url of your application's endpoint that will receive a POST request when the webhook is fired.
-	Url NullableString `json:"url,omitempty"`
+	Url string `json:"url"`
 	// Wether the webhook is enabled. On creation, this is set to `true`.
 	Enabled *bool `json:"enabled,omitempty"`
 	// The secret used to generate webhook signatures, only returned on creation. You should store this value securely and validate it on every call, to ensure that the caller is InvoicetronicApi.
@@ -43,12 +45,15 @@ type WebHook struct {
 	Events []string `json:"events,omitempty"`
 }
 
+type _WebHook WebHook
+
 // NewWebHook instantiates a new WebHook object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewWebHook() *WebHook {
+func NewWebHook(url string) *WebHook {
 	this := WebHook{}
+	this.Url = url
 	return &this
 }
 
@@ -230,46 +235,28 @@ func (o *WebHook) UnsetCompanyId() {
 	o.CompanyId.Unset()
 }
 
-// GetUrl returns the Url field value if set, zero value otherwise (both if not set or set to explicit null).
+// GetUrl returns the Url field value
 func (o *WebHook) GetUrl() string {
-	if o == nil || IsNil(o.Url.Get()) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Url.Get()
+
+	return o.Url
 }
 
-// GetUrlOk returns a tuple with the Url field value if set, nil otherwise
+// GetUrlOk returns a tuple with the Url field value
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *WebHook) GetUrlOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.Url.Get(), o.Url.IsSet()
+	return &o.Url, true
 }
 
-// HasUrl returns a boolean if a field has been set.
-func (o *WebHook) HasUrl() bool {
-	if o != nil && o.Url.IsSet() {
-		return true
-	}
-
-	return false
-}
-
-// SetUrl gets a reference to the given NullableString and assigns it to the Url field.
+// SetUrl sets field value
 func (o *WebHook) SetUrl(v string) {
-	o.Url.Set(&v)
-}
-// SetUrlNil sets the value for Url to be an explicit nil
-func (o *WebHook) SetUrlNil() {
-	o.Url.Set(nil)
-}
-
-// UnsetUrl ensures that no value is present for Url, not even an explicit nil
-func (o *WebHook) UnsetUrl() {
-	o.Url.Unset()
+	o.Url = v
 }
 
 // GetEnabled returns the Enabled field value if set, zero value otherwise.
@@ -446,9 +433,7 @@ func (o WebHook) ToMap() (map[string]interface{}, error) {
 	if o.CompanyId.IsSet() {
 		toSerialize["company_id"] = o.CompanyId.Get()
 	}
-	if o.Url.IsSet() {
-		toSerialize["url"] = o.Url.Get()
-	}
+	toSerialize["url"] = o.Url
 	if !IsNil(o.Enabled) {
 		toSerialize["enabled"] = o.Enabled
 	}
@@ -462,6 +447,43 @@ func (o WebHook) ToMap() (map[string]interface{}, error) {
 		toSerialize["events"] = o.Events
 	}
 	return toSerialize, nil
+}
+
+func (o *WebHook) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"url",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varWebHook := _WebHook{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varWebHook)
+
+	if err != nil {
+		return err
+	}
+
+	*o = WebHook(varWebHook)
+
+	return err
 }
 
 type NullableWebHook struct {
