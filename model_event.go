@@ -49,11 +49,11 @@ type Event struct {
 	Error NullableString `json:"error,omitempty"`
 	// ID of the resource created or modified by this request.
 	ResourceId NullableInt32 `json:"resource_id,omitempty"`
-	// Wether the request was successful.
+	// Whether the request was successful.
 	Success *bool `json:"success,omitempty"`
 	// Request query. Only used for internal logging, not sent to webhooks.
 	Query NullableString `json:"query,omitempty"`
-	// Response payload. It is guaranteed to be cyphered at rest.
+	// Response payload. It is guaranteed to be encrypted at rest.
 	ResponseBody NullableString `json:"response_body,omitempty"`
 }
 

@@ -37,7 +37,7 @@ type WebHookHistory struct {
 	StatusCode *int32 `json:"status_code,omitempty"`
 	// Date and time of the request.
 	DateTime *time.Time `json:"date_time,omitempty"`
-	// Wether the request was successful.
+	// Whether the request was successful.
 	Success *bool `json:"success,omitempty"`
 }
 

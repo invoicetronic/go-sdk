@@ -128,7 +128,25 @@ func (r ApiUpdateGetRequest) Execute() ([]Update, *http.Response, error) {
 /*
 UpdateGet List updates
 
-Updates are notifications sent by the SDI about the status of invoices you sent.
+Retrieve a paginated list of updates. Results can be filtered by various criteria such as company, send item, SDI state, and date ranges.
+
+**Updates** are status notifications from Italy's SDI (Sistema di Interscambio) about invoices you sent. Multiple updates can exist for the same send item as the invoice progresses through the SDI workflow.
+
+The `state` field is the most important property and can have the following values:
+
+| Value | Name | Description |
+|-------|------|-------------|
+| 2 | `Inviato` | Sent to the SDI. |
+| 5 | `Consegnato` | Delivered to the recipient. |
+| 6 | `NonConsegnato` | Not delivered to the recipient. Only relevant for public administration entities. |
+| 7 | `Scartato` | Rejected by the SDI. |
+| 8 | `AccettatoDalDestinatario` | Accepted by the recipient. Only relevant for public administration entities. |
+| 9 | `RifiutatoDalDestinatario` | Rejected by the recipient. Only relevant for public administration entities. |
+| 10 | `ImpossibilitaDiRecapito` | Available on the recipient's tax drawer, but it was not possible to deliver it to the recipient's reception system. |
+| 11 | `DecorrenzaTermini` | A public administration entity has not responded for more than 15 days. The document is considered delivered. |
+| 12 | `AttestazioneTrasmissioneFattura` | A public administration entity has received the document, but has not yet processed it. |
+
+**Important:** Always monitor the state of your sent invoices. A state of `Inviato` only means the invoice has been submitted to SDI, not that it has been delivered. A state like `Scartato` indicates that the invoice was **not** successfully delivered and may require corrective action, such as fixing validation errors and resubmitting. In that case, `description` contains the reason for the rejection.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiUpdateGetRequest
@@ -194,23 +212,23 @@ func (a *UpdateAPIService) UpdateGetExecute(r ApiUpdateGetRequest) ([]Update, *h
 	if r.page != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "form", "")
 	} else {
-        var defaultValue int32 = 1
-        parameterAddToHeaderOrQuery(localVarQueryParams, "page", defaultValue, "form", "")
-        r.page = &defaultValue
+		var defaultValue int32 = 1
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", defaultValue, "form", "")
+		r.page = &defaultValue
 	}
 	if r.pageSize != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "form", "")
 	} else {
-        var defaultValue int32 = 100
-        parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", defaultValue, "form", "")
-        r.pageSize = &defaultValue
+		var defaultValue int32 = 100
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", defaultValue, "form", "")
+		r.pageSize = &defaultValue
 	}
 	if r.sort != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", r.sort, "form", "")
 	} else {
-        var defaultValue string = "last_update"
-        parameterAddToHeaderOrQuery(localVarQueryParams, "sort", defaultValue, "form", "")
-        r.sort = &defaultValue
+		var defaultValue string = "last_update"
+		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", defaultValue, "form", "")
+		r.sort = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -289,7 +307,25 @@ func (r ApiUpdateIdGetRequest) Execute() (*Update, *http.Response, error) {
 /*
 UpdateIdGet Get an update by id
 
-Updates are notifications sent by the SDI about the status of invoices you sent.
+Retrieve an update by its internal id.
+
+**Updates** are status notifications from Italy's SDI (Sistema di Interscambio) about invoices you sent. Multiple updates can exist for the same send item as the invoice progresses through the SDI workflow.
+
+The `state` field is the most important property and can have the following values:
+
+| Value | Name | Description |
+|-------|------|-------------|
+| 2 | `Inviato` | Sent to the SDI. |
+| 5 | `Consegnato` | Delivered to the recipient. |
+| 6 | `NonConsegnato` | Not delivered to the recipient. Only relevant for public administration entities. |
+| 7 | `Scartato` | Rejected by the SDI. |
+| 8 | `AccettatoDalDestinatario` | Accepted by the recipient. Only relevant for public administration entities. |
+| 9 | `RifiutatoDalDestinatario` | Rejected by the recipient. Only relevant for public administration entities. |
+| 10 | `ImpossibilitaDiRecapito` | Available on the recipient's tax drawer, but it was not possible to deliver it to the recipient's reception system. |
+| 11 | `DecorrenzaTermini` | A public administration entity has not responded for more than 15 days. The document is considered delivered. |
+| 12 | `AttestazioneTrasmissioneFattura` | A public administration entity has received the document, but has not yet processed it. |
+
+**Important:** Always monitor the state of your sent invoices. A state of `Inviato` only means the invoice has been submitted to SDI, not that it has been delivered. A state like `Scartato` indicates that the invoice was **not** successfully delivered and may require corrective action, such as fixing validation errors and resubmitting. In that case, `description` contains the reason for the rejection.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id Item id

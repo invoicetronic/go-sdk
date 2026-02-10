@@ -131,7 +131,11 @@ func (r ApiLogGetRequest) Execute() ([]Event, *http.Response, error) {
 /*
 LogGet List events
 
-Every API operation is logged and can be retrieved here. Log records are preserved for 15 days.
+Retrieve a paginated list of log events. Results can be filtered by various criteria such as endpoint, method, status code, and date ranges.
+
+**Logs** record every API request. They are preserved for 15 days.
+
+You can also view logs in the Events section of the [Dashboard](https://dashboard.invoicetronic.com).
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiLogGetRequest
@@ -188,16 +192,16 @@ func (a *LogAPIService) LogGetExecute(r ApiLogGetRequest) ([]Event, *http.Respon
 	if r.page != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "form", "")
 	} else {
-        var defaultValue int32 = 1
-        parameterAddToHeaderOrQuery(localVarQueryParams, "page", defaultValue, "form", "")
-        r.page = &defaultValue
+		var defaultValue int32 = 1
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", defaultValue, "form", "")
+		r.page = &defaultValue
 	}
 	if r.pageSize != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "form", "")
 	} else {
-        var defaultValue int32 = 100
-        parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", defaultValue, "form", "")
-        r.pageSize = &defaultValue
+		var defaultValue int32 = 100
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", defaultValue, "form", "")
+		r.pageSize = &defaultValue
 	}
 	if r.sort != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", r.sort, "form", "")
@@ -291,7 +295,11 @@ func (r ApiLogIdGetRequest) Execute() (*Event, *http.Response, error) {
 /*
 LogIdGet Get an event by id
 
-Every API operation is logged and can be retrieved here. Log records are preserved for 15 days.
+Retrieve a log event by its internal id.
+
+**Logs** record every API request. They are preserved for 15 days.
+
+You can also view logs in the Events section of the [Dashboard](https://dashboard.invoicetronic.com).
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id Item id

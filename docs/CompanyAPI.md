@@ -84,7 +84,7 @@ Name | Type | Description  | Notes
 
 ## CompanyIdDelete
 
-> Company CompanyIdDelete(ctx, id).Execute()
+> Company CompanyIdDelete(ctx, id).Force(force).Execute()
 
 Delete a company
 
@@ -104,10 +104,11 @@ import (
 
 func main() {
 	id := int32(56) // int32 | Item id
+	force := true // bool | Force delete including all related data. (optional) (default to false)
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.CompanyAPI.CompanyIdDelete(context.Background(), id).Execute()
+	resp, r, err := apiClient.CompanyAPI.CompanyIdDelete(context.Background(), id).Force(force).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `CompanyAPI.CompanyIdDelete``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -133,6 +134,7 @@ Other parameters are passed through a pointer to a apiCompanyIdDeleteRequest str
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **force** | **bool** | Force delete including all related data. | [default to false]
 
 ### Return type
 

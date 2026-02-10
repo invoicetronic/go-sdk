@@ -57,7 +57,9 @@ func (r ApiCompanyGetRequest) Execute() ([]Company, *http.Response, error) {
 /*
 CompanyGet List companies
 
-Companies are the entities that send and receive invoices. As you send invoices, companies are added as needed (company details are extrapolated). **You can only receive invoices for existing companies, so ensure they exist**.
+Retrieve a paginated list of companies.
+
+**Companies** are the entities that send and receive invoices. They are automatically created from invoice data when invoices are sent or received.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCompanyGetRequest
@@ -93,16 +95,16 @@ func (a *CompanyAPIService) CompanyGetExecute(r ApiCompanyGetRequest) ([]Company
 	if r.page != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "form", "")
 	} else {
-        var defaultValue int32 = 1
-        parameterAddToHeaderOrQuery(localVarQueryParams, "page", defaultValue, "form", "")
-        r.page = &defaultValue
+		var defaultValue int32 = 1
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", defaultValue, "form", "")
+		r.page = &defaultValue
 	}
 	if r.pageSize != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "form", "")
 	} else {
-        var defaultValue int32 = 100
-        parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", defaultValue, "form", "")
-        r.pageSize = &defaultValue
+		var defaultValue int32 = 100
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", defaultValue, "form", "")
+		r.pageSize = &defaultValue
 	}
 	if r.sort != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", r.sort, "form", "")
@@ -175,6 +177,13 @@ type ApiCompanyIdDeleteRequest struct {
 	ctx context.Context
 	ApiService *CompanyAPIService
 	id int32
+	force *bool
+}
+
+// Force delete including all related data.
+func (r ApiCompanyIdDeleteRequest) Force(force bool) ApiCompanyIdDeleteRequest {
+	r.force = &force
+	return r
 }
 
 func (r ApiCompanyIdDeleteRequest) Execute() (*Company, *http.Response, error) {
@@ -184,7 +193,13 @@ func (r ApiCompanyIdDeleteRequest) Execute() (*Company, *http.Response, error) {
 /*
 CompanyIdDelete Delete a company
 
-Companies are the entities that send and receive invoices. As you send invoices, companies are added as needed (company details are extrapolated). **You can only receive invoices for existing companies, so ensure they exist**.
+Delete a company by its internal id.
+
+**Companies** are the entities that send and receive invoices. They are automatically created from invoice data when invoices are sent or received.
+
+**Warning:** Deleting a company will permanently remove all associated data, including sent invoices, received invoices, invoice updates from SDI, logs, and webhooks.
+
+If the company has any linked invoices, you must explicitly confirm deletion by adding `?force=true` to the request. Without this parameter, the API will return `409 Conflict` with details about the linked data.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id Item id
@@ -220,6 +235,13 @@ func (a *CompanyAPIService) CompanyIdDeleteExecute(r ApiCompanyIdDeleteRequest) 
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if r.force != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "force", r.force, "form", "")
+	} else {
+		var defaultValue bool = false
+		parameterAddToHeaderOrQuery(localVarQueryParams, "force", defaultValue, "form", "")
+		r.force = &defaultValue
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -281,6 +303,17 @@ func (a *CompanyAPIService) CompanyIdDeleteExecute(r ApiCompanyIdDeleteRequest) 
 					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
+		if localVarHTTPResponse.StatusCode == 409 {
+			var v ProblemHttpResult
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -309,7 +342,9 @@ func (r ApiCompanyIdGetRequest) Execute() (*Company, *http.Response, error) {
 /*
 CompanyIdGet Get a company by id
 
-Companies are the entities that send and receive invoices. As you send invoices, companies are added as needed (company details are extrapolated). **You can only receive invoices for existing companies, so ensure they exist**.
+Retrieve a company by its internal id.
+
+**Companies** are the entities that send and receive invoices. They are automatically created from invoice data when invoices are sent or received.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id Item id
@@ -417,7 +452,9 @@ func (r ApiCompanyPostRequest) Execute() (*Company, *http.Response, error) {
 /*
 CompanyPost Add a company
 
-Companies are the entities that send and receive invoices. As you send invoices, companies are added as needed (company details are extrapolated). **You can only receive invoices for existing companies, so ensure they exist**.
+Add a new company.
+
+**Companies** are the entities that send and receive invoices. They are automatically created from invoice data when invoices are sent or received.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCompanyPostRequest
@@ -548,7 +585,9 @@ func (r ApiCompanyPutRequest) Execute() (*Company, *http.Response, error) {
 /*
 CompanyPut Update a company
 
-Companies are the entities that send and receive invoices. As you send invoices, companies are added as needed (company details are extrapolated). **You can only receive invoices for existing companies, so ensure they exist**.
+Update an existing company.
+
+**Companies** are the entities that send and receive invoices. They are automatically created from invoice data when invoices are sent or received.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCompanyPutRequest

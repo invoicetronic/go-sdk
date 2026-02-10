@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 **Event** | Pointer to **NullableString** | Event name. | [optional] 
 **StatusCode** | Pointer to **int32** | Status code. | [optional] 
 **DateTime** | Pointer to **time.Time** | Date and time of the request. | [optional] 
-**Success** | Pointer to **bool** | Wether the request was successful. | [optional] [readonly] 
+**Success** | Pointer to **bool** | Whether the request was successful. | [optional] [readonly] 
 
 ## Methods
 

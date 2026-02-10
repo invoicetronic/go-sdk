@@ -88,7 +88,13 @@ func (r ApiWebhookGetRequest) Execute() ([]WebHook, *http.Response, error) {
 /*
 WebhookGet List webhooks
 
-Webhooks are used to notify external services about write events that occur in the API. You can subscribe to specific events and receive a notification when they occur.
+Retrieve a paginated list of webhooks. Results can be filtered by company, description, enabled status, events, and URL.
+
+**Webhooks** allow you to receive notifications to an external service when specific events occur, such as invoice creation or status updates. You can subscribe to specific events and receive a notification when they occur.
+
+You can also manage webhooks via the [Dashboard](https://dashboard.invoicetronic.com).
+
+For more information, see the **[Webhooks documentation page](https://invoicetronic.com/en/docs/webhooks/)**.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiWebhookGetRequest
@@ -127,16 +133,16 @@ func (a *WebhookAPIService) WebhookGetExecute(r ApiWebhookGetRequest) ([]WebHook
 	if r.page != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "form", "")
 	} else {
-        var defaultValue int32 = 1
-        parameterAddToHeaderOrQuery(localVarQueryParams, "page", defaultValue, "form", "")
-        r.page = &defaultValue
+		var defaultValue int32 = 1
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", defaultValue, "form", "")
+		r.page = &defaultValue
 	}
 	if r.pageSize != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "form", "")
 	} else {
-        var defaultValue int32 = 100
-        parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", defaultValue, "form", "")
-        r.pageSize = &defaultValue
+		var defaultValue int32 = 100
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", defaultValue, "form", "")
+		r.pageSize = &defaultValue
 	}
 	if r.sort != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", r.sort, "form", "")
@@ -230,7 +236,13 @@ func (r ApiWebhookIdDeleteRequest) Execute() (*WebHook, *http.Response, error) {
 /*
 WebhookIdDelete Delete a webhook by id
 
-Webhooks are used to notify external services about write events that occur in the API. You can subscribe to specific events and receive a notification when they occur.
+Delete a webhook subscription by its internal id.
+
+**Webhooks** allow you to receive notifications to an external service when specific events occur, such as invoice creation or status updates. You can subscribe to specific events and receive a notification when they occur.
+
+You can also manage webhooks via the [Dashboard](https://dashboard.invoicetronic.com).
+
+For more information, see the **[Webhooks documentation page](https://invoicetronic.com/en/docs/webhooks/)**.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id Item id
@@ -327,6 +339,17 @@ func (a *WebhookAPIService) WebhookIdDeleteExecute(r ApiWebhookIdDeleteRequest) 
 					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
+		if localVarHTTPResponse.StatusCode == 409 {
+			var v ProblemHttpResult
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -355,7 +378,13 @@ func (r ApiWebhookIdGetRequest) Execute() (*WebHook, *http.Response, error) {
 /*
 WebhookIdGet Get a webhook by id
 
-Webhooks are used to notify external services about write events that occur in the API. You can subscribe to specific events and receive a notification when they occur.
+Retrieve a webhook by its internal id.
+
+**Webhooks** allow you to receive notifications to an external service when specific events occur, such as invoice creation or status updates. You can subscribe to specific events and receive a notification when they occur.
+
+You can also manage webhooks via the [Dashboard](https://dashboard.invoicetronic.com).
+
+For more information, see the **[Webhooks documentation page](https://invoicetronic.com/en/docs/webhooks/)**.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id Item id
@@ -463,7 +492,13 @@ func (r ApiWebhookPostRequest) Execute() (*WebHook, *http.Response, error) {
 /*
 WebhookPost Add a webhook
 
-Webhooks are used to notify external services about write events that occur in the API. You can subscribe to specific events and receive a notification when they occur.
+Create a new webhook subscription.
+
+**Webhooks** allow you to receive notifications to an external service when specific events occur, such as invoice creation or status updates. You can subscribe to specific events and receive a notification when they occur.
+
+You can also manage webhooks via the [Dashboard](https://dashboard.invoicetronic.com).
+
+For more information, see the **[Webhooks documentation page](https://invoicetronic.com/en/docs/webhooks/)**.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiWebhookPostRequest
@@ -594,7 +629,13 @@ func (r ApiWebhookPutRequest) Execute() (*WebHook, *http.Response, error) {
 /*
 WebhookPut Update a webhook
 
-Webhooks are used to notify external services about write events that occur in the API. You can subscribe to specific events and receive a notification when they occur.
+Update an existing webhook subscription.
+
+**Webhooks** allow you to receive notifications to an external service when specific events occur, such as invoice creation or status updates. You can subscribe to specific events and receive a notification when they occur.
+
+You can also manage webhooks via the [Dashboard](https://dashboard.invoicetronic.com).
+
+For more information, see the **[Webhooks documentation page](https://invoicetronic.com/en/docs/webhooks/)**.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiWebhookPutRequest
@@ -783,16 +824,16 @@ func (a *WebhookAPIService) WebhookhistoryGetExecute(r ApiWebhookhistoryGetReque
 	if r.page != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "form", "")
 	} else {
-        var defaultValue int32 = 1
-        parameterAddToHeaderOrQuery(localVarQueryParams, "page", defaultValue, "form", "")
-        r.page = &defaultValue
+		var defaultValue int32 = 1
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", defaultValue, "form", "")
+		r.page = &defaultValue
 	}
 	if r.pageSize != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "form", "")
 	} else {
-        var defaultValue int32 = 100
-        parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", defaultValue, "form", "")
-        r.pageSize = &defaultValue
+		var defaultValue int32 = 100
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", defaultValue, "form", "")
+		r.pageSize = &defaultValue
 	}
 	if r.sort != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", r.sort, "form", "")

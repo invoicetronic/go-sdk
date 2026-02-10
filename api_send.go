@@ -58,7 +58,11 @@ func (r ApiSendFilePostRequest) Execute() (*Send, *http.Response, error) {
 /*
 SendFilePost Add an invoice by file
 
-Send invoices are the invoices that are sent to the SDI. They are preserved for two years in the live environment and 15 days in the Sandbox.
+Add a new invoice by uploading a file. Supported formats are XML (FatturaPA) and P7M (signed). The invoice will be signed (if requested), validated (if requested), and queued for delivery to SDI. Status updates from SDI will be available in the `update` endpoint.
+
+**Send** invoices are outbound sales invoices transmitted to customers through Italy's SDI (Sistema di Interscambio). Preserved for two years in the live environment and 15 days in the [Sandbox](https://invoicetronic.com/en/docs/sandbox/).
+
+You can also upload invoices via the [Dashboard](https://dashboard.invoicetronic.com).
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSendFilePostRequest
@@ -97,16 +101,16 @@ func (a *SendAPIService) SendFilePostExecute(r ApiSendFilePostRequest) (*Send, *
 	if r.validate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "validate", r.validate, "form", "")
 	} else {
-        var defaultValue bool = false
-        parameterAddToHeaderOrQuery(localVarQueryParams, "validate", defaultValue, "form", "")
-        r.validate = &defaultValue
+		var defaultValue bool = false
+		parameterAddToHeaderOrQuery(localVarQueryParams, "validate", defaultValue, "form", "")
+		r.validate = &defaultValue
 	}
 	if r.signature != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "signature", r.signature, "form", "")
 	} else {
-        var defaultValue string = "Auto"
-        parameterAddToHeaderOrQuery(localVarQueryParams, "signature", defaultValue, "form", "")
-        r.signature = &defaultValue
+		var defaultValue string = "Auto"
+		parameterAddToHeaderOrQuery(localVarQueryParams, "signature", defaultValue, "form", "")
+		r.signature = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"multipart/form-data"}
@@ -322,7 +326,9 @@ func (r ApiSendGetRequest) Execute() ([]Send, *http.Response, error) {
 /*
 SendGet List invoices
 
-test **markdown**.
+Retrieve a paginated list of send invoices. Results can be filtered by various criteria such as company, date ranges, and document number. Returns invoice metadata; set `include_payload` to true to include the full invoice content.
+
+**Send** invoices are outbound sales invoices transmitted to customers through Italy's SDI (Sistema di Interscambio). Preserved for two years in the live environment and 15 days in the [Sandbox](https://invoicetronic.com/en/docs/sandbox/).
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSendGetRequest
@@ -397,16 +403,16 @@ func (a *SendAPIService) SendGetExecute(r ApiSendGetRequest) ([]Send, *http.Resp
 	if r.page != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "form", "")
 	} else {
-        var defaultValue int32 = 1
-        parameterAddToHeaderOrQuery(localVarQueryParams, "page", defaultValue, "form", "")
-        r.page = &defaultValue
+		var defaultValue int32 = 1
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", defaultValue, "form", "")
+		r.page = &defaultValue
 	}
 	if r.pageSize != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "form", "")
 	} else {
-        var defaultValue int32 = 100
-        parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", defaultValue, "form", "")
-        r.pageSize = &defaultValue
+		var defaultValue int32 = 100
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", defaultValue, "form", "")
+		r.pageSize = &defaultValue
 	}
 	if r.sort != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", r.sort, "form", "")
@@ -495,7 +501,9 @@ func (r ApiSendIdGetRequest) Execute() (*Send, *http.Response, error) {
 /*
 SendIdGet Get a invoice by id
 
-Send invoices are the invoices that are sent to the SDI. They are preserved for two years in the live environment and 15 days in the Sandbox.
+Retrieve a send invoice by its internal id. The `id` is unique and assigned by the system when the invoice is created. Returns invoice metadata; set `include_payload` to true to include the full invoice content.
+
+**Send** invoices are outbound sales invoices transmitted to customers through Italy's SDI (Sistema di Interscambio). Preserved for two years in the live environment and 15 days in the [Sandbox](https://invoicetronic.com/en/docs/sandbox/).
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id Item id
@@ -534,9 +542,9 @@ func (a *SendAPIService) SendIdGetExecute(r ApiSendIdGetRequest) (*Send, *http.R
 	if r.includePayload != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "include_payload", r.includePayload, "form", "")
 	} else {
-        var defaultValue bool = false
-        parameterAddToHeaderOrQuery(localVarQueryParams, "include_payload", defaultValue, "form", "")
-        r.includePayload = &defaultValue
+		var defaultValue bool = false
+		parameterAddToHeaderOrQuery(localVarQueryParams, "include_payload", defaultValue, "form", "")
+		r.includePayload = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -612,7 +620,9 @@ func (r ApiSendIdentifierGetRequest) Execute() (*Send, *http.Response, error) {
 /*
 SendIdentifierGet Get a invoice by identifier
 
-Send invoices are the invoices that are sent to the SDI. They are preserved for two years in the live environment and 15 days in the Sandbox.
+Retrieve a send invoice by its SDI identifier. The `identifier` is assigned by the SDI and becomes available after the invoice has been accepted. Returns invoice metadata; set `include_payload` to true to include the full invoice content.
+
+**Send** invoices are outbound sales invoices transmitted to customers through Italy's SDI (Sistema di Interscambio). Preserved for two years in the live environment and 15 days in the [Sandbox](https://invoicetronic.com/en/docs/sandbox/).
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param identifier
@@ -651,9 +661,9 @@ func (a *SendAPIService) SendIdentifierGetExecute(r ApiSendIdentifierGetRequest)
 	if r.includePayload != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "include_payload", r.includePayload, "form", "")
 	} else {
-        var defaultValue bool = false
-        parameterAddToHeaderOrQuery(localVarQueryParams, "include_payload", defaultValue, "form", "")
-        r.includePayload = &defaultValue
+		var defaultValue bool = false
+		parameterAddToHeaderOrQuery(localVarQueryParams, "include_payload", defaultValue, "form", "")
+		r.includePayload = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -751,7 +761,11 @@ func (r ApiSendJsonPostRequest) Execute() (*Send, *http.Response, error) {
 /*
 SendJsonPost Add an invoice by json
 
-Send invoices are the invoices that are sent to the SDI. They are preserved for two years in the live environment and 15 days in the Sandbox.
+Add a new invoice using a FatturaPA JSON representation. The invoice will be signed (if requested), validated (if requested), and queued for delivery to SDI. Status updates from SDI will be available in the `update` endpoint.
+
+**Send** invoices are outbound sales invoices transmitted to customers through Italy's SDI (Sistema di Interscambio). Preserved for two years in the live environment and 15 days in the [Sandbox](https://invoicetronic.com/en/docs/sandbox/).
+
+You can also upload invoices via the [Dashboard](https://dashboard.invoicetronic.com).
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSendJsonPostRequest
@@ -790,16 +804,16 @@ func (a *SendAPIService) SendJsonPostExecute(r ApiSendJsonPostRequest) (*Send, *
 	if r.validate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "validate", r.validate, "form", "")
 	} else {
-        var defaultValue bool = false
-        parameterAddToHeaderOrQuery(localVarQueryParams, "validate", defaultValue, "form", "")
-        r.validate = &defaultValue
+		var defaultValue bool = false
+		parameterAddToHeaderOrQuery(localVarQueryParams, "validate", defaultValue, "form", "")
+		r.validate = &defaultValue
 	}
 	if r.signature != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "signature", r.signature, "form", "")
 	} else {
-        var defaultValue string = "Auto"
-        parameterAddToHeaderOrQuery(localVarQueryParams, "signature", defaultValue, "form", "")
-        r.signature = &defaultValue
+		var defaultValue string = "Auto"
+		parameterAddToHeaderOrQuery(localVarQueryParams, "signature", defaultValue, "form", "")
+		r.signature = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json"}
@@ -910,7 +924,11 @@ func (r ApiSendPostRequest) Execute() (*Send, *http.Response, error) {
 /*
 SendPost Add an invoice
 
-Send invoices are the invoices that are sent to the SDI. They are preserved for two years in the live environment and 15 days in the Sandbox.
+Add a new invoice using a structured Send object. The invoice will be signed (if requested), validated (if requested), and queued for delivery to SDI. Status updates from SDI will be available in the `update` endpoint.
+
+**Send** invoices are outbound sales invoices transmitted to customers through Italy's SDI (Sistema di Interscambio). Preserved for two years in the live environment and 15 days in the [Sandbox](https://invoicetronic.com/en/docs/sandbox/).
+
+You can also upload invoices via the [Dashboard](https://dashboard.invoicetronic.com).
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSendPostRequest
@@ -949,16 +967,16 @@ func (a *SendAPIService) SendPostExecute(r ApiSendPostRequest) (*Send, *http.Res
 	if r.validate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "validate", r.validate, "form", "")
 	} else {
-        var defaultValue bool = false
-        parameterAddToHeaderOrQuery(localVarQueryParams, "validate", defaultValue, "form", "")
-        r.validate = &defaultValue
+		var defaultValue bool = false
+		parameterAddToHeaderOrQuery(localVarQueryParams, "validate", defaultValue, "form", "")
+		r.validate = &defaultValue
 	}
 	if r.signature != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "signature", r.signature, "form", "")
 	} else {
-        var defaultValue string = "Auto"
-        parameterAddToHeaderOrQuery(localVarQueryParams, "signature", defaultValue, "form", "")
-        r.signature = &defaultValue
+		var defaultValue string = "Auto"
+		parameterAddToHeaderOrQuery(localVarQueryParams, "signature", defaultValue, "form", "")
+		r.signature = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json"}
@@ -1055,7 +1073,9 @@ func (r ApiSendValidateFilePostRequest) Execute() (*http.Response, error) {
 /*
 SendValidateFilePost Validate an invoice file
 
-Send invoices are the invoices that are sent to the SDI. They are preserved for two years in the live environment and 15 days in the Sandbox.
+Validate an invoice file without sending it to SDI. Supported formats are XML (FatturaPA) and P7M (signed). Use this to check for errors before actual submission. Returns validation results with any errors found.
+
+**Send** invoices are outbound sales invoices transmitted to customers through Italy's SDI (Sistema di Interscambio). Preserved for two years in the live environment and 15 days in the [Sandbox](https://invoicetronic.com/en/docs/sandbox/).
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSendValidateFilePostRequest
@@ -1188,7 +1208,9 @@ func (r ApiSendValidateJsonPostRequest) Execute() (*http.Response, error) {
 /*
 SendValidateJsonPost Validate an invoice by json
 
-Send invoices are the invoices that are sent to the SDI. They are preserved for two years in the live environment and 15 days in the Sandbox.
+Validate a JSON invoice without sending it to SDI. Use this to check for errors before actual submission. Returns validation results with any errors found.
+
+**Send** invoices are outbound sales invoices transmitted to customers through Italy's SDI (Sistema di Interscambio). Preserved for two years in the live environment and 15 days in the [Sandbox](https://invoicetronic.com/en/docs/sandbox/).
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSendValidateJsonPostRequest
@@ -1308,7 +1330,9 @@ func (r ApiSendValidatePostRequest) Execute() (*http.Response, error) {
 /*
 SendValidatePost Validate an invoice
 
-Send invoices are the invoices that are sent to the SDI. They are preserved for two years in the live environment and 15 days in the Sandbox.
+Validate an invoice without sending it to SDI. Use this to check for errors before actual submission. Returns validation results with any errors found.
+
+**Send** invoices are outbound sales invoices transmitted to customers through Italy's SDI (Sistema di Interscambio). Preserved for two years in the live environment and 15 days in the [Sandbox](https://invoicetronic.com/en/docs/sandbox/).
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSendValidatePostRequest
@@ -1428,7 +1452,9 @@ func (r ApiSendValidateXmlPostRequest) Execute() (*http.Response, error) {
 /*
 SendValidateXmlPost Validate an invoice by xml
 
-Send invoices are the invoices that are sent to the SDI. They are preserved for two years in the live environment and 15 days in the Sandbox.
+Validate an XML invoice document without sending it to SDI. Use this to check for errors before actual submission. Returns validation results with any errors found.
+
+**Send** invoices are outbound sales invoices transmitted to customers through Italy's SDI (Sistema di Interscambio). Preserved for two years in the live environment and 15 days in the [Sandbox](https://invoicetronic.com/en/docs/sandbox/).
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSendValidateXmlPostRequest
@@ -1562,7 +1588,11 @@ func (r ApiSendXmlPostRequest) Execute() (*Send, *http.Response, error) {
 /*
 SendXmlPost Add an invoice by xml
 
-Send invoices are the invoices that are sent to the SDI. They are preserved for two years in the live environment and 15 days in the Sandbox.
+Add a new invoice using a raw XML document in FatturaPA format. The invoice will be signed (if requested), validated (if requested), and queued for delivery to SDI. Status updates from SDI will be available in the `update` endpoint.
+
+**Send** invoices are outbound sales invoices transmitted to customers through Italy's SDI (Sistema di Interscambio). Preserved for two years in the live environment and 15 days in the [Sandbox](https://invoicetronic.com/en/docs/sandbox/).
+
+You can also upload invoices via the [Dashboard](https://dashboard.invoicetronic.com).
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSendXmlPostRequest
@@ -1601,16 +1631,16 @@ func (a *SendAPIService) SendXmlPostExecute(r ApiSendXmlPostRequest) (*Send, *ht
 	if r.validate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "validate", r.validate, "form", "")
 	} else {
-        var defaultValue bool = false
-        parameterAddToHeaderOrQuery(localVarQueryParams, "validate", defaultValue, "form", "")
-        r.validate = &defaultValue
+		var defaultValue bool = false
+		parameterAddToHeaderOrQuery(localVarQueryParams, "validate", defaultValue, "form", "")
+		r.validate = &defaultValue
 	}
 	if r.signature != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "signature", r.signature, "form", "")
 	} else {
-        var defaultValue string = "Auto"
-        parameterAddToHeaderOrQuery(localVarQueryParams, "signature", defaultValue, "form", "")
-        r.signature = &defaultValue
+		var defaultValue string = "Auto"
+		parameterAddToHeaderOrQuery(localVarQueryParams, "signature", defaultValue, "form", "")
+		r.signature = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/xml"}

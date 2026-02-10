@@ -17,9 +17,9 @@ Name | Type | Description | Notes
 **DateTime** | Pointer to **time.Time** | Date and time of the request. | [optional] 
 **Error** | Pointer to **NullableString** | Response error. | [optional] 
 **ResourceId** | Pointer to **NullableInt32** | ID of the resource created or modified by this request. | [optional] 
-**Success** | Pointer to **bool** | Wether the request was successful. | [optional] [readonly] 
+**Success** | Pointer to **bool** | Whether the request was successful. | [optional] [readonly] 
 **Query** | Pointer to **NullableString** | Request query. Only used for internal logging, not sent to webhooks. | [optional] 
-**ResponseBody** | Pointer to **NullableString** | Response payload. It is guaranteed to be cyphered at rest. | [optional] 
+**ResponseBody** | Pointer to **NullableString** | Response payload. It is guaranteed to be encrypted at rest. | [optional] 
 
 ## Methods
 

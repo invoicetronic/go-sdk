@@ -156,7 +156,9 @@ func (r ApiReceiveGetRequest) Execute() ([]Receive, *http.Response, error) {
 /*
 ReceiveGet List incoming invoices
 
-Receive invoices are the invoices that are received from other companies. They are preserved for two years in the live environment and 24 hours in the Sandbox.
+Retrieve a paginated list of receive invoices. Results can be filtered by various criteria such as company, date ranges, sender, and document number. Returns invoice metadata; set `include_payload` to true to include the full invoice content. Invoices are marked as read (`is_read` = true) only when `include_payload` is true.
+
+**Receive** invoices are inbound purchase invoices received from suppliers through Italy's SDI (Sistema di Interscambio). Preserved for two years in the live environment and 24 hours in the [Sandbox](https://invoicetronic.com/en/docs/sandbox/).
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiReceiveGetRequest
@@ -234,16 +236,16 @@ func (a *ReceiveAPIService) ReceiveGetExecute(r ApiReceiveGetRequest) ([]Receive
 	if r.page != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "form", "")
 	} else {
-        var defaultValue int32 = 1
-        parameterAddToHeaderOrQuery(localVarQueryParams, "page", defaultValue, "form", "")
-        r.page = &defaultValue
+		var defaultValue int32 = 1
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", defaultValue, "form", "")
+		r.page = &defaultValue
 	}
 	if r.pageSize != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "form", "")
 	} else {
-        var defaultValue int32 = 100
-        parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", defaultValue, "form", "")
-        r.pageSize = &defaultValue
+		var defaultValue int32 = 100
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", defaultValue, "form", "")
+		r.pageSize = &defaultValue
 	}
 	if r.sort != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", r.sort, "form", "")
@@ -325,7 +327,9 @@ func (r ApiReceiveIdDeleteRequest) Execute() (*Receive, *http.Response, error) {
 /*
 ReceiveIdDelete Delete an incoming invoice by id
 
-Receive invoices are the invoices that are received from other companies. They are preserved for two years in the live environment and 24 hours in the Sandbox.
+Permanently delete a receive invoice by its internal id. This action cannot be undone.
+
+**Receive** invoices are inbound purchase invoices received from suppliers through Italy's SDI (Sistema di Interscambio). Preserved for two years in the live environment and 24 hours in the [Sandbox](https://invoicetronic.com/en/docs/sandbox/).
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id Item id
@@ -422,6 +426,17 @@ func (a *ReceiveAPIService) ReceiveIdDeleteExecute(r ApiReceiveIdDeleteRequest) 
 					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
+		if localVarHTTPResponse.StatusCode == 409 {
+			var v ProblemHttpResult
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -457,7 +472,9 @@ func (r ApiReceiveIdGetRequest) Execute() (*Receive, *http.Response, error) {
 /*
 ReceiveIdGet Get an incoming invoice by id
 
-Receive invoices are the invoices that are received from other companies. They are preserved for two years in the live environment and 24 hours in the Sandbox.
+Retrieve an incoming invoice by its internal id. The `id` is unique and assigned by the system when the invoice is received. Returns invoice metadata; set `include_payload` to true to include the full invoice content. The invoice is marked as read (`is_read` = true) only when `include_payload` is true.
+
+**Receive** invoices are inbound purchase invoices received from suppliers through Italy's SDI (Sistema di Interscambio). Preserved for two years in the live environment and 24 hours in the [Sandbox](https://invoicetronic.com/en/docs/sandbox/).
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id Item id
@@ -496,9 +513,9 @@ func (a *ReceiveAPIService) ReceiveIdGetExecute(r ApiReceiveIdGetRequest) (*Rece
 	if r.includePayload != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "include_payload", r.includePayload, "form", "")
 	} else {
-        var defaultValue bool = false
-        parameterAddToHeaderOrQuery(localVarQueryParams, "include_payload", defaultValue, "form", "")
-        r.includePayload = &defaultValue
+		var defaultValue bool = false
+		parameterAddToHeaderOrQuery(localVarQueryParams, "include_payload", defaultValue, "form", "")
+		r.includePayload = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}

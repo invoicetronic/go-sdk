@@ -37,13 +37,13 @@ type Receive struct {
 	Committente NullableString `json:"committente,omitempty"`
 	// VAT number of the Cedente/Prestatore (vendor). This is automatically set based on the sender's VAT number.
 	Prestatore NullableString `json:"prestatore,omitempty"`
-	// SDI identifier. This is set by the SDI and is guaranted to be unique within the SDI system.
+	// SDI identifier. This is set by the SDI and is guaranteed to be unique within the SDI system.
 	Identifier NullableString `json:"identifier,omitempty"`
 	// Xml file name.
 	FileName NullableString `json:"file_name,omitempty"`
 	// SDI format (FPA12, FPR12, FSM10, ...)
 	Format NullableString `json:"format,omitempty"`
-	// Xml payloaad. This is the actual xml content, as string. On send, it can be base64 encoded. If it's not, it will be encoded before sending. It is guaranteed to be cyphered at rest.
+	// Xml payload. This is the actual xml content, as string. On send, it can be base64 encoded. If it's not, it will be encoded before sending. It is guaranteed to be encrypted at rest.
 	Payload string `json:"payload"`
 	// Last update from SDI.
 	LastUpdate NullableTime `json:"last_update,omitempty"`
@@ -53,7 +53,7 @@ type Receive struct {
 	Documents []DocumentData `json:"documents,omitempty"`
 	// Whether the payload is Base64 encoded or a plain XML (text).
 	Encoding *string `json:"encoding,omitempty"`
-	// Wether the invoice has been read at least once.
+	// Whether the invoice has been read at least once. Set to true only when the invoice is requested with include_payload=true.
 	IsRead *bool `json:"is_read,omitempty"`
 	// SDI message id.
 	MessageId NullableString `json:"message_id,omitempty"`
