@@ -52,6 +52,8 @@ type APIClient struct {
 
 	CompanyAPI *CompanyAPIService
 
+	ExportAPI *ExportAPIService
+
 	LogAPI *LogAPIService
 
 	ReceiveAPI *ReceiveAPIService
@@ -82,6 +84,7 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 
 	// API Services
 	c.CompanyAPI = (*CompanyAPIService)(&c.common)
+	c.ExportAPI = (*ExportAPIService)(&c.common)
 	c.LogAPI = (*LogAPIService)(&c.common)
 	c.ReceiveAPI = (*ReceiveAPIService)(&c.common)
 	c.SendAPI = (*SendAPIService)(&c.common)

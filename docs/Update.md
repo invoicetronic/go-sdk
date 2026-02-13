@@ -11,11 +11,11 @@ Name | Type | Description | Notes
 **CompanyId** | Pointer to **int32** | Company id. | [optional] 
 **SendId** | Pointer to **int32** | Send id. This is the id of the sent invoice to which this update refers to. | [optional] 
 **LastUpdate** | Pointer to **time.Time** | Last update from SDI. | [optional] 
-**State** | Pointer to **string** | State of the document. Theses are the possible values, as per the SDI documentation: | [optional] 
+**State** | Pointer to **string** | State of the document. These are the possible values, as per the SDI documentation: | [optional] 
 **Description** | Pointer to **NullableString** | Description for the state. | [optional] 
 **MessageId** | Pointer to **NullableString** | SDI message id. | [optional] 
 **Errors** | Pointer to [**[]Error**](Error.md) | SDI errors, if any. | [optional] 
-**IsRead** | Pointer to **bool** | Wether the item has been read at least once. | [optional] 
+**IsRead** | Pointer to **bool** | Whether the item has been read at least once. | [optional] 
 **Send** | Pointer to [**SendReduced**](SendReduced.md) |  | [optional] 
 
 ## Methods

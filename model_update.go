@@ -35,7 +35,7 @@ type Update struct {
 	SendId *int32 `json:"send_id,omitempty"`
 	// Last update from SDI.
 	LastUpdate *time.Time `json:"last_update,omitempty"`
-	// State of the document. Theses are the possible values, as per the SDI documentation:
+	// State of the document. These are the possible values, as per the SDI documentation:
 	State *string `json:"state,omitempty"`
 	// Description for the state.
 	Description NullableString `json:"description,omitempty"`
@@ -43,7 +43,7 @@ type Update struct {
 	MessageId NullableString `json:"message_id,omitempty"`
 	// SDI errors, if any.
 	Errors []Error `json:"errors,omitempty"`
-	// Wether the item has been read at least once.
+	// Whether the item has been read at least once.
 	IsRead *bool `json:"is_read,omitempty"`
 	Send *SendReduced `json:"send,omitempty"`
 }
