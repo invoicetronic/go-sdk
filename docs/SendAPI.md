@@ -400,7 +400,7 @@ Name | Type | Description  | Notes
 
 ## SendJsonPost
 
-> Send SendJsonPost(ctx).FatturaOrdinaria(fatturaOrdinaria).Validate(validate).Signature(signature).Execute()
+> Send SendJsonPost(ctx).Body(body).Validate(validate).Signature(signature).Execute()
 
 Add an invoice by json
 
@@ -419,13 +419,13 @@ import (
 )
 
 func main() {
-	fatturaOrdinaria := TODO // FatturaOrdinaria | 
+	body := map[string]interface{}{ ... } // map[string]interface{} | 
 	validate := true // bool | Validate the document first, and reject it on failure. (optional) (default to false)
 	signature := "signature_example" // string | Whether to digitally sign the document. (optional) (default to "Auto")
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.SendAPI.SendJsonPost(context.Background()).FatturaOrdinaria(fatturaOrdinaria).Validate(validate).Signature(signature).Execute()
+	resp, r, err := apiClient.SendAPI.SendJsonPost(context.Background()).Body(body).Validate(validate).Signature(signature).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendJsonPost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -446,7 +446,7 @@ Other parameters are passed through a pointer to a apiSendJsonPostRequest struct
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **fatturaOrdinaria** | [**FatturaOrdinaria**](FatturaOrdinaria.md) |  | 
+ **body** | **map[string]interface{}** |  | 
  **validate** | **bool** | Validate the document first, and reject it on failure. | [default to false]
  **signature** | **string** | Whether to digitally sign the document. | [default to &quot;Auto&quot;]
 
@@ -604,7 +604,7 @@ Name | Type | Description  | Notes
 
 ## SendValidateJsonPost
 
-> SendValidateJsonPost(ctx).FatturaOrdinaria(fatturaOrdinaria).Execute()
+> SendValidateJsonPost(ctx).Body(body).Execute()
 
 Validate an invoice by json
 
@@ -623,11 +623,11 @@ import (
 )
 
 func main() {
-	fatturaOrdinaria := TODO // FatturaOrdinaria | 
+	body := map[string]interface{}{ ... } // map[string]interface{} | 
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
-	r, err := apiClient.SendAPI.SendValidateJsonPost(context.Background()).FatturaOrdinaria(fatturaOrdinaria).Execute()
+	r, err := apiClient.SendAPI.SendValidateJsonPost(context.Background()).Body(body).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendValidateJsonPost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -646,7 +646,7 @@ Other parameters are passed through a pointer to a apiSendValidateJsonPostReques
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **fatturaOrdinaria** | [**FatturaOrdinaria**](FatturaOrdinaria.md) |  | 
+ **body** | **map[string]interface{}** |  | 
 
 ### Return type
 
@@ -732,7 +732,7 @@ Name | Type | Description  | Notes
 
 ## SendValidateXmlPost
 
-> SendValidateXmlPost(ctx).FatturaOrdinaria(fatturaOrdinaria).Execute()
+> SendValidateXmlPost(ctx).Body(body).Execute()
 
 Validate an invoice by xml
 
@@ -751,11 +751,11 @@ import (
 )
 
 func main() {
-	fatturaOrdinaria := TODO // FatturaOrdinaria | 
+	body := map[string]interface{}{ ... } // map[string]interface{} | 
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
-	r, err := apiClient.SendAPI.SendValidateXmlPost(context.Background()).FatturaOrdinaria(fatturaOrdinaria).Execute()
+	r, err := apiClient.SendAPI.SendValidateXmlPost(context.Background()).Body(body).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendValidateXmlPost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -774,7 +774,7 @@ Other parameters are passed through a pointer to a apiSendValidateXmlPostRequest
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **fatturaOrdinaria** | [**FatturaOrdinaria**](FatturaOrdinaria.md) |  | 
+ **body** | **map[string]interface{}** |  | 
 
 ### Return type
 
@@ -796,7 +796,7 @@ Name | Type | Description  | Notes
 
 ## SendXmlPost
 
-> Send SendXmlPost(ctx).FatturaOrdinaria(fatturaOrdinaria).Validate(validate).Signature(signature).Execute()
+> Send SendXmlPost(ctx).Body(body).Validate(validate).Signature(signature).Execute()
 
 Add an invoice by xml
 
@@ -815,13 +815,13 @@ import (
 )
 
 func main() {
-	fatturaOrdinaria := TODO // FatturaOrdinaria | 
+	body := map[string]interface{}{ ... } // map[string]interface{} | 
 	validate := true // bool | Validate the document first, and reject it on failure. (optional) (default to false)
 	signature := "signature_example" // string | Whether to digitally sign the document. (optional) (default to "Auto")
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.SendAPI.SendXmlPost(context.Background()).FatturaOrdinaria(fatturaOrdinaria).Validate(validate).Signature(signature).Execute()
+	resp, r, err := apiClient.SendAPI.SendXmlPost(context.Background()).Body(body).Validate(validate).Signature(signature).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendXmlPost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -842,7 +842,7 @@ Other parameters are passed through a pointer to a apiSendXmlPostRequest struct 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **fatturaOrdinaria** | [**FatturaOrdinaria**](FatturaOrdinaria.md) |  | 
+ **body** | **map[string]interface{}** |  | 
  **validate** | **bool** | Validate the document first, and reject it on failure. | [default to false]
  **signature** | **string** | Whether to digitally sign the document. | [default to &quot;Auto&quot;]
 

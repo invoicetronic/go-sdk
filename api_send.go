@@ -840,13 +840,13 @@ func (a *SendAPIService) SendIdentifierGetExecute(r ApiSendIdentifierGetRequest)
 type ApiSendJsonPostRequest struct {
 	ctx context.Context
 	ApiService *SendAPIService
-	fatturaOrdinaria *FatturaOrdinaria
+	body *map[string]interface{}
 	validate *bool
 	signature *string
 }
 
-func (r ApiSendJsonPostRequest) FatturaOrdinaria(fatturaOrdinaria FatturaOrdinaria) ApiSendJsonPostRequest {
-	r.fatturaOrdinaria = &fatturaOrdinaria
+func (r ApiSendJsonPostRequest) Body(body map[string]interface{}) ApiSendJsonPostRequest {
+	r.body = &body
 	return r
 }
 
@@ -905,8 +905,8 @@ func (a *SendAPIService) SendJsonPostExecute(r ApiSendJsonPostRequest) (*Send, *
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.fatturaOrdinaria == nil {
-		return localVarReturnValue, nil, reportError("fatturaOrdinaria is required and must be specified")
+	if r.body == nil {
+		return localVarReturnValue, nil, reportError("body is required and must be specified")
 	}
 
 	if r.validate != nil {
@@ -941,7 +941,7 @@ func (a *SendAPIService) SendJsonPostExecute(r ApiSendJsonPostRequest) (*Send, *
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.fatturaOrdinaria
+	localVarPostBody = r.body
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -1301,11 +1301,11 @@ func (a *SendAPIService) SendValidateFilePostExecute(r ApiSendValidateFilePostRe
 type ApiSendValidateJsonPostRequest struct {
 	ctx context.Context
 	ApiService *SendAPIService
-	fatturaOrdinaria *FatturaOrdinaria
+	body *map[string]interface{}
 }
 
-func (r ApiSendValidateJsonPostRequest) FatturaOrdinaria(fatturaOrdinaria FatturaOrdinaria) ApiSendValidateJsonPostRequest {
-	r.fatturaOrdinaria = &fatturaOrdinaria
+func (r ApiSendValidateJsonPostRequest) Body(body map[string]interface{}) ApiSendValidateJsonPostRequest {
+	r.body = &body
 	return r
 }
 
@@ -1348,8 +1348,8 @@ func (a *SendAPIService) SendValidateJsonPostExecute(r ApiSendValidateJsonPostRe
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.fatturaOrdinaria == nil {
-		return nil, reportError("fatturaOrdinaria is required and must be specified")
+	if r.body == nil {
+		return nil, reportError("body is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -1370,7 +1370,7 @@ func (a *SendAPIService) SendValidateJsonPostExecute(r ApiSendValidateJsonPostRe
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.fatturaOrdinaria
+	localVarPostBody = r.body
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return nil, err
@@ -1545,11 +1545,11 @@ func (a *SendAPIService) SendValidatePostExecute(r ApiSendValidatePostRequest) (
 type ApiSendValidateXmlPostRequest struct {
 	ctx context.Context
 	ApiService *SendAPIService
-	fatturaOrdinaria *FatturaOrdinaria
+	body *map[string]interface{}
 }
 
-func (r ApiSendValidateXmlPostRequest) FatturaOrdinaria(fatturaOrdinaria FatturaOrdinaria) ApiSendValidateXmlPostRequest {
-	r.fatturaOrdinaria = &fatturaOrdinaria
+func (r ApiSendValidateXmlPostRequest) Body(body map[string]interface{}) ApiSendValidateXmlPostRequest {
+	r.body = &body
 	return r
 }
 
@@ -1592,8 +1592,8 @@ func (a *SendAPIService) SendValidateXmlPostExecute(r ApiSendValidateXmlPostRequ
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.fatturaOrdinaria == nil {
-		return nil, reportError("fatturaOrdinaria is required and must be specified")
+	if r.body == nil {
+		return nil, reportError("body is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -1614,7 +1614,7 @@ func (a *SendAPIService) SendValidateXmlPostExecute(r ApiSendValidateXmlPostRequ
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.fatturaOrdinaria
+	localVarPostBody = r.body
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return nil, err
@@ -1667,13 +1667,13 @@ func (a *SendAPIService) SendValidateXmlPostExecute(r ApiSendValidateXmlPostRequ
 type ApiSendXmlPostRequest struct {
 	ctx context.Context
 	ApiService *SendAPIService
-	fatturaOrdinaria *FatturaOrdinaria
+	body *map[string]interface{}
 	validate *bool
 	signature *string
 }
 
-func (r ApiSendXmlPostRequest) FatturaOrdinaria(fatturaOrdinaria FatturaOrdinaria) ApiSendXmlPostRequest {
-	r.fatturaOrdinaria = &fatturaOrdinaria
+func (r ApiSendXmlPostRequest) Body(body map[string]interface{}) ApiSendXmlPostRequest {
+	r.body = &body
 	return r
 }
 
@@ -1732,8 +1732,8 @@ func (a *SendAPIService) SendXmlPostExecute(r ApiSendXmlPostRequest) (*Send, *ht
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.fatturaOrdinaria == nil {
-		return localVarReturnValue, nil, reportError("fatturaOrdinaria is required and must be specified")
+	if r.body == nil {
+		return localVarReturnValue, nil, reportError("body is required and must be specified")
 	}
 
 	if r.validate != nil {
@@ -1768,7 +1768,7 @@ func (a *SendAPIService) SendXmlPostExecute(r ApiSendXmlPostRequest) (*Send, *ht
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.fatturaOrdinaria
+	localVarPostBody = r.body
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
