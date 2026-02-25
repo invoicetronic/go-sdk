@@ -19,7 +19,7 @@ import (
 // checks if the Update type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &Update{}
 
-// Update struct for Update
+// Update An SDI status update for a sent invoice.
 type Update struct {
 	// Unique identifier. Leave it at 0 for new records as it will be set automatically.
 	Id *int32 `json:"id,omitempty"`

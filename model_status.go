@@ -18,7 +18,7 @@ import (
 // checks if the Status type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &Status{}
 
-// Status struct for Status
+// Status Account status with remaining operations and signatures.
 type Status struct {
 	// Operations (invoices and validations) left.
 	OperationLeft *int32 `json:"operation_left,omitempty"`

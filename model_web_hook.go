@@ -21,7 +21,7 @@ import (
 // checks if the WebHook type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &WebHook{}
 
-// WebHook struct for WebHook
+// WebHook A webhook subscription.
 type WebHook struct {
 	// Unique identifier. Leave it at 0 for new records as it will be set automatically.
 	Id *int32 `json:"id,omitempty"`

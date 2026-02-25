@@ -7,6 +7,7 @@ Method | HTTP request | Description
 [**SendFilePost**](SendAPI.md#SendFilePost) | **Post** /send/file | Add an invoice by file
 [**SendGet**](SendAPI.md#SendGet) | **Get** /send | List invoices
 [**SendIdGet**](SendAPI.md#SendIdGet) | **Get** /send/{id} | Get a invoice by id
+[**SendIdPayloadGet**](SendAPI.md#SendIdPayloadGet) | **Get** /send/{id}/payload | Get a send invoice payload by id
 [**SendIdentifierGet**](SendAPI.md#SendIdentifierGet) | **Get** /send/{identifier} | Get a invoice by identifier
 [**SendJsonPost**](SendAPI.md#SendJsonPost) | **Post** /send/json | Add an invoice by json
 [**SendPost**](SendAPI.md#SendPost) | **Post** /send | Add an invoice
@@ -257,6 +258,74 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
+## SendIdPayloadGet
+
+> SendIdPayloadGet(ctx, id).Execute()
+
+Get a send invoice payload by id
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	invoicetronicsdk "github.com/invoicetronic/go-sdk"
+)
+
+func main() {
+	id := int32(56) // int32 | Item id
+
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
+	r, err := apiClient.SendAPI.SendIdPayloadGet(context.Background(), id).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendIdPayloadGet``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **int32** | Item id | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiSendIdPayloadGetRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[Basic](../README.md#Basic)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## SendIdentifierGet
 
 > Send SendIdentifierGet(ctx, identifier).IncludePayload(includePayload).Execute()
@@ -350,7 +419,7 @@ import (
 )
 
 func main() {
-	fatturaOrdinaria := *invoicetronicsdk.NewFatturaOrdinaria() // FatturaOrdinaria | 
+	fatturaOrdinaria := TODO // FatturaOrdinaria | 
 	validate := true // bool | Validate the document first, and reject it on failure. (optional) (default to false)
 	signature := "signature_example" // string | Whether to digitally sign the document. (optional) (default to "Auto")
 
@@ -554,7 +623,7 @@ import (
 )
 
 func main() {
-	fatturaOrdinaria := *invoicetronicsdk.NewFatturaOrdinaria() // FatturaOrdinaria | 
+	fatturaOrdinaria := TODO // FatturaOrdinaria | 
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
@@ -682,7 +751,7 @@ import (
 )
 
 func main() {
-	fatturaOrdinaria := *invoicetronicsdk.NewFatturaOrdinaria() // FatturaOrdinaria | 
+	fatturaOrdinaria := TODO // FatturaOrdinaria | 
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
@@ -746,7 +815,7 @@ import (
 )
 
 func main() {
-	fatturaOrdinaria := *invoicetronicsdk.NewFatturaOrdinaria() // FatturaOrdinaria | 
+	fatturaOrdinaria := TODO // FatturaOrdinaria | 
 	validate := true // bool | Validate the document first, and reject it on failure. (optional) (default to false)
 	signature := "signature_example" // string | Whether to digitally sign the document. (optional) (default to "Auto")
 

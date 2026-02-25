@@ -21,7 +21,7 @@ import (
 // checks if the Receive type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &Receive{}
 
-// Receive struct for Receive
+// Receive A received invoice.
 type Receive struct {
 	// Unique identifier. Leave it at 0 for new records as it will be set automatically.
 	Id *int32 `json:"id,omitempty"`

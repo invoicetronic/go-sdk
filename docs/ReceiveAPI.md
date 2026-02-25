@@ -7,6 +7,7 @@ Method | HTTP request | Description
 [**ReceiveGet**](ReceiveAPI.md#ReceiveGet) | **Get** /receive | List incoming invoices
 [**ReceiveIdDelete**](ReceiveAPI.md#ReceiveIdDelete) | **Delete** /receive/{id} | Delete an incoming invoice by id
 [**ReceiveIdGet**](ReceiveAPI.md#ReceiveIdGet) | **Get** /receive/{id} | Get an incoming invoice by id
+[**ReceiveIdPayloadGet**](ReceiveAPI.md#ReceiveIdPayloadGet) | **Get** /receive/{id}/payload | Get a receive invoice payload by id
 
 
 
@@ -245,6 +246,74 @@ Name | Type | Description  | Notes
 
 - **Content-Type**: Not defined
 - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## ReceiveIdPayloadGet
+
+> ReceiveIdPayloadGet(ctx, id).Execute()
+
+Get a receive invoice payload by id
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	invoicetronicsdk "github.com/invoicetronic/go-sdk"
+)
+
+func main() {
+	id := int32(56) // int32 | Item id
+
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
+	r, err := apiClient.ReceiveAPI.ReceiveIdPayloadGet(context.Background(), id).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `ReceiveAPI.ReceiveIdPayloadGet``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **int32** | Item id | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiReceiveIdPayloadGetRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[Basic](../README.md#Basic)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/problem+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)

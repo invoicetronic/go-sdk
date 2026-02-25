@@ -60,6 +60,19 @@ func Test_invoicetronicsdk_SendAPIService(t *testing.T) {
 
 	})
 
+	t.Run("Test SendAPIService SendIdPayloadGet", func(t *testing.T) {
+
+		t.Skip("skip test")  // remove to run test
+
+		var id int32
+
+		httpRes, err := apiClient.SendAPI.SendIdPayloadGet(context.Background(), id).Execute()
+
+		require.Nil(t, err)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
 	t.Run("Test SendAPIService SendIdentifierGet", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test

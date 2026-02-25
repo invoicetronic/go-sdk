@@ -600,6 +600,114 @@ func (a *SendAPIService) SendIdGetExecute(r ApiSendIdGetRequest) (*Send, *http.R
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiSendIdPayloadGetRequest struct {
+	ctx context.Context
+	ApiService *SendAPIService
+	id int32
+}
+
+func (r ApiSendIdPayloadGetRequest) Execute() (*http.Response, error) {
+	return r.ApiService.SendIdPayloadGetExecute(r)
+}
+
+/*
+SendIdPayloadGet Get a send invoice payload by id
+
+Retrieve only the payload of a send invoice, without the full invoice metadata.
+This is useful when you already have the invoice metadata and only need the XML content.
+
+The response is a `text/plain` string, identical to the `payload` field returned
+by the standard GET endpoint with `include_payload=true`. Depending on how the invoice
+was originally submitted, the payload may be Base64-encoded or plain XML.
+
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id Item id
+ @return ApiSendIdPayloadGetRequest
+*/
+func (a *SendAPIService) SendIdPayloadGet(ctx context.Context, id int32) ApiSendIdPayloadGetRequest {
+	return ApiSendIdPayloadGetRequest{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+	}
+}
+
+// Execute executes the request
+func (a *SendAPIService) SendIdPayloadGetExecute(r ApiSendIdPayloadGetRequest) (*http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SendAPIService.SendIdPayloadGet")
+	if err != nil {
+		return nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/send/{id}/payload"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 404 {
+			var v ProblemDetails
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		}
+		return localVarHTTPResponse, newErr
+	}
+
+	return localVarHTTPResponse, nil
+}
+
 type ApiSendIdentifierGetRequest struct {
 	ctx context.Context
 	ApiService *SendAPIService

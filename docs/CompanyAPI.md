@@ -9,6 +9,7 @@ Method | HTTP request | Description
 [**CompanyIdGet**](CompanyAPI.md#CompanyIdGet) | **Get** /company/{id} | Get a company by id
 [**CompanyPost**](CompanyAPI.md#CompanyPost) | **Post** /company | Add a company
 [**CompanyPut**](CompanyAPI.md#CompanyPut) | **Put** /company | Update a company
+[**CompanyVatGet**](CompanyAPI.md#CompanyVatGet) | **Get** /company/{vat} | Get a company by vat number
 
 
 
@@ -349,6 +350,76 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CompanyVatGet
+
+> Company CompanyVatGet(ctx, vat).Execute()
+
+Get a company by vat number
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	invoicetronicsdk "github.com/invoicetronic/go-sdk"
+)
+
+func main() {
+	vat := "vat_example" // string | 
+
+	configuration := invoicetronicsdk.NewConfiguration()
+	apiClient := invoicetronicsdk.NewAPIClient(configuration)
+	resp, r, err := apiClient.CompanyAPI.CompanyVatGet(context.Background(), vat).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `CompanyAPI.CompanyVatGet``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `CompanyVatGet`: Company
+	fmt.Fprintf(os.Stdout, "Response from `CompanyAPI.CompanyVatGet`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**vat** | **string** |  | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCompanyVatGetRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+[**Company**](Company.md)
+
+### Authorization
+
+[Basic](../README.md#Basic)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)

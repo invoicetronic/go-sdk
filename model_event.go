@@ -21,7 +21,7 @@ import (
 // checks if the Event type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &Event{}
 
-// Event struct for Event
+// Event An API request log entry.
 type Event struct {
 	// Unique identifier. Leave it at 0 for new records as it will be set automatically.
 	Id *int32 `json:"id,omitempty"`

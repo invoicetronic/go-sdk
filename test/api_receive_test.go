@@ -62,4 +62,17 @@ func Test_invoicetronicsdk_ReceiveAPIService(t *testing.T) {
 
 	})
 
+	t.Run("Test ReceiveAPIService ReceiveIdPayloadGet", func(t *testing.T) {
+
+		t.Skip("skip test")  // remove to run test
+
+		var id int32
+
+		httpRes, err := apiClient.ReceiveAPI.ReceiveIdPayloadGet(context.Background(), id).Execute()
+
+		require.Nil(t, err)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
 }

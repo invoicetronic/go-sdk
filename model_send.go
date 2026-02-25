@@ -21,7 +21,7 @@ import (
 // checks if the Send type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &Send{}
 
-// Send struct for Send
+// Send A sent invoice.
 type Send struct {
 	// Unique identifier. Leave it at 0 for new records as it will be set automatically.
 	Id *int32 `json:"id,omitempty"`
