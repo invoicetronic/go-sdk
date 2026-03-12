@@ -19,6 +19,7 @@ Name | Type | Description | Notes
 **DateSent** | Pointer to **NullableTime** | When the invoice was sent to SDI. | [optional] 
 **Documents** | Pointer to [**[]DocumentData**](DocumentData.md) | The invoices included in the payload. This is set by the system, based on the xml content. | [optional] 
 **Encoding** | Pointer to **string** | Whether the payload is Base64 encoded or a plain XML (text). | [optional] 
+**NomePrestatore** | Pointer to **NullableString** | Business name of the prestatore (supplier/seller) extracted from the invoice XML. | [optional] 
 **IsRead** | Pointer to **bool** | Whether the invoice has been read at least once. Set to true only when the invoice is requested with include_payload&#x3D;true. | [optional] 
 **MessageId** | Pointer to **NullableString** | SDI message id. | [optional] 
 
@@ -491,6 +492,41 @@ SetEncoding sets Encoding field to given value.
 
 HasEncoding returns a boolean if a field has been set.
 
+### GetNomePrestatore
+
+`func (o *Receive) GetNomePrestatore() string`
+
+GetNomePrestatore returns the NomePrestatore field if non-nil, zero value otherwise.
+
+### GetNomePrestatoreOk
+
+`func (o *Receive) GetNomePrestatoreOk() (*string, bool)`
+
+GetNomePrestatoreOk returns a tuple with the NomePrestatore field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetNomePrestatore
+
+`func (o *Receive) SetNomePrestatore(v string)`
+
+SetNomePrestatore sets NomePrestatore field to given value.
+
+### HasNomePrestatore
+
+`func (o *Receive) HasNomePrestatore() bool`
+
+HasNomePrestatore returns a boolean if a field has been set.
+
+### SetNomePrestatoreNil
+
+`func (o *Receive) SetNomePrestatoreNil(b bool)`
+
+ SetNomePrestatoreNil sets the value for NomePrestatore to be an explicit nil
+
+### UnsetNomePrestatore
+`func (o *Receive) UnsetNomePrestatore()`
+
+UnsetNomePrestatore ensures that no value is present for NomePrestatore, not even an explicit nil
 ### GetIsRead
 
 `func (o *Receive) GetIsRead() bool`

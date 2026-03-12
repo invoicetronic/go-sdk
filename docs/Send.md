@@ -19,6 +19,7 @@ Name | Type | Description | Notes
 **DateSent** | Pointer to **NullableTime** | When the invoice was sent to SDI. | [optional] 
 **Documents** | Pointer to [**[]DocumentData**](DocumentData.md) | The invoices included in the payload. This is set by the system, based on the xml content. | [optional] 
 **Encoding** | Pointer to **string** | Whether the payload is Base64 encoded or a plain XML (text). | [optional] 
+**NomeCommittente** | Pointer to **NullableString** | Business name of the committente (client/buyer) extracted from the invoice XML. | [optional] 
 **MetaData** | Pointer to **map[string]string** | Optional metadata, as json. | [optional] 
 **Company** | Pointer to [**Company**](Company.md) |  | [optional] 
 
@@ -491,6 +492,41 @@ SetEncoding sets Encoding field to given value.
 
 HasEncoding returns a boolean if a field has been set.
 
+### GetNomeCommittente
+
+`func (o *Send) GetNomeCommittente() string`
+
+GetNomeCommittente returns the NomeCommittente field if non-nil, zero value otherwise.
+
+### GetNomeCommittenteOk
+
+`func (o *Send) GetNomeCommittenteOk() (*string, bool)`
+
+GetNomeCommittenteOk returns a tuple with the NomeCommittente field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetNomeCommittente
+
+`func (o *Send) SetNomeCommittente(v string)`
+
+SetNomeCommittente sets NomeCommittente field to given value.
+
+### HasNomeCommittente
+
+`func (o *Send) HasNomeCommittente() bool`
+
+HasNomeCommittente returns a boolean if a field has been set.
+
+### SetNomeCommittenteNil
+
+`func (o *Send) SetNomeCommittenteNil(b bool)`
+
+ SetNomeCommittenteNil sets the value for NomeCommittente to be an explicit nil
+
+### UnsetNomeCommittente
+`func (o *Send) UnsetNomeCommittente()`
+
+UnsetNomeCommittente ensures that no value is present for NomeCommittente, not even an explicit nil
 ### GetMetaData
 
 `func (o *Send) GetMetaData() map[string]string`

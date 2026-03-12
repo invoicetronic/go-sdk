@@ -30,7 +30,7 @@ import (
 )
 
 func main() {
-	type_ := "type__example" // string |  (optional) (default to "Both")
+	type_ := "type__example" // string |  (optional)
 	companyId := int32(56) // int32 | Company id (optional)
 	year := int32(56) // int32 |  (optional)
 	month := int32(56) // int32 |  (optional)
@@ -59,7 +59,7 @@ Other parameters are passed through a pointer to a apiExportGetRequest struct vi
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **type_** | **string** |  | [default to &quot;Both&quot;]
+ **type_** | **string** |  | 
  **companyId** | **int32** | Company id | 
  **year** | **int32** |  | 
  **month** | **int32** |  | 

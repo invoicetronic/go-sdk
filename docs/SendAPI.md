@@ -91,7 +91,7 @@ Name | Type | Description  | Notes
 
 ## SendGet
 
-> []Send SendGet(ctx).CompanyId(companyId).Identifier(identifier).Committente(committente).Prestatore(prestatore).FileName(fileName).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).DocumentDateFrom(documentDateFrom).DocumentDateTo(documentDateTo).DocumentNumber(documentNumber).IncludePayload(includePayload).Page(page).PageSize(pageSize).Sort(sort).Execute()
+> []Send SendGet(ctx).CompanyId(companyId).Identifier(identifier).Committente(committente).Prestatore(prestatore).FileName(fileName).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).DocumentDateFrom(documentDateFrom).DocumentDateTo(documentDateTo).DocumentNumber(documentNumber).IncludePayload(includePayload).Page(page).PageSize(pageSize).Sort(sort).Q(q).Execute()
 
 List invoices
 
@@ -127,10 +127,11 @@ func main() {
 	page := int32(56) // int32 | Page number. (optional) (default to 1)
 	pageSize := int32(56) // int32 | Items per page. Cannot be greater than 200. (optional) (default to 100)
 	sort := "sort_example" // string | Sort by field. Prefix with '-' for descending order. (optional)
+	q := "q_example" // string | Full-text search across committente, prestatore, identifier, and file name. (optional)
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.SendAPI.SendGet(context.Background()).CompanyId(companyId).Identifier(identifier).Committente(committente).Prestatore(prestatore).FileName(fileName).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).DocumentDateFrom(documentDateFrom).DocumentDateTo(documentDateTo).DocumentNumber(documentNumber).IncludePayload(includePayload).Page(page).PageSize(pageSize).Sort(sort).Execute()
+	resp, r, err := apiClient.SendAPI.SendGet(context.Background()).CompanyId(companyId).Identifier(identifier).Committente(committente).Prestatore(prestatore).FileName(fileName).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).DocumentDateFrom(documentDateFrom).DocumentDateTo(documentDateTo).DocumentNumber(documentNumber).IncludePayload(includePayload).Page(page).PageSize(pageSize).Sort(sort).Q(q).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -167,6 +168,7 @@ Name | Type | Description  | Notes
  **page** | **int32** | Page number. | [default to 1]
  **pageSize** | **int32** | Items per page. Cannot be greater than 200. | [default to 100]
  **sort** | **string** | Sort by field. Prefix with &#39;-&#39; for descending order. | 
+ **q** | **string** | Full-text search across committente, prestatore, identifier, and file name. | 
 
 ### Return type
 

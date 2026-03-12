@@ -30,6 +30,7 @@ type ApiCompanyGetRequest struct {
 	page *int32
 	pageSize *int32
 	sort *string
+	q *string
 }
 
 // Page number.
@@ -50,6 +51,12 @@ func (r ApiCompanyGetRequest) Sort(sort string) ApiCompanyGetRequest {
 	return r
 }
 
+// Full-text search across committente, prestatore, identifier, and file name.
+func (r ApiCompanyGetRequest) Q(q string) ApiCompanyGetRequest {
+	r.q = &q
+	return r
+}
+
 func (r ApiCompanyGetRequest) Execute() ([]Company, *http.Response, error) {
 	return r.ApiService.CompanyGetExecute(r)
 }
@@ -57,7 +64,7 @@ func (r ApiCompanyGetRequest) Execute() ([]Company, *http.Response, error) {
 /*
 CompanyGet List companies
 
-Retrieve a paginated list of companies.
+Retrieve a paginated list of companies. Results can be filtered by free-text search (`q`) across name, VAT number, and fiscal code.
 
 **Companies** are the entities that send and receive invoices. They are automatically created from invoice data when invoices are sent or received.
 
@@ -108,6 +115,9 @@ func (a *CompanyAPIService) CompanyGetExecute(r ApiCompanyGetRequest) ([]Company
 	}
 	if r.sort != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", r.sort, "form", "")
+	}
+	if r.q != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "q", r.q, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}

@@ -53,6 +53,8 @@ type Send struct {
 	Documents []DocumentData `json:"documents,omitempty"`
 	// Whether the payload is Base64 encoded or a plain XML (text).
 	Encoding *string `json:"encoding,omitempty"`
+	// Business name of the committente (client/buyer) extracted from the invoice XML.
+	NomeCommittente NullableString `json:"nome_committente,omitempty"`
 	// Optional metadata, as json.
 	MetaData map[string]string `json:"meta_data,omitempty"`
 	Company *Company `json:"company,omitempty"`
@@ -621,6 +623,48 @@ func (o *Send) SetEncoding(v string) {
 	o.Encoding = &v
 }
 
+// GetNomeCommittente returns the NomeCommittente field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *Send) GetNomeCommittente() string {
+	if o == nil || IsNil(o.NomeCommittente.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.NomeCommittente.Get()
+}
+
+// GetNomeCommittenteOk returns a tuple with the NomeCommittente field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *Send) GetNomeCommittenteOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.NomeCommittente.Get(), o.NomeCommittente.IsSet()
+}
+
+// HasNomeCommittente returns a boolean if a field has been set.
+func (o *Send) HasNomeCommittente() bool {
+	if o != nil && o.NomeCommittente.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetNomeCommittente gets a reference to the given NullableString and assigns it to the NomeCommittente field.
+func (o *Send) SetNomeCommittente(v string) {
+	o.NomeCommittente.Set(&v)
+}
+// SetNomeCommittenteNil sets the value for NomeCommittente to be an explicit nil
+func (o *Send) SetNomeCommittenteNil() {
+	o.NomeCommittente.Set(nil)
+}
+
+// UnsetNomeCommittente ensures that no value is present for NomeCommittente, not even an explicit nil
+func (o *Send) UnsetNomeCommittente() {
+	o.NomeCommittente.Unset()
+}
+
 // GetMetaData returns the MetaData field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *Send) GetMetaData() map[string]string {
 	if o == nil {
@@ -738,6 +782,9 @@ func (o Send) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Encoding) {
 		toSerialize["encoding"] = o.Encoding
+	}
+	if o.NomeCommittente.IsSet() {
+		toSerialize["nome_committente"] = o.NomeCommittente.Get()
 	}
 	if o.MetaData != nil {
 		toSerialize["meta_data"] = o.MetaData

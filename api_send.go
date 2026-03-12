@@ -221,6 +221,7 @@ type ApiSendGetRequest struct {
 	page *int32
 	pageSize *int32
 	sort *string
+	q *string
 }
 
 // Company id
@@ -319,6 +320,12 @@ func (r ApiSendGetRequest) Sort(sort string) ApiSendGetRequest {
 	return r
 }
 
+// Full-text search across committente, prestatore, identifier, and file name.
+func (r ApiSendGetRequest) Q(q string) ApiSendGetRequest {
+	r.q = &q
+	return r
+}
+
 func (r ApiSendGetRequest) Execute() ([]Send, *http.Response, error) {
 	return r.ApiService.SendGetExecute(r)
 }
@@ -326,7 +333,7 @@ func (r ApiSendGetRequest) Execute() ([]Send, *http.Response, error) {
 /*
 SendGet List invoices
 
-Retrieve a paginated list of send invoices. Results can be filtered by various criteria such as company, date ranges, and document number. Returns invoice metadata; set `include_payload` to true to include the full invoice content.
+Retrieve a paginated list of send invoices. Results can be filtered by various criteria such as company, date ranges, document number, and free-text search (`q`). Returns invoice metadata; set `include_payload` to true to include the full invoice content.
 
 **Send** invoices are outbound sales invoices transmitted to customers through Italy's SDI (Sistema di Interscambio). Preserved for two years in the live environment and 15 days in the [Sandbox](https://invoicetronic.com/en/docs/sandbox/).
 
@@ -416,6 +423,9 @@ func (a *SendAPIService) SendGetExecute(r ApiSendGetRequest) ([]Send, *http.Resp
 	}
 	if r.sort != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "sort", r.sort, "form", "")
+	}
+	if r.q != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "q", r.q, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}

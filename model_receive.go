@@ -53,6 +53,8 @@ type Receive struct {
 	Documents []DocumentData `json:"documents,omitempty"`
 	// Whether the payload is Base64 encoded or a plain XML (text).
 	Encoding *string `json:"encoding,omitempty"`
+	// Business name of the prestatore (supplier/seller) extracted from the invoice XML.
+	NomePrestatore NullableString `json:"nome_prestatore,omitempty"`
 	// Whether the invoice has been read at least once. Set to true only when the invoice is requested with include_payload=true.
 	IsRead *bool `json:"is_read,omitempty"`
 	// SDI message id.
@@ -622,6 +624,48 @@ func (o *Receive) SetEncoding(v string) {
 	o.Encoding = &v
 }
 
+// GetNomePrestatore returns the NomePrestatore field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *Receive) GetNomePrestatore() string {
+	if o == nil || IsNil(o.NomePrestatore.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.NomePrestatore.Get()
+}
+
+// GetNomePrestatoreOk returns a tuple with the NomePrestatore field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *Receive) GetNomePrestatoreOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.NomePrestatore.Get(), o.NomePrestatore.IsSet()
+}
+
+// HasNomePrestatore returns a boolean if a field has been set.
+func (o *Receive) HasNomePrestatore() bool {
+	if o != nil && o.NomePrestatore.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetNomePrestatore gets a reference to the given NullableString and assigns it to the NomePrestatore field.
+func (o *Receive) SetNomePrestatore(v string) {
+	o.NomePrestatore.Set(&v)
+}
+// SetNomePrestatoreNil sets the value for NomePrestatore to be an explicit nil
+func (o *Receive) SetNomePrestatoreNil() {
+	o.NomePrestatore.Set(nil)
+}
+
+// UnsetNomePrestatore ensures that no value is present for NomePrestatore, not even an explicit nil
+func (o *Receive) UnsetNomePrestatore() {
+	o.NomePrestatore.Unset()
+}
+
 // GetIsRead returns the IsRead field value if set, zero value otherwise.
 func (o *Receive) GetIsRead() bool {
 	if o == nil || IsNil(o.IsRead) {
@@ -748,6 +792,9 @@ func (o Receive) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Encoding) {
 		toSerialize["encoding"] = o.Encoding
+	}
+	if o.NomePrestatore.IsSet() {
+		toSerialize["nome_prestatore"] = o.NomePrestatore.Get()
 	}
 	if !IsNil(o.IsRead) {
 		toSerialize["is_read"] = o.IsRead

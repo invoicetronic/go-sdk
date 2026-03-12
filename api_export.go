@@ -135,10 +135,6 @@ func (a *ExportAPIService) ExportGetExecute(r ApiExportGetRequest) (*http.Respon
 
 	if r.type_ != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "type", r.type_, "form", "")
-	} else {
-		var defaultValue string = "Both"
-		parameterAddToHeaderOrQuery(localVarQueryParams, "type", defaultValue, "form", "")
-		r.type_ = &defaultValue
 	}
 	if r.companyId != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "company_id", r.companyId, "form", "")
