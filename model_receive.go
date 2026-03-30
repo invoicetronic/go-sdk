@@ -3,7 +3,7 @@ Invoicetronic API
 
 The [Invoicetronic API][2] is a RESTful service that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. It provides advanced features as encryption at rest, multi-language pre-flight invoice validation, multiple upload formats, webhooks, event logging, client SDKs, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
-API version: 1
+API version: 1.6.1
 Contact: info@invoicetronic.com
 */
 
@@ -31,7 +31,7 @@ type Receive struct {
 	Version *int32 `json:"version,omitempty"`
 	// User id.
 	UserId *int32 `json:"user_id,omitempty"`
-	// Company id. On send, this is the sender and must be set in advance. On receive, it will be  automatically set based on the recipient's VAT number. If a matching company is not found, the invoice will be rejected until the company is created.
+	// Company id. On send, this is the sender and must be set in advance. On receive, it will be automatically set based on the recipient's VAT number. If a matching company is not found, the invoice will be rejected until the company is created.
 	CompanyId *int32 `json:"company_id,omitempty"`
 	// VAT number of the Cessionario/Committente (customer). This is automatically set based on the recipient's VAT number.
 	Committente NullableString `json:"committente,omitempty"`

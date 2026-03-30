@@ -3,7 +3,7 @@ Invoicetronic API
 
 The [Invoicetronic API][2] is a RESTful service that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. It provides advanced features as encryption at rest, multi-language pre-flight invoice validation, multiple upload formats, webhooks, event logging, client SDKs, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
-API version: 1
+API version: 1.6.1
 Contact: info@invoicetronic.com
 */
 
@@ -42,6 +42,7 @@ type ApiLogGetRequest struct {
 	success *bool
 	dateTimeFrom *time.Time
 	dateTimeTo *time.Time
+	userAgent *string
 }
 
 // Company id
@@ -121,6 +122,11 @@ func (r ApiLogGetRequest) DateTimeFrom(dateTimeFrom time.Time) ApiLogGetRequest 
 // Date and time of the event
 func (r ApiLogGetRequest) DateTimeTo(dateTimeTo time.Time) ApiLogGetRequest {
 	r.dateTimeTo = &dateTimeTo
+	return r
+}
+
+func (r ApiLogGetRequest) UserAgent(userAgent string) ApiLogGetRequest {
+	r.userAgent = &userAgent
 	return r
 }
 
@@ -218,6 +224,9 @@ func (a *LogAPIService) LogGetExecute(r ApiLogGetRequest) ([]Event, *http.Respon
 	if r.dateTimeTo != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "date_time_to", r.dateTimeTo, "form", "")
 	}
+	if r.userAgent != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "user_agent", r.userAgent, "form", "")
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -256,16 +265,6 @@ func (a *LogAPIService) LogGetExecute(r ApiLogGetRequest) ([]Event, *http.Respon
 		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
-		}
-		if localVarHTTPResponse.StatusCode == 400 {
-			var v ProblemHttpResult
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

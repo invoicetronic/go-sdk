@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 **Enabled** | Pointer to **bool** | Whether the webhook is enabled. On creation, this is set to &#x60;true&#x60;. | [optional] 
 **Secret** | Pointer to **NullableString** | The secret used to generate webhook signatures, only returned on creation. You should store this value securely and validate it on every call, to ensure that the caller is InvoicetronicApi. | [optional] 
 **Description** | Pointer to **NullableString** | An optional description. | [optional] 
-**Events** | Pointer to **[]string** | List of events that trigger the webhook.  See Invoicetronic.SupportedEvents.Available for a list of valid event names. | [optional] 
+**Events** | Pointer to **[]string** | List of events that trigger the webhook. See Invoicetronic.SupportedEvents.Available for a list of valid event names. | [optional] 
 
 ## Methods
 

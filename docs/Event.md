@@ -17,6 +17,7 @@ Name | Type | Description | Notes
 **DateTime** | Pointer to **time.Time** | Date and time of the request. | [optional] 
 **Error** | Pointer to **NullableString** | Response error. | [optional] 
 **ResourceId** | Pointer to **NullableInt32** | ID of the resource created or modified by this request. | [optional] 
+**UserAgent** | Pointer to **NullableString** | User-Agent header from the HTTP request. | [optional] 
 **Success** | Pointer to **bool** | Whether the request was successful. | [optional] [readonly] 
 **Query** | Pointer to **NullableString** | Request query. Only used for internal logging, not sent to webhooks. | [optional] 
 **ResponseBody** | Pointer to **NullableString** | Response payload. It is guaranteed to be encrypted at rest. | [optional] 
@@ -385,6 +386,41 @@ HasResourceId returns a boolean if a field has been set.
 `func (o *Event) UnsetResourceId()`
 
 UnsetResourceId ensures that no value is present for ResourceId, not even an explicit nil
+### GetUserAgent
+
+`func (o *Event) GetUserAgent() string`
+
+GetUserAgent returns the UserAgent field if non-nil, zero value otherwise.
+
+### GetUserAgentOk
+
+`func (o *Event) GetUserAgentOk() (*string, bool)`
+
+GetUserAgentOk returns a tuple with the UserAgent field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetUserAgent
+
+`func (o *Event) SetUserAgent(v string)`
+
+SetUserAgent sets UserAgent field to given value.
+
+### HasUserAgent
+
+`func (o *Event) HasUserAgent() bool`
+
+HasUserAgent returns a boolean if a field has been set.
+
+### SetUserAgentNil
+
+`func (o *Event) SetUserAgentNil(b bool)`
+
+ SetUserAgentNil sets the value for UserAgent to be an explicit nil
+
+### UnsetUserAgent
+`func (o *Event) UnsetUserAgent()`
+
+UnsetUserAgent ensures that no value is present for UserAgent, not even an explicit nil
 ### GetSuccess
 
 `func (o *Event) GetSuccess() bool`

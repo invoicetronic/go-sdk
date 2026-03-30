@@ -57,7 +57,7 @@ Other parameters are passed through a pointer to a apiStatusGetRequest struct vi
 
 ### Authorization
 
-[Basic](../README.md#Basic)
+No authorization required
 
 ### HTTP request headers
 

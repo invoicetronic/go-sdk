@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **Created** | Pointer to **time.Time** | Creation date. It is set automatically. | [optional] 
 **Version** | Pointer to **int32** | Row version, for optimistic concurrency. It is set automatically. | [optional] 
 **UserId** | Pointer to **int32** | User id. | [optional] 
-**CompanyId** | Pointer to **int32** | Company id. On send, this is the sender and must be set in advance. On receive, it will be  automatically set based on the recipient&#39;s VAT number. If a matching company is not found, the invoice will be rejected until the company is created. | [optional] 
+**CompanyId** | Pointer to **int32** | Company id. On send, this is the sender and must be set in advance. On receive, it will be automatically set based on the recipient&#39;s VAT number. If a matching company is not found, the invoice will be rejected until the company is created. | [optional] 
 **Committente** | Pointer to **NullableString** | VAT number of the Cessionario/Committente (customer). This is automatically set based on the recipient&#39;s VAT number. | [optional] 
 **Prestatore** | Pointer to **NullableString** | VAT number of the Cedente/Prestatore (vendor). This is automatically set based on the sender&#39;s VAT number. | [optional] 
 **Identifier** | Pointer to **NullableString** | SDI identifier. This is set by the SDI and is guaranteed to be unique within the SDI system. | [optional] 

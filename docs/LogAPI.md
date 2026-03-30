@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 ## LogGet
 
-> []Event LogGet(ctx).CompanyId(companyId).Endpoint(endpoint).Method(method).ApiVerion(apiVerion).StatusCode(statusCode).DateCreatedFrom(dateCreatedFrom).DateCreatedTo(dateCreatedTo).Page(page).PageSize(pageSize).Sort(sort).Query(query).Success(success).DateTimeFrom(dateTimeFrom).DateTimeTo(dateTimeTo).Execute()
+> []Event LogGet(ctx).CompanyId(companyId).Endpoint(endpoint).Method(method).ApiVerion(apiVerion).StatusCode(statusCode).DateCreatedFrom(dateCreatedFrom).DateCreatedTo(dateCreatedTo).Page(page).PageSize(pageSize).Sort(sort).Query(query).Success(success).DateTimeFrom(dateTimeFrom).DateTimeTo(dateTimeTo).UserAgent(userAgent).Execute()
 
 List events
 
@@ -45,10 +45,11 @@ func main() {
 	success := true // bool |  (optional)
 	dateTimeFrom := time.Now() // time.Time | Date and time of the event (optional)
 	dateTimeTo := time.Now() // time.Time | Date and time of the event (optional)
+	userAgent := "userAgent_example" // string |  (optional)
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.LogAPI.LogGet(context.Background()).CompanyId(companyId).Endpoint(endpoint).Method(method).ApiVerion(apiVerion).StatusCode(statusCode).DateCreatedFrom(dateCreatedFrom).DateCreatedTo(dateCreatedTo).Page(page).PageSize(pageSize).Sort(sort).Query(query).Success(success).DateTimeFrom(dateTimeFrom).DateTimeTo(dateTimeTo).Execute()
+	resp, r, err := apiClient.LogAPI.LogGet(context.Background()).CompanyId(companyId).Endpoint(endpoint).Method(method).ApiVerion(apiVerion).StatusCode(statusCode).DateCreatedFrom(dateCreatedFrom).DateCreatedTo(dateCreatedTo).Page(page).PageSize(pageSize).Sort(sort).Query(query).Success(success).DateTimeFrom(dateTimeFrom).DateTimeTo(dateTimeTo).UserAgent(userAgent).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `LogAPI.LogGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -83,6 +84,7 @@ Name | Type | Description  | Notes
  **success** | **bool** |  | 
  **dateTimeFrom** | **time.Time** | Date and time of the event | 
  **dateTimeTo** | **time.Time** | Date and time of the event | 
+ **userAgent** | **string** |  | 
 
 ### Return type
 
@@ -90,7 +92,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[Basic](../README.md#Basic)
+No authorization required
 
 ### HTTP request headers
 
@@ -160,7 +162,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[Basic](../README.md#Basic)
+No authorization required
 
 ### HTTP request headers
 

@@ -3,7 +3,7 @@ Invoicetronic API
 
 The [Invoicetronic API][2] is a RESTful service that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. It provides advanced features as encryption at rest, multi-language pre-flight invoice validation, multiple upload formats, webhooks, event logging, client SDKs, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
-API version: 1
+API version: 1.6.1
 Contact: info@invoicetronic.com
 */
 
@@ -49,6 +49,8 @@ type Event struct {
 	Error NullableString `json:"error,omitempty"`
 	// ID of the resource created or modified by this request.
 	ResourceId NullableInt32 `json:"resource_id,omitempty"`
+	// User-Agent header from the HTTP request.
+	UserAgent NullableString `json:"user_agent,omitempty"`
 	// Whether the request was successful.
 	Success *bool `json:"success,omitempty"`
 	// Request query. Only used for internal logging, not sent to webhooks.
@@ -508,6 +510,48 @@ func (o *Event) UnsetResourceId() {
 	o.ResourceId.Unset()
 }
 
+// GetUserAgent returns the UserAgent field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *Event) GetUserAgent() string {
+	if o == nil || IsNil(o.UserAgent.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.UserAgent.Get()
+}
+
+// GetUserAgentOk returns a tuple with the UserAgent field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *Event) GetUserAgentOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.UserAgent.Get(), o.UserAgent.IsSet()
+}
+
+// HasUserAgent returns a boolean if a field has been set.
+func (o *Event) HasUserAgent() bool {
+	if o != nil && o.UserAgent.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetUserAgent gets a reference to the given NullableString and assigns it to the UserAgent field.
+func (o *Event) SetUserAgent(v string) {
+	o.UserAgent.Set(&v)
+}
+// SetUserAgentNil sets the value for UserAgent to be an explicit nil
+func (o *Event) SetUserAgentNil() {
+	o.UserAgent.Set(nil)
+}
+
+// UnsetUserAgent ensures that no value is present for UserAgent, not even an explicit nil
+func (o *Event) UnsetUserAgent() {
+	o.UserAgent.Unset()
+}
+
 // GetSuccess returns the Success field value if set, zero value otherwise.
 func (o *Event) GetSuccess() bool {
 	if o == nil || IsNil(o.Success) {
@@ -668,6 +712,9 @@ func (o Event) ToMap() (map[string]interface{}, error) {
 	}
 	if o.ResourceId.IsSet() {
 		toSerialize["resource_id"] = o.ResourceId.Get()
+	}
+	if o.UserAgent.IsSet() {
+		toSerialize["user_agent"] = o.UserAgent.Get()
 	}
 	if !IsNil(o.Success) {
 		toSerialize["success"] = o.Success

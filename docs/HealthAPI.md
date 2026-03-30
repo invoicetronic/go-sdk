@@ -55,7 +55,7 @@ Other parameters are passed through a pointer to a apiHealthGetRequest struct vi
 
 ### Authorization
 
-[Basic](../README.md#Basic)
+No authorization required
 
 ### HTTP request headers
 
