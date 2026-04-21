@@ -6,6 +6,8 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **OperationLeft** | Pointer to **int32** | Operations (invoices and validations) left. | [optional] 
 **SignatureLeft** | Pointer to **int32** | Signatures left. | [optional] 
+**HasActiveSeat** | Pointer to **bool** | Whether the current API key has an active Desk seat. | [optional] 
+**IsSubKey** | Pointer to **bool** | Whether the current API key is a sub-key (restricted key). | [optional] 
 
 ## Methods
 
@@ -75,6 +77,56 @@ SetSignatureLeft sets SignatureLeft field to given value.
 `func (o *Status) HasSignatureLeft() bool`
 
 HasSignatureLeft returns a boolean if a field has been set.
+
+### GetHasActiveSeat
+
+`func (o *Status) GetHasActiveSeat() bool`
+
+GetHasActiveSeat returns the HasActiveSeat field if non-nil, zero value otherwise.
+
+### GetHasActiveSeatOk
+
+`func (o *Status) GetHasActiveSeatOk() (*bool, bool)`
+
+GetHasActiveSeatOk returns a tuple with the HasActiveSeat field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetHasActiveSeat
+
+`func (o *Status) SetHasActiveSeat(v bool)`
+
+SetHasActiveSeat sets HasActiveSeat field to given value.
+
+### HasHasActiveSeat
+
+`func (o *Status) HasHasActiveSeat() bool`
+
+HasHasActiveSeat returns a boolean if a field has been set.
+
+### GetIsSubKey
+
+`func (o *Status) GetIsSubKey() bool`
+
+GetIsSubKey returns the IsSubKey field if non-nil, zero value otherwise.
+
+### GetIsSubKeyOk
+
+`func (o *Status) GetIsSubKeyOk() (*bool, bool)`
+
+GetIsSubKeyOk returns a tuple with the IsSubKey field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIsSubKey
+
+`func (o *Status) SetIsSubKey(v bool)`
+
+SetIsSubKey sets IsSubKey field to given value.
+
+### HasIsSubKey
+
+`func (o *Status) HasIsSubKey() bool`
+
+HasIsSubKey returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

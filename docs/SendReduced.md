@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **MetaData** | Pointer to **map[string]string** | Optional metadata, as json. | [optional] 
 **Documents** | Pointer to [**[]DocumentData**](DocumentData.md) | The invoices included in the payload. | [optional] 
 **DateSent** | Pointer to **NullableTime** | When the invoice was sent to SDI. | [optional] 
+**LatestState** | Pointer to **NullableString** | Current SDI state of the invoice. Reflects the most recent update received from SDI. | [optional] 
 
 ## Methods
 
@@ -204,6 +205,41 @@ HasDateSent returns a boolean if a field has been set.
 `func (o *SendReduced) UnsetDateSent()`
 
 UnsetDateSent ensures that no value is present for DateSent, not even an explicit nil
+### GetLatestState
+
+`func (o *SendReduced) GetLatestState() string`
+
+GetLatestState returns the LatestState field if non-nil, zero value otherwise.
+
+### GetLatestStateOk
+
+`func (o *SendReduced) GetLatestStateOk() (*string, bool)`
+
+GetLatestStateOk returns a tuple with the LatestState field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetLatestState
+
+`func (o *SendReduced) SetLatestState(v string)`
+
+SetLatestState sets LatestState field to given value.
+
+### HasLatestState
+
+`func (o *SendReduced) HasLatestState() bool`
+
+HasLatestState returns a boolean if a field has been set.
+
+### SetLatestStateNil
+
+`func (o *SendReduced) SetLatestStateNil(b bool)`
+
+ SetLatestStateNil sets the value for LatestState to be an explicit nil
+
+### UnsetLatestState
+`func (o *SendReduced) UnsetLatestState()`
+
+UnsetLatestState ensures that no value is present for LatestState, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

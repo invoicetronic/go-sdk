@@ -3,7 +3,7 @@ Invoicetronic API
 
 The [Invoicetronic API][2] is a RESTful service that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. It provides advanced features as encryption at rest, multi-language pre-flight invoice validation, multiple upload formats, webhooks, event logging, client SDKs, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
-API version: 1.6.4
+API version: 1.12.0
 Contact: info@invoicetronic.com
 */
 
@@ -31,6 +31,8 @@ type SendReduced struct {
 	Documents []DocumentData `json:"documents,omitempty"`
 	// When the invoice was sent to SDI.
 	DateSent NullableTime `json:"date_sent,omitempty"`
+	// Current SDI state of the invoice. Reflects the most recent update received from SDI.
+	LatestState NullableString `json:"latest_state,omitempty"`
 }
 
 // NewSendReduced instantiates a new SendReduced object
@@ -242,6 +244,48 @@ func (o *SendReduced) UnsetDateSent() {
 	o.DateSent.Unset()
 }
 
+// GetLatestState returns the LatestState field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *SendReduced) GetLatestState() string {
+	if o == nil || IsNil(o.LatestState.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.LatestState.Get()
+}
+
+// GetLatestStateOk returns a tuple with the LatestState field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *SendReduced) GetLatestStateOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.LatestState.Get(), o.LatestState.IsSet()
+}
+
+// HasLatestState returns a boolean if a field has been set.
+func (o *SendReduced) HasLatestState() bool {
+	if o != nil && o.LatestState.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetLatestState gets a reference to the given NullableString and assigns it to the LatestState field.
+func (o *SendReduced) SetLatestState(v string) {
+	o.LatestState.Set(&v)
+}
+// SetLatestStateNil sets the value for LatestState to be an explicit nil
+func (o *SendReduced) SetLatestStateNil() {
+	o.LatestState.Set(nil)
+}
+
+// UnsetLatestState ensures that no value is present for LatestState, not even an explicit nil
+func (o *SendReduced) UnsetLatestState() {
+	o.LatestState.Unset()
+}
+
 func (o SendReduced) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -266,6 +310,9 @@ func (o SendReduced) ToMap() (map[string]interface{}, error) {
 	}
 	if o.DateSent.IsSet() {
 		toSerialize["date_sent"] = o.DateSent.Get()
+	}
+	if o.LatestState.IsSet() {
+		toSerialize["latest_state"] = o.LatestState.Get()
 	}
 	return toSerialize, nil
 }

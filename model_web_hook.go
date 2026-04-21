@@ -3,7 +3,7 @@ Invoicetronic API
 
 The [Invoicetronic API][2] is a RESTful service that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. It provides advanced features as encryption at rest, multi-language pre-flight invoice validation, multiple upload formats, webhooks, event logging, client SDKs, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
-API version: 1.6.4
+API version: 1.12.0
 Contact: info@invoicetronic.com
 */
 
@@ -23,15 +23,15 @@ var _ MappedNullable = &WebHook{}
 
 // WebHook A webhook subscription.
 type WebHook struct {
-	// Unique identifier. Leave it at 0 for new records as it will be set automatically.
+	// Unique identifier. For POST requests, leave it at `0` — the server will assign one automatically. For PUT requests, set it to the id of the record you want to update.
 	Id *int32 `json:"id,omitempty"`
 	// Creation date. It is set automatically.
 	Created *time.Time `json:"created,omitempty"`
 	// Row version, for optimistic concurrency. It is set automatically.
 	Version *int32 `json:"version,omitempty"`
-	// User id.
+	// User id. It is set automatically based on the authenticated user.
 	UserId *int32 `json:"user_id,omitempty"`
-	// Company id.
+	// Optional company id. If set, the webhook is restricted to events for that company; if omitted, it fires for all companies on the account.
 	CompanyId NullableInt32 `json:"company_id,omitempty"`
 	// The url of your application's endpoint that will receive a POST request when the webhook is fired.
 	Url string `json:"url"`
@@ -43,6 +43,8 @@ type WebHook struct {
 	Description NullableString `json:"description,omitempty"`
 	// List of events that trigger the webhook. See Invoicetronic.SupportedEvents.Available for a list of valid event names.
 	Events []string `json:"events,omitempty"`
+	// Timestamp of the last failure notification email sent for this webhook. Set by the notifier service; reset to null on successful delivery.
+	FailureNotifiedAt NullableTime `json:"failure_notified_at,omitempty"`
 }
 
 type _WebHook WebHook
@@ -408,6 +410,48 @@ func (o *WebHook) SetEvents(v []string) {
 	o.Events = v
 }
 
+// GetFailureNotifiedAt returns the FailureNotifiedAt field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *WebHook) GetFailureNotifiedAt() time.Time {
+	if o == nil || IsNil(o.FailureNotifiedAt.Get()) {
+		var ret time.Time
+		return ret
+	}
+	return *o.FailureNotifiedAt.Get()
+}
+
+// GetFailureNotifiedAtOk returns a tuple with the FailureNotifiedAt field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *WebHook) GetFailureNotifiedAtOk() (*time.Time, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.FailureNotifiedAt.Get(), o.FailureNotifiedAt.IsSet()
+}
+
+// HasFailureNotifiedAt returns a boolean if a field has been set.
+func (o *WebHook) HasFailureNotifiedAt() bool {
+	if o != nil && o.FailureNotifiedAt.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetFailureNotifiedAt gets a reference to the given NullableTime and assigns it to the FailureNotifiedAt field.
+func (o *WebHook) SetFailureNotifiedAt(v time.Time) {
+	o.FailureNotifiedAt.Set(&v)
+}
+// SetFailureNotifiedAtNil sets the value for FailureNotifiedAt to be an explicit nil
+func (o *WebHook) SetFailureNotifiedAtNil() {
+	o.FailureNotifiedAt.Set(nil)
+}
+
+// UnsetFailureNotifiedAt ensures that no value is present for FailureNotifiedAt, not even an explicit nil
+func (o *WebHook) UnsetFailureNotifiedAt() {
+	o.FailureNotifiedAt.Unset()
+}
+
 func (o WebHook) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -445,6 +489,9 @@ func (o WebHook) ToMap() (map[string]interface{}, error) {
 	}
 	if o.Events != nil {
 		toSerialize["events"] = o.Events
+	}
+	if o.FailureNotifiedAt.IsSet() {
+		toSerialize["failure_notified_at"] = o.FailureNotifiedAt.Get()
 	}
 	return toSerialize, nil
 }

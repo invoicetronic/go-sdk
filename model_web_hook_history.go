@@ -3,7 +3,7 @@ Invoicetronic API
 
 The [Invoicetronic API][2] is a RESTful service that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. It provides advanced features as encryption at rest, multi-language pre-flight invoice validation, multiple upload formats, webhooks, event logging, client SDKs, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
-API version: 1.6.4
+API version: 1.12.0
 Contact: info@invoicetronic.com
 */
 
@@ -21,7 +21,7 @@ var _ MappedNullable = &WebHookHistory{}
 
 // WebHookHistory Webhook history.
 type WebHookHistory struct {
-	// Unique identifier. Leave it at 0 for new records as it will be set automatically.
+	// Unique identifier. For POST requests, leave it at `0` — the server will assign one automatically. For PUT requests, set it to the id of the record you want to update.
 	Id *int32 `json:"id,omitempty"`
 	// Creation date. It is set automatically.
 	Created *time.Time `json:"created,omitempty"`
@@ -33,8 +33,10 @@ type WebHookHistory struct {
 	UserId *int32 `json:"user_id,omitempty"`
 	// Event name.
 	Event NullableString `json:"event,omitempty"`
-	// Status code.
+	// HTTP status code returned by the webhook endpoint. A value of 0 means the request could not be completed due to a network error (e.g., DNS resolution failure, connection refused, or timeout). This typically indicates that the endpoint URL is misconfigured or no longer exists.
 	StatusCode *int32 `json:"status_code,omitempty"`
+	// Error description, if any. Null when the delivery is successful (2xx). Contains the exception message for network errors (status code 0) or the response body for non-2xx HTTP responses.
+	Error NullableString `json:"error,omitempty"`
 	// Date and time of the request.
 	DateTime *time.Time `json:"date_time,omitempty"`
 	// Whether the request was successful.
@@ -292,6 +294,48 @@ func (o *WebHookHistory) SetStatusCode(v int32) {
 	o.StatusCode = &v
 }
 
+// GetError returns the Error field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *WebHookHistory) GetError() string {
+	if o == nil || IsNil(o.Error.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.Error.Get()
+}
+
+// GetErrorOk returns a tuple with the Error field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *WebHookHistory) GetErrorOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Error.Get(), o.Error.IsSet()
+}
+
+// HasError returns a boolean if a field has been set.
+func (o *WebHookHistory) HasError() bool {
+	if o != nil && o.Error.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetError gets a reference to the given NullableString and assigns it to the Error field.
+func (o *WebHookHistory) SetError(v string) {
+	o.Error.Set(&v)
+}
+// SetErrorNil sets the value for Error to be an explicit nil
+func (o *WebHookHistory) SetErrorNil() {
+	o.Error.Set(nil)
+}
+
+// UnsetError ensures that no value is present for Error, not even an explicit nil
+func (o *WebHookHistory) UnsetError() {
+	o.Error.Unset()
+}
+
 // GetDateTime returns the DateTime field value if set, zero value otherwise.
 func (o *WebHookHistory) GetDateTime() time.Time {
 	if o == nil || IsNil(o.DateTime) {
@@ -386,6 +430,9 @@ func (o WebHookHistory) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.StatusCode) {
 		toSerialize["status_code"] = o.StatusCode
+	}
+	if o.Error.IsSet() {
+		toSerialize["error"] = o.Error.Get()
 	}
 	if !IsNil(o.DateTime) {
 		toSerialize["date_time"] = o.DateTime

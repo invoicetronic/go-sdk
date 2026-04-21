@@ -4,16 +4,17 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **int32** | Unique identifier. Leave it at 0 for new records as it will be set automatically. | [optional] 
-**Created** | Pointer to **time.Time** | Creation date. It is set automatically. | [optional] 
-**Version** | Pointer to **int32** | Row version, for optimistic concurrency. It is set automatically. | [optional] 
-**UserId** | Pointer to **int32** | User id. | [optional] 
-**CompanyId** | Pointer to **NullableInt32** | Company id. | [optional] 
+**Id** | Pointer to **int32** | Unique identifier. For POST requests, leave it at &#x60;0&#x60; — the server will assign one automatically. For PUT requests, set it to the id of the record you want to update. | [optional] 
+**Created** | Pointer to **time.Time** | Creation date. It is set automatically. | [optional] [readonly] 
+**Version** | Pointer to **int32** | Row version, for optimistic concurrency. It is set automatically. | [optional] [readonly] 
+**UserId** | Pointer to **int32** | User id. It is set automatically based on the authenticated user. | [optional] [readonly] 
+**CompanyId** | Pointer to **NullableInt32** | Optional company id. If set, the webhook is restricted to events for that company; if omitted, it fires for all companies on the account. | [optional] 
 **Url** | **string** | The url of your application&#39;s endpoint that will receive a POST request when the webhook is fired. | 
 **Enabled** | Pointer to **bool** | Whether the webhook is enabled. On creation, this is set to &#x60;true&#x60;. | [optional] 
 **Secret** | Pointer to **NullableString** | The secret used to generate webhook signatures, only returned on creation. You should store this value securely and validate it on every call, to ensure that the caller is InvoicetronicApi. | [optional] 
 **Description** | Pointer to **NullableString** | An optional description. | [optional] 
 **Events** | Pointer to **[]string** | List of events that trigger the webhook. See Invoicetronic.SupportedEvents.Available for a list of valid event names. | [optional] 
+**FailureNotifiedAt** | Pointer to **NullableTime** | Timestamp of the last failure notification email sent for this webhook. Set by the notifier service; reset to null on successful delivery. | [optional] [readonly] 
 
 ## Methods
 
@@ -319,6 +320,41 @@ HasEvents returns a boolean if a field has been set.
 `func (o *WebHook) UnsetEvents()`
 
 UnsetEvents ensures that no value is present for Events, not even an explicit nil
+### GetFailureNotifiedAt
+
+`func (o *WebHook) GetFailureNotifiedAt() time.Time`
+
+GetFailureNotifiedAt returns the FailureNotifiedAt field if non-nil, zero value otherwise.
+
+### GetFailureNotifiedAtOk
+
+`func (o *WebHook) GetFailureNotifiedAtOk() (*time.Time, bool)`
+
+GetFailureNotifiedAtOk returns a tuple with the FailureNotifiedAt field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetFailureNotifiedAt
+
+`func (o *WebHook) SetFailureNotifiedAt(v time.Time)`
+
+SetFailureNotifiedAt sets FailureNotifiedAt field to given value.
+
+### HasFailureNotifiedAt
+
+`func (o *WebHook) HasFailureNotifiedAt() bool`
+
+HasFailureNotifiedAt returns a boolean if a field has been set.
+
+### SetFailureNotifiedAtNil
+
+`func (o *WebHook) SetFailureNotifiedAtNil(b bool)`
+
+ SetFailureNotifiedAtNil sets the value for FailureNotifiedAt to be an explicit nil
+
+### UnsetFailureNotifiedAt
+`func (o *WebHook) UnsetFailureNotifiedAt()`
+
+UnsetFailureNotifiedAt ensures that no value is present for FailureNotifiedAt, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

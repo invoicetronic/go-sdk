@@ -3,7 +3,7 @@ Invoicetronic API
 
 The [Invoicetronic API][2] is a RESTful service that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. It provides advanced features as encryption at rest, multi-language pre-flight invoice validation, multiple upload formats, webhooks, event logging, client SDKs, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
-API version: 1.6.4
+API version: 1.12.0
 Contact: info@invoicetronic.com
 */
 
@@ -207,6 +207,7 @@ type ApiSendGetRequest struct {
 	documentDateTo *time.Time
 	documentNumber *string
 	includePayload *bool
+	ids *string
 	page *int32
 	pageSize *int32
 	sort *string
@@ -291,6 +292,12 @@ func (r ApiSendGetRequest) IncludePayload(includePayload bool) ApiSendGetRequest
 	return r
 }
 
+// Comma-separated list of Send ids (max 100). Filters the collection to the matching rows; unknown or unauthorized ids are silently skipped.
+func (r ApiSendGetRequest) Ids(ids string) ApiSendGetRequest {
+	r.ids = &ids
+	return r
+}
+
 // Page number.
 func (r ApiSendGetRequest) Page(page int32) ApiSendGetRequest {
 	r.page = &page
@@ -322,7 +329,7 @@ func (r ApiSendGetRequest) Execute() ([]Send, *http.Response, error) {
 /*
 SendGet List invoices
 
-Retrieve a paginated list of send invoices. Results can be filtered by various criteria such as company, date ranges, document number, and free-text search (`q`). Returns invoice metadata; set `include_payload` to true to include the full invoice content.
+Retrieve a paginated list of send invoices. Results can be filtered by various criteria such as company, date ranges, document number, and free-text search (`q`). Use `ids` to fetch specific Send records in a single call (comma-separated, up to 100). Returns invoice metadata; set `include_payload` to true to include the full invoice content.
 
 **Send** invoices are outbound sales invoices transmitted to customers through Italy's SDI (Sistema di Interscambio). Preserved for two years in the live environment and 15 days in the [Sandbox](https://invoicetronic.com/en/docs/sandbox/).
 
@@ -395,6 +402,9 @@ func (a *SendAPIService) SendGetExecute(r ApiSendGetRequest) ([]Send, *http.Resp
 	}
 	if r.includePayload != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "include_payload", r.includePayload, "form", "")
+	}
+	if r.ids != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ids", r.ids, "form", "")
 	}
 	if r.page != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "form", "")

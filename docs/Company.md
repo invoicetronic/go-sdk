@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **int32** | Unique identifier. Leave it at 0 for new records as it will be set automatically. | [optional] 
-**Created** | Pointer to **time.Time** | Creation date. It is set automatically. | [optional] 
-**Version** | Pointer to **int32** | Row version, for optimistic concurrency. It is set automatically. | [optional] 
-**UserId** | Pointer to **int32** | User id. | [optional] 
+**Id** | Pointer to **int32** | Unique identifier. For POST requests, leave it at &#x60;0&#x60; — the server will assign one automatically. For PUT requests, set it to the id of the record you want to update. | [optional] 
+**Created** | Pointer to **time.Time** | Creation date. It is set automatically. | [optional] [readonly] 
+**Version** | Pointer to **int32** | Row version, for optimistic concurrency. It is set automatically. | [optional] [readonly] 
+**UserId** | Pointer to **int32** | User id. It is set automatically based on the authenticated user. | [optional] [readonly] 
 **Vat** | **string** | Vat number. Must include the country code. | 
 **FiscalCode** | **string** | Fiscal code. In most cases it&#39;s the same as the vat number. | 
 **Name** | **string** | Name | 

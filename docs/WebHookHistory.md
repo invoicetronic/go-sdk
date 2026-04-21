@@ -4,13 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **int32** | Unique identifier. Leave it at 0 for new records as it will be set automatically. | [optional] 
-**Created** | Pointer to **time.Time** | Creation date. It is set automatically. | [optional] 
-**Version** | Pointer to **int32** | Row version, for optimistic concurrency. It is set automatically. | [optional] 
+**Id** | Pointer to **int32** | Unique identifier. For POST requests, leave it at &#x60;0&#x60; — the server will assign one automatically. For PUT requests, set it to the id of the record you want to update. | [optional] 
+**Created** | Pointer to **time.Time** | Creation date. It is set automatically. | [optional] [readonly] 
+**Version** | Pointer to **int32** | Row version, for optimistic concurrency. It is set automatically. | [optional] [readonly] 
 **WebHookId** | Pointer to **int32** | Webhook id. | [optional] 
 **UserId** | Pointer to **int32** | User id. | [optional] 
 **Event** | Pointer to **NullableString** | Event name. | [optional] 
-**StatusCode** | Pointer to **int32** | Status code. | [optional] 
+**StatusCode** | Pointer to **int32** | HTTP status code returned by the webhook endpoint. A value of 0 means the request could not be completed due to a network error (e.g., DNS resolution failure, connection refused, or timeout). This typically indicates that the endpoint URL is misconfigured or no longer exists. | [optional] 
+**Error** | Pointer to **NullableString** | Error description, if any. Null when the delivery is successful (2xx). Contains the exception message for network errors (status code 0) or the response body for non-2xx HTTP responses. | [optional] 
 **DateTime** | Pointer to **time.Time** | Date and time of the request. | [optional] 
 **Success** | Pointer to **bool** | Whether the request was successful. | [optional] [readonly] 
 
@@ -218,6 +219,41 @@ SetStatusCode sets StatusCode field to given value.
 
 HasStatusCode returns a boolean if a field has been set.
 
+### GetError
+
+`func (o *WebHookHistory) GetError() string`
+
+GetError returns the Error field if non-nil, zero value otherwise.
+
+### GetErrorOk
+
+`func (o *WebHookHistory) GetErrorOk() (*string, bool)`
+
+GetErrorOk returns a tuple with the Error field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetError
+
+`func (o *WebHookHistory) SetError(v string)`
+
+SetError sets Error field to given value.
+
+### HasError
+
+`func (o *WebHookHistory) HasError() bool`
+
+HasError returns a boolean if a field has been set.
+
+### SetErrorNil
+
+`func (o *WebHookHistory) SetErrorNil(b bool)`
+
+ SetErrorNil sets the value for Error to be an explicit nil
+
+### UnsetError
+`func (o *WebHookHistory) UnsetError()`
+
+UnsetError ensures that no value is present for Error, not even an explicit nil
 ### GetDateTime
 
 `func (o *WebHookHistory) GetDateTime() time.Time`

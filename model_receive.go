@@ -3,7 +3,7 @@ Invoicetronic API
 
 The [Invoicetronic API][2] is a RESTful service that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. It provides advanced features as encryption at rest, multi-language pre-flight invoice validation, multiple upload formats, webhooks, event logging, client SDKs, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
-API version: 1.6.4
+API version: 1.12.0
 Contact: info@invoicetronic.com
 */
 
@@ -23,15 +23,15 @@ var _ MappedNullable = &Receive{}
 
 // Receive A received invoice.
 type Receive struct {
-	// Unique identifier. Leave it at 0 for new records as it will be set automatically.
+	// Unique identifier. For POST requests, leave it at `0` — the server will assign one automatically. For PUT requests, set it to the id of the record you want to update.
 	Id *int32 `json:"id,omitempty"`
 	// Creation date. It is set automatically.
 	Created *time.Time `json:"created,omitempty"`
 	// Row version, for optimistic concurrency. It is set automatically.
 	Version *int32 `json:"version,omitempty"`
-	// User id.
+	// User id. It is set automatically based on the authenticated user.
 	UserId *int32 `json:"user_id,omitempty"`
-	// Company id. On send, this is the sender and must be set in advance. On receive, it will be automatically set based on the recipient's VAT number. If a matching company is not found, the invoice will be rejected until the company is created.
+	// Company id. It is set automatically based on the VAT number extracted from the invoice payload (the sender for `send`, the recipient for `receive`).
 	CompanyId *int32 `json:"company_id,omitempty"`
 	// VAT number of the Cessionario/Committente (customer). This is automatically set based on the recipient's VAT number.
 	Committente NullableString `json:"committente,omitempty"`
@@ -39,7 +39,7 @@ type Receive struct {
 	Prestatore NullableString `json:"prestatore,omitempty"`
 	// SDI identifier. This is set by the SDI and is guaranteed to be unique within the SDI system.
 	Identifier NullableString `json:"identifier,omitempty"`
-	// Xml file name.
+	// Xml file name. If not provided on send, it will be auto-generated.
 	FileName NullableString `json:"file_name,omitempty"`
 	// SDI format (FPA12, FPR12, FSM10, ...)
 	Format NullableString `json:"format,omitempty"`

@@ -91,7 +91,7 @@ Name | Type | Description  | Notes
 
 ## SendGet
 
-> []Send SendGet(ctx).CompanyId(companyId).Identifier(identifier).Committente(committente).Prestatore(prestatore).FileName(fileName).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).DocumentDateFrom(documentDateFrom).DocumentDateTo(documentDateTo).DocumentNumber(documentNumber).IncludePayload(includePayload).Page(page).PageSize(pageSize).Sort(sort).Q(q).Execute()
+> []Send SendGet(ctx).CompanyId(companyId).Identifier(identifier).Committente(committente).Prestatore(prestatore).FileName(fileName).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).DocumentDateFrom(documentDateFrom).DocumentDateTo(documentDateTo).DocumentNumber(documentNumber).IncludePayload(includePayload).Ids(ids).Page(page).PageSize(pageSize).Sort(sort).Q(q).Execute()
 
 List invoices
 
@@ -124,6 +124,7 @@ func main() {
 	documentDateTo := time.Now() // time.Time | UTC ISO 8601 (2024-11-29T12:34:56Z) (optional)
 	documentNumber := "documentNumber_example" // string | Document number. (optional)
 	includePayload := true // bool | Include payload in the response. Defaults to false. (optional)
+	ids := "ids_example" // string | Comma-separated list of Send ids (max 100). Filters the collection to the matching rows; unknown or unauthorized ids are silently skipped. (optional)
 	page := int32(56) // int32 | Page number. (optional) (default to 1)
 	pageSize := int32(56) // int32 | Items per page. Cannot be greater than 200. (optional) (default to 100)
 	sort := "sort_example" // string | Sort by field. Prefix with '-' for descending order. (optional)
@@ -131,7 +132,7 @@ func main() {
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.SendAPI.SendGet(context.Background()).CompanyId(companyId).Identifier(identifier).Committente(committente).Prestatore(prestatore).FileName(fileName).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).DocumentDateFrom(documentDateFrom).DocumentDateTo(documentDateTo).DocumentNumber(documentNumber).IncludePayload(includePayload).Page(page).PageSize(pageSize).Sort(sort).Q(q).Execute()
+	resp, r, err := apiClient.SendAPI.SendGet(context.Background()).CompanyId(companyId).Identifier(identifier).Committente(committente).Prestatore(prestatore).FileName(fileName).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).DocumentDateFrom(documentDateFrom).DocumentDateTo(documentDateTo).DocumentNumber(documentNumber).IncludePayload(includePayload).Ids(ids).Page(page).PageSize(pageSize).Sort(sort).Q(q).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -165,6 +166,7 @@ Name | Type | Description  | Notes
  **documentDateTo** | **time.Time** | UTC ISO 8601 (2024-11-29T12:34:56Z) | 
  **documentNumber** | **string** | Document number. | 
  **includePayload** | **bool** | Include payload in the response. Defaults to false. | 
+ **ids** | **string** | Comma-separated list of Send ids (max 100). Filters the collection to the matching rows; unknown or unauthorized ids are silently skipped. | 
  **page** | **int32** | Page number. | [default to 1]
  **pageSize** | **int32** | Items per page. Cannot be greater than 200. | [default to 100]
  **sort** | **string** | Sort by field. Prefix with &#39;-&#39; for descending order. | 
@@ -491,7 +493,7 @@ import (
 )
 
 func main() {
-	send := *invoicetronicsdk.NewSend("Payload_example") // Send | 
+	send := *invoicetronicsdk.NewSend("PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48cDpGYXR0dXJhRWxldHRyb25pY2EgLi4uPjwvcDpGYXR0dXJhRWxldHRyb25pY2E+") // Send | 
 	validate := true // bool | Validate the document first, and reject it on failure. (optional) (default to false)
 	signature := "signature_example" // string | Whether to digitally sign the document. (optional) (default to "Auto")
 
@@ -689,7 +691,7 @@ import (
 )
 
 func main() {
-	send := *invoicetronicsdk.NewSend("Payload_example") // Send | 
+	send := *invoicetronicsdk.NewSend("PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48cDpGYXR0dXJhRWxldHRyb25pY2EgLi4uPjwvcDpGYXR0dXJhRWxldHRyb25pY2E+") // Send | 
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)

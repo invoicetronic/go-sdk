@@ -3,7 +3,7 @@ Invoicetronic API
 
 The [Invoicetronic API][2] is a RESTful service that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. It provides advanced features as encryption at rest, multi-language pre-flight invoice validation, multiple upload formats, webhooks, event logging, client SDKs, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
 
-API version: 1.6.4
+API version: 1.12.0
 Contact: info@invoicetronic.com
 */
 
@@ -24,6 +24,10 @@ type Status struct {
 	OperationLeft *int32 `json:"operation_left,omitempty"`
 	// Signatures left.
 	SignatureLeft *int32 `json:"signature_left,omitempty"`
+	// Whether the current API key has an active Desk seat.
+	HasActiveSeat *bool `json:"has_active_seat,omitempty"`
+	// Whether the current API key is a sub-key (restricted key).
+	IsSubKey *bool `json:"is_sub_key,omitempty"`
 }
 
 // NewStatus instantiates a new Status object
@@ -107,6 +111,70 @@ func (o *Status) SetSignatureLeft(v int32) {
 	o.SignatureLeft = &v
 }
 
+// GetHasActiveSeat returns the HasActiveSeat field value if set, zero value otherwise.
+func (o *Status) GetHasActiveSeat() bool {
+	if o == nil || IsNil(o.HasActiveSeat) {
+		var ret bool
+		return ret
+	}
+	return *o.HasActiveSeat
+}
+
+// GetHasActiveSeatOk returns a tuple with the HasActiveSeat field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Status) GetHasActiveSeatOk() (*bool, bool) {
+	if o == nil || IsNil(o.HasActiveSeat) {
+		return nil, false
+	}
+	return o.HasActiveSeat, true
+}
+
+// HasHasActiveSeat returns a boolean if a field has been set.
+func (o *Status) HasHasActiveSeat() bool {
+	if o != nil && !IsNil(o.HasActiveSeat) {
+		return true
+	}
+
+	return false
+}
+
+// SetHasActiveSeat gets a reference to the given bool and assigns it to the HasActiveSeat field.
+func (o *Status) SetHasActiveSeat(v bool) {
+	o.HasActiveSeat = &v
+}
+
+// GetIsSubKey returns the IsSubKey field value if set, zero value otherwise.
+func (o *Status) GetIsSubKey() bool {
+	if o == nil || IsNil(o.IsSubKey) {
+		var ret bool
+		return ret
+	}
+	return *o.IsSubKey
+}
+
+// GetIsSubKeyOk returns a tuple with the IsSubKey field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Status) GetIsSubKeyOk() (*bool, bool) {
+	if o == nil || IsNil(o.IsSubKey) {
+		return nil, false
+	}
+	return o.IsSubKey, true
+}
+
+// HasIsSubKey returns a boolean if a field has been set.
+func (o *Status) HasIsSubKey() bool {
+	if o != nil && !IsNil(o.IsSubKey) {
+		return true
+	}
+
+	return false
+}
+
+// SetIsSubKey gets a reference to the given bool and assigns it to the IsSubKey field.
+func (o *Status) SetIsSubKey(v bool) {
+	o.IsSubKey = &v
+}
+
 func (o Status) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -122,6 +190,12 @@ func (o Status) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.SignatureLeft) {
 		toSerialize["signature_left"] = o.SignatureLeft
+	}
+	if !IsNil(o.HasActiveSeat) {
+		toSerialize["has_active_seat"] = o.HasActiveSeat
+	}
+	if !IsNil(o.IsSubKey) {
+		toSerialize["is_sub_key"] = o.IsSubKey
 	}
 	return toSerialize, nil
 }
