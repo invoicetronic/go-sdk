@@ -1,9 +1,9 @@
 /*
 Invoicetronic API
 
-The [Invoicetronic API][2] is a RESTful service that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. It provides advanced features as encryption at rest, multi-language pre-flight invoice validation, multiple upload formats, webhooks, event logging, client SDKs, and CLI tools.  For more information, see  [Invoicetronic website][2]  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/
+The [Invoicetronic API][2] is a RESTful service that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. It provides advanced features as encryption at rest, multi-language pre-flight invoice validation, multiple upload formats, webhooks, event logging, client SDKs, and CLI tools.  For more information, see  [Invoicetronic website][2]  ## Before you start  For the full integration guide, tutorials, SDKs and quickstarts, see the **[Documentation](https://invoicetronic.com/en/docs/)**. A few cross-cutting topics worth knowing before integrating:  - **[Prerequisites](https://invoicetronic.com/en/docs/prerequisites/)** — what you need to start in Sandbox and what's required to move to production. - **[API Keys](https://invoicetronic.com/en/docs/apikeys/)** — how `ik_live_` and `ik_test_` keys select the environment. - **[Sandbox](https://invoicetronic.com/en/docs/sandbox/)** — free test environment that mirrors the live workflow, with no credits consumed. - **[Rate Limiting](https://invoicetronic.com/en/docs/ratelimiting/)** — per-second, per-minute and per-day limits; how to handle `429 Too Many Requests`. - **[Pagination](https://invoicetronic.com/en/docs/pagination/)** — `page` and `page_size` parameters and the `Invoicetronic-Total-Count` response header. - **[CORS](https://invoicetronic.com/en/docs/cors/)** — calling the API from the browser; allowed origins are configured per key. - **[Webhooks](https://invoicetronic.com/en/docs/webhooks/)** — real-time event notifications with HMAC-SHA256 signature validation. - **[Localization](https://invoicetronic.com/en/docs/accept-language/)** — use the `Accept-Language` header to receive error messages in Italian, English or German.  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/ 
 
-API version: 1.12.0
+API version: 1.14.0
 Contact: info@invoicetronic.com
 */
 
@@ -32,6 +32,7 @@ type ApiSendFilePostRequest struct {
 	file *os.File
 	validate *bool
 	signature *string
+	idempotencyKey *string
 }
 
 func (r ApiSendFilePostRequest) File(file *os.File) ApiSendFilePostRequest {
@@ -51,6 +52,12 @@ func (r ApiSendFilePostRequest) Signature(signature string) ApiSendFilePostReque
 	return r
 }
 
+// Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice.
+func (r ApiSendFilePostRequest) IdempotencyKey(idempotencyKey string) ApiSendFilePostRequest {
+	r.idempotencyKey = &idempotencyKey
+	return r
+}
+
 func (r ApiSendFilePostRequest) Execute() (*Send, *http.Response, error) {
 	return r.ApiService.SendFilePostExecute(r)
 }
@@ -63,6 +70,17 @@ Add a new invoice by uploading a file. Supported formats are XML (FatturaPA) and
 **Send** invoices are outbound sales invoices transmitted to customers through Italy's SDI (Sistema di Interscambio). Preserved for two years in the live environment and 15 days in the [Sandbox](https://invoicetronic.com/en/docs/sandbox/).
 
 You can also upload invoices via the [Dashboard](https://dashboard.invoicetronic.com).
+
+### Idempotency
+
+To protect against duplicate submissions caused by network retries, you can send an optional `Idempotency-Key` header with any unique, client-generated value (up to 255 characters).
+
+- The first request with a given key is processed normally, and its response (status, body and `Location`) is stored for 24 hours.
+- Any subsequent request that reuses the same key within that window replays the original response instead of sending a second invoice to SDI.
+- If a request with the same key is still being processed, the retry receives `409 Conflict`.
+- If the same key is reused with a **different** invoice payload, the request is rejected with `422 Unprocessable Entity`: a given key must always map to the same request.
+
+Keys are scoped per account, so different accounts can use the same key value without interfering. If the idempotency store is temporarily unavailable, the request is processed normally without idempotency protection.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSendFilePostRequest
@@ -128,6 +146,9 @@ func (a *SendAPIService) SendFilePostExecute(r ApiSendFilePostRequest) (*Send, *
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.idempotencyKey != nil {
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "Idempotency-Key", r.idempotencyKey, "simple", "")
 	}
 	var fileLocalVarFormFileName string
 	var fileLocalVarFileName     string
@@ -206,6 +227,7 @@ type ApiSendGetRequest struct {
 	documentDateFrom *time.Time
 	documentDateTo *time.Time
 	documentNumber *string
+	latestState *string
 	includePayload *bool
 	ids *string
 	page *int32
@@ -286,6 +308,12 @@ func (r ApiSendGetRequest) DocumentNumber(documentNumber string) ApiSendGetReque
 	return r
 }
 
+// Filter by the most recent SDI state for the invoice. Matches the &#x60;latest_state&#x60; field exposed inline on each Send.
+func (r ApiSendGetRequest) LatestState(latestState string) ApiSendGetRequest {
+	r.latestState = &latestState
+	return r
+}
+
 // Include payload in the response. Defaults to false.
 func (r ApiSendGetRequest) IncludePayload(includePayload bool) ApiSendGetRequest {
 	r.includePayload = &includePayload
@@ -329,7 +357,7 @@ func (r ApiSendGetRequest) Execute() ([]Send, *http.Response, error) {
 /*
 SendGet List invoices
 
-Retrieve a paginated list of send invoices. Results can be filtered by various criteria such as company, date ranges, document number, and free-text search (`q`). Use `ids` to fetch specific Send records in a single call (comma-separated, up to 100). Returns invoice metadata; set `include_payload` to true to include the full invoice content.
+Retrieve a paginated list of send invoices. Results can be filtered by various criteria such as company, date ranges, document number, current SDI state (`latest_state`), and free-text search (`q`). Use `ids` to fetch specific Send records in a single call (comma-separated, up to 100). Returns invoice metadata; set `include_payload` to true to include the full invoice content.
 
 **Send** invoices are outbound sales invoices transmitted to customers through Italy's SDI (Sistema di Interscambio). Preserved for two years in the live environment and 15 days in the [Sandbox](https://invoicetronic.com/en/docs/sandbox/).
 
@@ -399,6 +427,9 @@ func (a *SendAPIService) SendGetExecute(r ApiSendGetRequest) ([]Send, *http.Resp
 	}
 	if r.documentNumber != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "document_number", r.documentNumber, "form", "")
+	}
+	if r.latestState != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "latest_state", r.latestState, "form", "")
 	}
 	if r.includePayload != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "include_payload", r.includePayload, "form", "")
@@ -832,6 +863,7 @@ type ApiSendJsonPostRequest struct {
 	body *map[string]interface{}
 	validate *bool
 	signature *string
+	idempotencyKey *string
 }
 
 func (r ApiSendJsonPostRequest) Body(body map[string]interface{}) ApiSendJsonPostRequest {
@@ -851,6 +883,12 @@ func (r ApiSendJsonPostRequest) Signature(signature string) ApiSendJsonPostReque
 	return r
 }
 
+// Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice.
+func (r ApiSendJsonPostRequest) IdempotencyKey(idempotencyKey string) ApiSendJsonPostRequest {
+	r.idempotencyKey = &idempotencyKey
+	return r
+}
+
 func (r ApiSendJsonPostRequest) Execute() (*Send, *http.Response, error) {
 	return r.ApiService.SendJsonPostExecute(r)
 }
@@ -858,11 +896,22 @@ func (r ApiSendJsonPostRequest) Execute() (*Send, *http.Response, error) {
 /*
 SendJsonPost Add an invoice by json
 
-Add a new invoice using a FatturaPA JSON representation. The invoice will be signed (if requested), validated (if requested), and queued for delivery to SDI. Status updates from SDI will be available in the `update` endpoint.
+Add a new invoice using a FatturaPA JSON representation. Property names mirror the FatturaPA XML schema (PascalCase, e.g. `FatturaElettronicaHeader`). The invoice will be signed (if requested), validated (if requested), and queued for delivery to SDI. Status updates from SDI will be available in the `update` endpoint.
 
 **Send** invoices are outbound sales invoices transmitted to customers through Italy's SDI (Sistema di Interscambio). Preserved for two years in the live environment and 15 days in the [Sandbox](https://invoicetronic.com/en/docs/sandbox/).
 
 You can also upload invoices via the [Dashboard](https://dashboard.invoicetronic.com).
+
+### Idempotency
+
+To protect against duplicate submissions caused by network retries, you can send an optional `Idempotency-Key` header with any unique, client-generated value (up to 255 characters).
+
+- The first request with a given key is processed normally, and its response (status, body and `Location`) is stored for 24 hours.
+- Any subsequent request that reuses the same key within that window replays the original response instead of sending a second invoice to SDI.
+- If a request with the same key is still being processed, the retry receives `409 Conflict`.
+- If the same key is reused with a **different** invoice payload, the request is rejected with `422 Unprocessable Entity`: a given key must always map to the same request.
+
+Keys are scoped per account, so different accounts can use the same key value without interfering. If the idempotency store is temporarily unavailable, the request is processed normally without idempotency protection.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSendJsonPostRequest
@@ -929,6 +978,9 @@ func (a *SendAPIService) SendJsonPostExecute(r ApiSendJsonPostRequest) (*Send, *
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
+	if r.idempotencyKey != nil {
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "Idempotency-Key", r.idempotencyKey, "simple", "")
+	}
 	// body params
 	localVarPostBody = r.body
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
@@ -984,6 +1036,7 @@ type ApiSendPostRequest struct {
 	send *Send
 	validate *bool
 	signature *string
+	idempotencyKey *string
 }
 
 func (r ApiSendPostRequest) Send(send Send) ApiSendPostRequest {
@@ -1003,6 +1056,12 @@ func (r ApiSendPostRequest) Signature(signature string) ApiSendPostRequest {
 	return r
 }
 
+// Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice.
+func (r ApiSendPostRequest) IdempotencyKey(idempotencyKey string) ApiSendPostRequest {
+	r.idempotencyKey = &idempotencyKey
+	return r
+}
+
 func (r ApiSendPostRequest) Execute() (*Send, *http.Response, error) {
 	return r.ApiService.SendPostExecute(r)
 }
@@ -1015,6 +1074,17 @@ Add a new invoice using a structured Send object. The invoice will be signed (if
 **Send** invoices are outbound sales invoices transmitted to customers through Italy's SDI (Sistema di Interscambio). Preserved for two years in the live environment and 15 days in the [Sandbox](https://invoicetronic.com/en/docs/sandbox/).
 
 You can also upload invoices via the [Dashboard](https://dashboard.invoicetronic.com).
+
+### Idempotency
+
+To protect against duplicate submissions caused by network retries, you can send an optional `Idempotency-Key` header with any unique, client-generated value (up to 255 characters).
+
+- The first request with a given key is processed normally, and its response (status, body and `Location`) is stored for 24 hours.
+- Any subsequent request that reuses the same key within that window replays the original response instead of sending a second invoice to SDI.
+- If a request with the same key is still being processed, the retry receives `409 Conflict`.
+- If the same key is reused with a **different** invoice payload, the request is rejected with `422 Unprocessable Entity`: a given key must always map to the same request.
+
+Keys are scoped per account, so different accounts can use the same key value without interfering. If the idempotency store is temporarily unavailable, the request is processed normally without idempotency protection.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSendPostRequest
@@ -1080,6 +1150,9 @@ func (a *SendAPIService) SendPostExecute(r ApiSendPostRequest) (*Send, *http.Res
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.idempotencyKey != nil {
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "Idempotency-Key", r.idempotencyKey, "simple", "")
 	}
 	// body params
 	localVarPostBody = r.send
@@ -1272,7 +1345,7 @@ func (r ApiSendValidateJsonPostRequest) Execute() (*http.Response, error) {
 /*
 SendValidateJsonPost Validate an invoice by json
 
-Validate a JSON invoice without sending it to SDI. Use this to check for errors before actual submission. Returns validation results with any errors found.
+Validate a FatturaPA JSON invoice without sending it to SDI. Property names mirror the FatturaPA XML schema (PascalCase, e.g. `FatturaElettronicaHeader`). Use this to check for errors before actual submission. Returns validation results with any errors found.
 
 **Send** invoices are outbound sales invoices transmitted to customers through Italy's SDI (Sistema di Interscambio). Preserved for two years in the live environment and 15 days in the [Sandbox](https://invoicetronic.com/en/docs/sandbox/).
 
@@ -1593,6 +1666,7 @@ type ApiSendXmlPostRequest struct {
 	body *map[string]interface{}
 	validate *bool
 	signature *string
+	idempotencyKey *string
 }
 
 func (r ApiSendXmlPostRequest) Body(body map[string]interface{}) ApiSendXmlPostRequest {
@@ -1612,6 +1686,12 @@ func (r ApiSendXmlPostRequest) Signature(signature string) ApiSendXmlPostRequest
 	return r
 }
 
+// Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice.
+func (r ApiSendXmlPostRequest) IdempotencyKey(idempotencyKey string) ApiSendXmlPostRequest {
+	r.idempotencyKey = &idempotencyKey
+	return r
+}
+
 func (r ApiSendXmlPostRequest) Execute() (*Send, *http.Response, error) {
 	return r.ApiService.SendXmlPostExecute(r)
 }
@@ -1624,6 +1704,17 @@ Add a new invoice using a raw XML document in FatturaPA format. The invoice will
 **Send** invoices are outbound sales invoices transmitted to customers through Italy's SDI (Sistema di Interscambio). Preserved for two years in the live environment and 15 days in the [Sandbox](https://invoicetronic.com/en/docs/sandbox/).
 
 You can also upload invoices via the [Dashboard](https://dashboard.invoicetronic.com).
+
+### Idempotency
+
+To protect against duplicate submissions caused by network retries, you can send an optional `Idempotency-Key` header with any unique, client-generated value (up to 255 characters).
+
+- The first request with a given key is processed normally, and its response (status, body and `Location`) is stored for 24 hours.
+- Any subsequent request that reuses the same key within that window replays the original response instead of sending a second invoice to SDI.
+- If a request with the same key is still being processed, the retry receives `409 Conflict`.
+- If the same key is reused with a **different** invoice payload, the request is rejected with `422 Unprocessable Entity`: a given key must always map to the same request.
+
+Keys are scoped per account, so different accounts can use the same key value without interfering. If the idempotency store is temporarily unavailable, the request is processed normally without idempotency protection.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSendXmlPostRequest
@@ -1689,6 +1780,9 @@ func (a *SendAPIService) SendXmlPostExecute(r ApiSendXmlPostRequest) (*Send, *ht
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.idempotencyKey != nil {
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "Idempotency-Key", r.idempotencyKey, "simple", "")
 	}
 	// body params
 	localVarPostBody = r.body

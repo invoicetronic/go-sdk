@@ -21,7 +21,7 @@ Method | HTTP request | Description
 
 ## SendFilePost
 
-> Send SendFilePost(ctx).File(file).Validate(validate).Signature(signature).Execute()
+> Send SendFilePost(ctx).File(file).Validate(validate).Signature(signature).IdempotencyKey(idempotencyKey).Execute()
 
 Add an invoice by file
 
@@ -43,10 +43,11 @@ func main() {
 	file := os.NewFile(1234, "some_file") // *os.File | 
 	validate := true // bool | Validate the document first, and reject it on failure. (optional) (default to false)
 	signature := "signature_example" // string | Whether to digitally sign the document. (optional) (default to "Auto")
+	idempotencyKey := "idempotencyKey_example" // string | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. (optional)
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.SendAPI.SendFilePost(context.Background()).File(file).Validate(validate).Signature(signature).Execute()
+	resp, r, err := apiClient.SendAPI.SendFilePost(context.Background()).File(file).Validate(validate).Signature(signature).IdempotencyKey(idempotencyKey).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendFilePost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -70,6 +71,7 @@ Name | Type | Description  | Notes
  **file** | ***os.File** |  | 
  **validate** | **bool** | Validate the document first, and reject it on failure. | [default to false]
  **signature** | **string** | Whether to digitally sign the document. | [default to &quot;Auto&quot;]
+ **idempotencyKey** | **string** | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. | 
 
 ### Return type
 
@@ -91,7 +93,7 @@ Name | Type | Description  | Notes
 
 ## SendGet
 
-> []Send SendGet(ctx).CompanyId(companyId).Identifier(identifier).Committente(committente).Prestatore(prestatore).FileName(fileName).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).DocumentDateFrom(documentDateFrom).DocumentDateTo(documentDateTo).DocumentNumber(documentNumber).IncludePayload(includePayload).Ids(ids).Page(page).PageSize(pageSize).Sort(sort).Q(q).Execute()
+> []Send SendGet(ctx).CompanyId(companyId).Identifier(identifier).Committente(committente).Prestatore(prestatore).FileName(fileName).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).DocumentDateFrom(documentDateFrom).DocumentDateTo(documentDateTo).DocumentNumber(documentNumber).LatestState(latestState).IncludePayload(includePayload).Ids(ids).Page(page).PageSize(pageSize).Sort(sort).Q(q).Execute()
 
 List invoices
 
@@ -123,6 +125,7 @@ func main() {
 	documentDateFrom := time.Now() // time.Time | UTC ISO 8601 (2024-11-29T12:34:56Z) (optional)
 	documentDateTo := time.Now() // time.Time | UTC ISO 8601 (2024-11-29T12:34:56Z) (optional)
 	documentNumber := "documentNumber_example" // string | Document number. (optional)
+	latestState := "latestState_example" // string | Filter by the most recent SDI state for the invoice. Matches the `latest_state` field exposed inline on each Send. (optional)
 	includePayload := true // bool | Include payload in the response. Defaults to false. (optional)
 	ids := "ids_example" // string | Comma-separated list of Send ids (max 100). Filters the collection to the matching rows; unknown or unauthorized ids are silently skipped. (optional)
 	page := int32(56) // int32 | Page number. (optional) (default to 1)
@@ -132,7 +135,7 @@ func main() {
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.SendAPI.SendGet(context.Background()).CompanyId(companyId).Identifier(identifier).Committente(committente).Prestatore(prestatore).FileName(fileName).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).DocumentDateFrom(documentDateFrom).DocumentDateTo(documentDateTo).DocumentNumber(documentNumber).IncludePayload(includePayload).Ids(ids).Page(page).PageSize(pageSize).Sort(sort).Q(q).Execute()
+	resp, r, err := apiClient.SendAPI.SendGet(context.Background()).CompanyId(companyId).Identifier(identifier).Committente(committente).Prestatore(prestatore).FileName(fileName).LastUpdateFrom(lastUpdateFrom).LastUpdateTo(lastUpdateTo).DateSentFrom(dateSentFrom).DateSentTo(dateSentTo).DocumentDateFrom(documentDateFrom).DocumentDateTo(documentDateTo).DocumentNumber(documentNumber).LatestState(latestState).IncludePayload(includePayload).Ids(ids).Page(page).PageSize(pageSize).Sort(sort).Q(q).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -165,6 +168,7 @@ Name | Type | Description  | Notes
  **documentDateFrom** | **time.Time** | UTC ISO 8601 (2024-11-29T12:34:56Z) | 
  **documentDateTo** | **time.Time** | UTC ISO 8601 (2024-11-29T12:34:56Z) | 
  **documentNumber** | **string** | Document number. | 
+ **latestState** | **string** | Filter by the most recent SDI state for the invoice. Matches the &#x60;latest_state&#x60; field exposed inline on each Send. | 
  **includePayload** | **bool** | Include payload in the response. Defaults to false. | 
  **ids** | **string** | Comma-separated list of Send ids (max 100). Filters the collection to the matching rows; unknown or unauthorized ids are silently skipped. | 
  **page** | **int32** | Page number. | [default to 1]
@@ -404,7 +408,7 @@ Name | Type | Description  | Notes
 
 ## SendJsonPost
 
-> Send SendJsonPost(ctx).Body(body).Validate(validate).Signature(signature).Execute()
+> Send SendJsonPost(ctx).Body(body).Validate(validate).Signature(signature).IdempotencyKey(idempotencyKey).Execute()
 
 Add an invoice by json
 
@@ -426,10 +430,11 @@ func main() {
 	body := map[string]interface{}{ ... } // map[string]interface{} | 
 	validate := true // bool | Validate the document first, and reject it on failure. (optional) (default to false)
 	signature := "signature_example" // string | Whether to digitally sign the document. (optional) (default to "Auto")
+	idempotencyKey := "idempotencyKey_example" // string | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. (optional)
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.SendAPI.SendJsonPost(context.Background()).Body(body).Validate(validate).Signature(signature).Execute()
+	resp, r, err := apiClient.SendAPI.SendJsonPost(context.Background()).Body(body).Validate(validate).Signature(signature).IdempotencyKey(idempotencyKey).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendJsonPost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -453,6 +458,7 @@ Name | Type | Description  | Notes
  **body** | **map[string]interface{}** |  | 
  **validate** | **bool** | Validate the document first, and reject it on failure. | [default to false]
  **signature** | **string** | Whether to digitally sign the document. | [default to &quot;Auto&quot;]
+ **idempotencyKey** | **string** | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. | 
 
 ### Return type
 
@@ -474,7 +480,7 @@ Name | Type | Description  | Notes
 
 ## SendPost
 
-> Send SendPost(ctx).Send(send).Validate(validate).Signature(signature).Execute()
+> Send SendPost(ctx).Send(send).Validate(validate).Signature(signature).IdempotencyKey(idempotencyKey).Execute()
 
 Add an invoice
 
@@ -496,10 +502,11 @@ func main() {
 	send := *invoicetronicsdk.NewSend("PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48cDpGYXR0dXJhRWxldHRyb25pY2EgLi4uPjwvcDpGYXR0dXJhRWxldHRyb25pY2E+") // Send | 
 	validate := true // bool | Validate the document first, and reject it on failure. (optional) (default to false)
 	signature := "signature_example" // string | Whether to digitally sign the document. (optional) (default to "Auto")
+	idempotencyKey := "idempotencyKey_example" // string | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. (optional)
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.SendAPI.SendPost(context.Background()).Send(send).Validate(validate).Signature(signature).Execute()
+	resp, r, err := apiClient.SendAPI.SendPost(context.Background()).Send(send).Validate(validate).Signature(signature).IdempotencyKey(idempotencyKey).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendPost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -523,6 +530,7 @@ Name | Type | Description  | Notes
  **send** | [**Send**](Send.md) |  | 
  **validate** | **bool** | Validate the document first, and reject it on failure. | [default to false]
  **signature** | **string** | Whether to digitally sign the document. | [default to &quot;Auto&quot;]
+ **idempotencyKey** | **string** | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. | 
 
 ### Return type
 
@@ -800,7 +808,7 @@ Name | Type | Description  | Notes
 
 ## SendXmlPost
 
-> Send SendXmlPost(ctx).Body(body).Validate(validate).Signature(signature).Execute()
+> Send SendXmlPost(ctx).Body(body).Validate(validate).Signature(signature).IdempotencyKey(idempotencyKey).Execute()
 
 Add an invoice by xml
 
@@ -822,10 +830,11 @@ func main() {
 	body := map[string]interface{}{ ... } // map[string]interface{} | 
 	validate := true // bool | Validate the document first, and reject it on failure. (optional) (default to false)
 	signature := "signature_example" // string | Whether to digitally sign the document. (optional) (default to "Auto")
+	idempotencyKey := "idempotencyKey_example" // string | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. (optional)
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
-	resp, r, err := apiClient.SendAPI.SendXmlPost(context.Background()).Body(body).Validate(validate).Signature(signature).Execute()
+	resp, r, err := apiClient.SendAPI.SendXmlPost(context.Background()).Body(body).Validate(validate).Signature(signature).IdempotencyKey(idempotencyKey).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SendAPI.SendXmlPost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -849,6 +858,7 @@ Name | Type | Description  | Notes
  **body** | **map[string]interface{}** |  | 
  **validate** | **bool** | Validate the document first, and reject it on failure. | [default to false]
  **signature** | **string** | Whether to digitally sign the document. | [default to &quot;Auto&quot;]
+ **idempotencyKey** | **string** | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. | 
 
 ### Return type
 
