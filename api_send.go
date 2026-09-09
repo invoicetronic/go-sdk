@@ -3,7 +3,7 @@ Invoicetronic API
 
 The [Invoicetronic API][2] is a RESTful service that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. It provides advanced features as encryption at rest, multi-language pre-flight invoice validation, multiple upload formats, webhooks, event logging, client SDKs, and CLI tools.  For more information, see  [Invoicetronic website][2]  ## Before you start  For the full integration guide, tutorials, SDKs and quickstarts, see the **[Documentation](https://invoicetronic.com/en/docs/)**. A few cross-cutting topics worth knowing before integrating:  - **[Prerequisites](https://invoicetronic.com/en/docs/prerequisites/)** — what you need to start in Sandbox and what's required to move to production. - **[API Keys](https://invoicetronic.com/en/docs/apikeys/)** — how `ik_live_` and `ik_test_` keys select the environment. - **[Sandbox](https://invoicetronic.com/en/docs/sandbox/)** — free test environment that mirrors the live workflow, with no credits consumed. - **[Rate Limiting](https://invoicetronic.com/en/docs/ratelimiting/)** — per-second, per-minute and per-day limits; how to handle `429 Too Many Requests`. - **[Pagination](https://invoicetronic.com/en/docs/pagination/)** — `page` and `page_size` parameters and the `Invoicetronic-Total-Count` response header. - **[CORS](https://invoicetronic.com/en/docs/cors/)** — calling the API from the browser; allowed origins are configured per key. - **[Webhooks](https://invoicetronic.com/en/docs/webhooks/)** — real-time event notifications with HMAC-SHA256 signature validation. - **[Localization](https://invoicetronic.com/en/docs/accept-language/)** — use the `Accept-Language` header to receive error messages in Italian, English or German.  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/ 
 
-API version: 1.14.0
+API version: 1.15.0
 Contact: info@invoicetronic.com
 */
 
@@ -52,7 +52,7 @@ func (r ApiSendFilePostRequest) Signature(signature string) ApiSendFilePostReque
 	return r
 }
 
-// Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice.
+// Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. A replayed response carries the &#x60;Idempotent-Replayed: true&#x60; header.
 func (r ApiSendFilePostRequest) IdempotencyKey(idempotencyKey string) ApiSendFilePostRequest {
 	r.idempotencyKey = &idempotencyKey
 	return r
@@ -76,7 +76,7 @@ You can also upload invoices via the [Dashboard](https://dashboard.invoicetronic
 To protect against duplicate submissions caused by network retries, you can send an optional `Idempotency-Key` header with any unique, client-generated value (up to 255 characters).
 
 - The first request with a given key is processed normally, and its response (status, body and `Location`) is stored for 24 hours.
-- Any subsequent request that reuses the same key within that window replays the original response instead of sending a second invoice to SDI.
+- Any subsequent request that reuses the same key within that window replays the original response instead of sending a second invoice to SDI. A replayed response carries the `Idempotent-Replayed: true` header, so you can tell it apart from a freshly processed one.
 - If a request with the same key is still being processed, the retry receives `409 Conflict`.
 - If the same key is reused with a **different** invoice payload, the request is rejected with `422 Unprocessable Entity`: a given key must always map to the same request.
 
@@ -140,7 +140,7 @@ func (a *SendAPIService) SendFilePostExecute(r ApiSendFilePostRequest) (*Send, *
 	}
 
 	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
@@ -186,6 +186,17 @@ func (a *SendAPIService) SendFilePostExecute(r ApiSendFilePostRequest) (*Send, *
 		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ProblemDetails
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 422 {
 			var v ProblemDetails
@@ -883,7 +894,7 @@ func (r ApiSendJsonPostRequest) Signature(signature string) ApiSendJsonPostReque
 	return r
 }
 
-// Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice.
+// Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. A replayed response carries the &#x60;Idempotent-Replayed: true&#x60; header.
 func (r ApiSendJsonPostRequest) IdempotencyKey(idempotencyKey string) ApiSendJsonPostRequest {
 	r.idempotencyKey = &idempotencyKey
 	return r
@@ -907,7 +918,7 @@ You can also upload invoices via the [Dashboard](https://dashboard.invoicetronic
 To protect against duplicate submissions caused by network retries, you can send an optional `Idempotency-Key` header with any unique, client-generated value (up to 255 characters).
 
 - The first request with a given key is processed normally, and its response (status, body and `Location`) is stored for 24 hours.
-- Any subsequent request that reuses the same key within that window replays the original response instead of sending a second invoice to SDI.
+- Any subsequent request that reuses the same key within that window replays the original response instead of sending a second invoice to SDI. A replayed response carries the `Idempotent-Replayed: true` header, so you can tell it apart from a freshly processed one.
 - If a request with the same key is still being processed, the retry receives `409 Conflict`.
 - If the same key is reused with a **different** invoice payload, the request is rejected with `422 Unprocessable Entity`: a given key must always map to the same request.
 
@@ -971,7 +982,7 @@ func (a *SendAPIService) SendJsonPostExecute(r ApiSendJsonPostRequest) (*Send, *
 	}
 
 	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
@@ -1004,6 +1015,17 @@ func (a *SendAPIService) SendJsonPostExecute(r ApiSendJsonPostRequest) (*Send, *
 		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ProblemDetails
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 422 {
 			var v ProblemDetails
@@ -1056,7 +1078,7 @@ func (r ApiSendPostRequest) Signature(signature string) ApiSendPostRequest {
 	return r
 }
 
-// Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice.
+// Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. A replayed response carries the &#x60;Idempotent-Replayed: true&#x60; header.
 func (r ApiSendPostRequest) IdempotencyKey(idempotencyKey string) ApiSendPostRequest {
 	r.idempotencyKey = &idempotencyKey
 	return r
@@ -1080,7 +1102,7 @@ You can also upload invoices via the [Dashboard](https://dashboard.invoicetronic
 To protect against duplicate submissions caused by network retries, you can send an optional `Idempotency-Key` header with any unique, client-generated value (up to 255 characters).
 
 - The first request with a given key is processed normally, and its response (status, body and `Location`) is stored for 24 hours.
-- Any subsequent request that reuses the same key within that window replays the original response instead of sending a second invoice to SDI.
+- Any subsequent request that reuses the same key within that window replays the original response instead of sending a second invoice to SDI. A replayed response carries the `Idempotent-Replayed: true` header, so you can tell it apart from a freshly processed one.
 - If a request with the same key is still being processed, the retry receives `409 Conflict`.
 - If the same key is reused with a **different** invoice payload, the request is rejected with `422 Unprocessable Entity`: a given key must always map to the same request.
 
@@ -1144,7 +1166,7 @@ func (a *SendAPIService) SendPostExecute(r ApiSendPostRequest) (*Send, *http.Res
 	}
 
 	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
@@ -1177,6 +1199,17 @@ func (a *SendAPIService) SendPostExecute(r ApiSendPostRequest) (*Send, *http.Res
 		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ProblemDetails
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 422 {
 			var v ProblemDetails
@@ -1267,7 +1300,7 @@ func (a *SendAPIService) SendValidateFilePostExecute(r ApiSendValidateFilePostRe
 	}
 
 	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
@@ -1312,6 +1345,17 @@ func (a *SendAPIService) SendValidateFilePostExecute(r ApiSendValidateFilePostRe
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 422 {
+			var v ProblemDetails
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
 			var v ProblemDetails
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -1391,7 +1435,7 @@ func (a *SendAPIService) SendValidateJsonPostExecute(r ApiSendValidateJsonPostRe
 	}
 
 	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
@@ -1423,6 +1467,17 @@ func (a *SendAPIService) SendValidateJsonPostExecute(r ApiSendValidateJsonPostRe
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 422 {
+			var v ProblemDetails
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
 			var v ProblemDetails
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -1502,7 +1557,7 @@ func (a *SendAPIService) SendValidatePostExecute(r ApiSendValidatePostRequest) (
 	}
 
 	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
@@ -1534,6 +1589,17 @@ func (a *SendAPIService) SendValidatePostExecute(r ApiSendValidatePostRequest) (
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 422 {
+			var v ProblemDetails
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
 			var v ProblemDetails
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -1613,7 +1679,7 @@ func (a *SendAPIService) SendValidateXmlPostExecute(r ApiSendValidateXmlPostRequ
 	}
 
 	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
@@ -1645,6 +1711,17 @@ func (a *SendAPIService) SendValidateXmlPostExecute(r ApiSendValidateXmlPostRequ
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 422 {
+			var v ProblemDetails
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
 			var v ProblemDetails
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -1686,7 +1763,7 @@ func (r ApiSendXmlPostRequest) Signature(signature string) ApiSendXmlPostRequest
 	return r
 }
 
-// Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice.
+// Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. A replayed response carries the &#x60;Idempotent-Replayed: true&#x60; header.
 func (r ApiSendXmlPostRequest) IdempotencyKey(idempotencyKey string) ApiSendXmlPostRequest {
 	r.idempotencyKey = &idempotencyKey
 	return r
@@ -1710,7 +1787,7 @@ You can also upload invoices via the [Dashboard](https://dashboard.invoicetronic
 To protect against duplicate submissions caused by network retries, you can send an optional `Idempotency-Key` header with any unique, client-generated value (up to 255 characters).
 
 - The first request with a given key is processed normally, and its response (status, body and `Location`) is stored for 24 hours.
-- Any subsequent request that reuses the same key within that window replays the original response instead of sending a second invoice to SDI.
+- Any subsequent request that reuses the same key within that window replays the original response instead of sending a second invoice to SDI. A replayed response carries the `Idempotent-Replayed: true` header, so you can tell it apart from a freshly processed one.
 - If a request with the same key is still being processed, the retry receives `409 Conflict`.
 - If the same key is reused with a **different** invoice payload, the request is rejected with `422 Unprocessable Entity`: a given key must always map to the same request.
 
@@ -1774,7 +1851,7 @@ func (a *SendAPIService) SendXmlPostExecute(r ApiSendXmlPostRequest) (*Send, *ht
 	}
 
 	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
@@ -1807,6 +1884,17 @@ func (a *SendAPIService) SendXmlPostExecute(r ApiSendXmlPostRequest) (*Send, *ht
 		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ProblemDetails
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 422 {
 			var v ProblemDetails

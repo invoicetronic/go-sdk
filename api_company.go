@@ -3,7 +3,7 @@ Invoicetronic API
 
 The [Invoicetronic API][2] is a RESTful service that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. It provides advanced features as encryption at rest, multi-language pre-flight invoice validation, multiple upload formats, webhooks, event logging, client SDKs, and CLI tools.  For more information, see  [Invoicetronic website][2]  ## Before you start  For the full integration guide, tutorials, SDKs and quickstarts, see the **[Documentation](https://invoicetronic.com/en/docs/)**. A few cross-cutting topics worth knowing before integrating:  - **[Prerequisites](https://invoicetronic.com/en/docs/prerequisites/)** — what you need to start in Sandbox and what's required to move to production. - **[API Keys](https://invoicetronic.com/en/docs/apikeys/)** — how `ik_live_` and `ik_test_` keys select the environment. - **[Sandbox](https://invoicetronic.com/en/docs/sandbox/)** — free test environment that mirrors the live workflow, with no credits consumed. - **[Rate Limiting](https://invoicetronic.com/en/docs/ratelimiting/)** — per-second, per-minute and per-day limits; how to handle `429 Too Many Requests`. - **[Pagination](https://invoicetronic.com/en/docs/pagination/)** — `page` and `page_size` parameters and the `Invoicetronic-Total-Count` response header. - **[CORS](https://invoicetronic.com/en/docs/cors/)** — calling the API from the browser; allowed origins are configured per key. - **[Webhooks](https://invoicetronic.com/en/docs/webhooks/)** — real-time event notifications with HMAC-SHA256 signature validation. - **[Localization](https://invoicetronic.com/en/docs/accept-language/)** — use the `Accept-Language` header to receive error messages in Italian, English or German.  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/ 
 
-API version: 1.14.0
+API version: 1.15.0
 Contact: info@invoicetronic.com
 */
 
@@ -67,6 +67,9 @@ CompanyGet List companies
 Retrieve a paginated list of companies. Results can be filtered by free-text search (`q`) across name, VAT number, and fiscal code.
 
 **Companies** are the entities that send and receive invoices. They are automatically created from invoice data when invoices are sent or received.
+
+A company's `vat` and `fiscal_code` are unique platform-wide, not just within your account: incoming invoices are routed to their owner by VAT number alone, so a company belongs to one account at a time. Registering a company that is already active under another account is therefore not possible, and that account is not disclosed to you. Moving a company to your account is a transfer: contact support with the company's written authorization.
+
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCompanyGetRequest
@@ -197,6 +200,9 @@ Delete a company by its internal id.
 
 **Companies** are the entities that send and receive invoices. They are automatically created from invoice data when invoices are sent or received.
 
+A company's `vat` and `fiscal_code` are unique platform-wide, not just within your account: incoming invoices are routed to their owner by VAT number alone, so a company belongs to one account at a time. Registering a company that is already active under another account is therefore not possible, and that account is not disclosed to you. Moving a company to your account is a transfer: contact support with the company's written authorization.
+
+
 **Warning:** Deleting a company will permanently remove all associated data, including sent invoices, received invoices, invoice updates from SDI, logs, and webhooks.
 
 If the company has any linked invoices, you must explicitly confirm deletion by adding `?force=true` to the request. Without this parameter, the API will return `409 Conflict` with details about the linked data.
@@ -313,6 +319,9 @@ Retrieve a company by its internal id.
 
 **Companies** are the entities that send and receive invoices. They are automatically created from invoice data when invoices are sent or received.
 
+A company's `vat` and `fiscal_code` are unique platform-wide, not just within your account: incoming invoices are routed to their owner by VAT number alone, so a company belongs to one account at a time. Registering a company that is already active under another account is therefore not possible, and that account is not disclosed to you. Moving a company to your account is a transfer: contact support with the company's written authorization.
+
+
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id Item id
  @return ApiCompanyIdGetRequest
@@ -421,7 +430,12 @@ CompanyPost Add a company
 
 Add a new company.
 
+When the company is already registered on the platform, the request fails with `400 Bad Request` and a problem details body whose `code` member is `company_already_registered`. Branch on `code`, not on `detail`, which is localized according to the `Accept-Language` header.
+
 **Companies** are the entities that send and receive invoices. They are automatically created from invoice data when invoices are sent or received.
+
+A company's `vat` and `fiscal_code` are unique platform-wide, not just within your account: incoming invoices are routed to their owner by VAT number alone, so a company belongs to one account at a time. Registering a company that is already active under another account is therefore not possible, and that account is not disclosed to you. Moving a company to your account is a transfer: contact support with the company's written authorization.
+
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCompanyPostRequest
@@ -467,7 +481,7 @@ func (a *CompanyAPIService) CompanyPostExecute(r ApiCompanyPostRequest) (*Compan
 	}
 
 	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
@@ -497,6 +511,17 @@ func (a *CompanyAPIService) CompanyPostExecute(r ApiCompanyPostRequest) (*Compan
 		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ProblemDetails
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 422 {
 			var v ProblemDetails
@@ -543,7 +568,12 @@ CompanyPut Update a company
 
 Update an existing company.
 
+Changing `vat` or `fiscal_code` to a value already registered on the platform fails with `400 Bad Request` and `code` = `company_already_registered`.
+
 **Companies** are the entities that send and receive invoices. They are automatically created from invoice data when invoices are sent or received.
+
+A company's `vat` and `fiscal_code` are unique platform-wide, not just within your account: incoming invoices are routed to their owner by VAT number alone, so a company belongs to one account at a time. Registering a company that is already active under another account is therefore not possible, and that account is not disclosed to you. Moving a company to your account is a transfer: contact support with the company's written authorization.
+
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCompanyPutRequest
@@ -589,7 +619,7 @@ func (a *CompanyAPIService) CompanyPutExecute(r ApiCompanyPutRequest) (*Company,
 	}
 
 	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
@@ -621,6 +651,17 @@ func (a *CompanyAPIService) CompanyPutExecute(r ApiCompanyPutRequest) (*Company,
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 422 {
+			var v ProblemDetails
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
 			var v ProblemDetails
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -661,6 +702,9 @@ CompanyVatGet Get a company by vat number
 Retrieve a company by its VAT number.
 
 **Companies** are the entities that send and receive invoices. They are automatically created from invoice data when invoices are sent or received.
+
+A company's `vat` and `fiscal_code` are unique platform-wide, not just within your account: incoming invoices are routed to their owner by VAT number alone, so a company belongs to one account at a time. Registering a company that is already active under another account is therefore not possible, and that account is not disclosed to you. Moving a company to your account is a transfer: contact support with the company's written authorization.
+
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param vat

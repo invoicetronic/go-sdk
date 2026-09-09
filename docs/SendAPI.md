@@ -43,7 +43,7 @@ func main() {
 	file := os.NewFile(1234, "some_file") // *os.File | 
 	validate := true // bool | Validate the document first, and reject it on failure. (optional) (default to false)
 	signature := "signature_example" // string | Whether to digitally sign the document. (optional) (default to "Auto")
-	idempotencyKey := "idempotencyKey_example" // string | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. (optional)
+	idempotencyKey := "idempotencyKey_example" // string | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. A replayed response carries the `Idempotent-Replayed: true` header. (optional)
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
@@ -71,7 +71,7 @@ Name | Type | Description  | Notes
  **file** | ***os.File** |  | 
  **validate** | **bool** | Validate the document first, and reject it on failure. | [default to false]
  **signature** | **string** | Whether to digitally sign the document. | [default to &quot;Auto&quot;]
- **idempotencyKey** | **string** | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. | 
+ **idempotencyKey** | **string** | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. A replayed response carries the &#x60;Idempotent-Replayed: true&#x60; header. | 
 
 ### Return type
 
@@ -84,7 +84,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: multipart/form-data
-- **Accept**: application/json
+- **Accept**: application/json, application/problem+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -430,7 +430,7 @@ func main() {
 	body := map[string]interface{}{ ... } // map[string]interface{} | 
 	validate := true // bool | Validate the document first, and reject it on failure. (optional) (default to false)
 	signature := "signature_example" // string | Whether to digitally sign the document. (optional) (default to "Auto")
-	idempotencyKey := "idempotencyKey_example" // string | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. (optional)
+	idempotencyKey := "idempotencyKey_example" // string | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. A replayed response carries the `Idempotent-Replayed: true` header. (optional)
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
@@ -458,7 +458,7 @@ Name | Type | Description  | Notes
  **body** | **map[string]interface{}** |  | 
  **validate** | **bool** | Validate the document first, and reject it on failure. | [default to false]
  **signature** | **string** | Whether to digitally sign the document. | [default to &quot;Auto&quot;]
- **idempotencyKey** | **string** | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. | 
+ **idempotencyKey** | **string** | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. A replayed response carries the &#x60;Idempotent-Replayed: true&#x60; header. | 
 
 ### Return type
 
@@ -471,7 +471,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: application/json
+- **Accept**: application/json, application/problem+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -502,7 +502,7 @@ func main() {
 	send := *invoicetronicsdk.NewSend("PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48cDpGYXR0dXJhRWxldHRyb25pY2EgLi4uPjwvcDpGYXR0dXJhRWxldHRyb25pY2E+") // Send | 
 	validate := true // bool | Validate the document first, and reject it on failure. (optional) (default to false)
 	signature := "signature_example" // string | Whether to digitally sign the document. (optional) (default to "Auto")
-	idempotencyKey := "idempotencyKey_example" // string | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. (optional)
+	idempotencyKey := "idempotencyKey_example" // string | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. A replayed response carries the `Idempotent-Replayed: true` header. (optional)
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
@@ -530,7 +530,7 @@ Name | Type | Description  | Notes
  **send** | [**Send**](Send.md) |  | 
  **validate** | **bool** | Validate the document first, and reject it on failure. | [default to false]
  **signature** | **string** | Whether to digitally sign the document. | [default to &quot;Auto&quot;]
- **idempotencyKey** | **string** | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. | 
+ **idempotencyKey** | **string** | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. A replayed response carries the &#x60;Idempotent-Replayed: true&#x60; header. | 
 
 ### Return type
 
@@ -543,7 +543,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: application/json
+- **Accept**: application/json, application/problem+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -607,7 +607,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: multipart/form-data
-- **Accept**: application/json
+- **Accept**: application/json, application/problem+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -671,7 +671,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: application/json
+- **Accept**: application/json, application/problem+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -735,7 +735,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: application/json
+- **Accept**: application/json, application/problem+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -799,7 +799,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/xml
-- **Accept**: application/json
+- **Accept**: application/json, application/problem+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -830,7 +830,7 @@ func main() {
 	body := map[string]interface{}{ ... } // map[string]interface{} | 
 	validate := true // bool | Validate the document first, and reject it on failure. (optional) (default to false)
 	signature := "signature_example" // string | Whether to digitally sign the document. (optional) (default to "Auto")
-	idempotencyKey := "idempotencyKey_example" // string | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. (optional)
+	idempotencyKey := "idempotencyKey_example" // string | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. A replayed response carries the `Idempotent-Replayed: true` header. (optional)
 
 	configuration := invoicetronicsdk.NewConfiguration()
 	apiClient := invoicetronicsdk.NewAPIClient(configuration)
@@ -858,7 +858,7 @@ Name | Type | Description  | Notes
  **body** | **map[string]interface{}** |  | 
  **validate** | **bool** | Validate the document first, and reject it on failure. | [default to false]
  **signature** | **string** | Whether to digitally sign the document. | [default to &quot;Auto&quot;]
- **idempotencyKey** | **string** | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. | 
+ **idempotencyKey** | **string** | Optional client-generated key that makes the submission idempotent. Retrying the same request with the same key within 24 hours returns the original response instead of creating a duplicate invoice. A replayed response carries the &#x60;Idempotent-Replayed: true&#x60; header. | 
 
 ### Return type
 
@@ -871,7 +871,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/xml
-- **Accept**: application/json
+- **Accept**: application/json, application/problem+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
