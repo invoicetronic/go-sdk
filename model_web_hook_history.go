@@ -3,7 +3,7 @@ Invoicetronic API
 
 The [Invoicetronic API][2] is a RESTful service that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. It provides advanced features as encryption at rest, multi-language pre-flight invoice validation, multiple upload formats, webhooks, event logging, client SDKs, and CLI tools.  For more information, see  [Invoicetronic website][2]  ## Before you start  For the full integration guide, tutorials, SDKs and quickstarts, see the **[Documentation](https://invoicetronic.com/en/docs/)**. A few cross-cutting topics worth knowing before integrating:  - **[Prerequisites](https://invoicetronic.com/en/docs/prerequisites/)** — what you need to start in Sandbox and what's required to move to production. - **[API Keys](https://invoicetronic.com/en/docs/apikeys/)** — how `ik_live_` and `ik_test_` keys select the environment. - **[Sandbox](https://invoicetronic.com/en/docs/sandbox/)** — free test environment that mirrors the live workflow, with no credits consumed. - **[Rate Limiting](https://invoicetronic.com/en/docs/ratelimiting/)** — per-second, per-minute and per-day limits; how to handle `429 Too Many Requests`. - **[Pagination](https://invoicetronic.com/en/docs/pagination/)** — `page` and `page_size` parameters and the `Invoicetronic-Total-Count` response header. - **[CORS](https://invoicetronic.com/en/docs/cors/)** — calling the API from the browser; allowed origins are configured per key. - **[Webhooks](https://invoicetronic.com/en/docs/webhooks/)** — real-time event notifications with HMAC-SHA256 signature validation. - **[Localization](https://invoicetronic.com/en/docs/accept-language/)** — use the `Accept-Language` header to receive error messages in Italian, English or German.  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/ 
 
-API version: 1.15.0
+API version: 1.17.0
 Contact: info@invoicetronic.com
 */
 
@@ -33,6 +33,10 @@ type WebHookHistory struct {
 	UserId *int32 `json:"user_id,omitempty"`
 	// Event name.
 	Event NullableString `json:"event,omitempty"`
+	// Id of the event that triggered the delivery. It matches the `id` field of the webhook payload, so all the attempts made for the same event share it. Null for deliveries recorded before retries were introduced.
+	EventId NullableInt32 `json:"event_id,omitempty"`
+	// Delivery attempt number, starting at 1. Failed deliveries (any non-2xx response except 410, or a network error) are retried with increasing delays; each retry is recorded as a separate history item.
+	Attempt *int32 `json:"attempt,omitempty"`
 	// HTTP status code returned by the webhook endpoint. A value of 0 means the request could not be completed due to a network error (e.g., DNS resolution failure, connection refused, or timeout). This typically indicates that the endpoint URL is misconfigured or no longer exists.
 	StatusCode *int32 `json:"status_code,omitempty"`
 	// Error description, if any. Null when the delivery is successful (2xx). Contains the exception message for network errors (status code 0) or the response body for non-2xx HTTP responses.
@@ -262,6 +266,80 @@ func (o *WebHookHistory) UnsetEvent() {
 	o.Event.Unset()
 }
 
+// GetEventId returns the EventId field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *WebHookHistory) GetEventId() int32 {
+	if o == nil || IsNil(o.EventId.Get()) {
+		var ret int32
+		return ret
+	}
+	return *o.EventId.Get()
+}
+
+// GetEventIdOk returns a tuple with the EventId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *WebHookHistory) GetEventIdOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.EventId.Get(), o.EventId.IsSet()
+}
+
+// HasEventId returns a boolean if a field has been set.
+func (o *WebHookHistory) HasEventId() bool {
+	if o != nil && o.EventId.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetEventId gets a reference to the given NullableInt32 and assigns it to the EventId field.
+func (o *WebHookHistory) SetEventId(v int32) {
+	o.EventId.Set(&v)
+}
+// SetEventIdNil sets the value for EventId to be an explicit nil
+func (o *WebHookHistory) SetEventIdNil() {
+	o.EventId.Set(nil)
+}
+
+// UnsetEventId ensures that no value is present for EventId, not even an explicit nil
+func (o *WebHookHistory) UnsetEventId() {
+	o.EventId.Unset()
+}
+
+// GetAttempt returns the Attempt field value if set, zero value otherwise.
+func (o *WebHookHistory) GetAttempt() int32 {
+	if o == nil || IsNil(o.Attempt) {
+		var ret int32
+		return ret
+	}
+	return *o.Attempt
+}
+
+// GetAttemptOk returns a tuple with the Attempt field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *WebHookHistory) GetAttemptOk() (*int32, bool) {
+	if o == nil || IsNil(o.Attempt) {
+		return nil, false
+	}
+	return o.Attempt, true
+}
+
+// HasAttempt returns a boolean if a field has been set.
+func (o *WebHookHistory) HasAttempt() bool {
+	if o != nil && !IsNil(o.Attempt) {
+		return true
+	}
+
+	return false
+}
+
+// SetAttempt gets a reference to the given int32 and assigns it to the Attempt field.
+func (o *WebHookHistory) SetAttempt(v int32) {
+	o.Attempt = &v
+}
+
 // GetStatusCode returns the StatusCode field value if set, zero value otherwise.
 func (o *WebHookHistory) GetStatusCode() int32 {
 	if o == nil || IsNil(o.StatusCode) {
@@ -427,6 +505,12 @@ func (o WebHookHistory) ToMap() (map[string]interface{}, error) {
 	}
 	if o.Event.IsSet() {
 		toSerialize["event"] = o.Event.Get()
+	}
+	if o.EventId.IsSet() {
+		toSerialize["event_id"] = o.EventId.Get()
+	}
+	if !IsNil(o.Attempt) {
+		toSerialize["attempt"] = o.Attempt
 	}
 	if !IsNil(o.StatusCode) {
 		toSerialize["status_code"] = o.StatusCode

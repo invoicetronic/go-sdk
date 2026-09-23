@@ -10,6 +10,8 @@ Name | Type | Description | Notes
 **WebHookId** | Pointer to **int32** | Webhook id. | [optional] 
 **UserId** | Pointer to **int32** | User id. | [optional] 
 **Event** | Pointer to **NullableString** | Event name. | [optional] 
+**EventId** | Pointer to **NullableInt32** | Id of the event that triggered the delivery. It matches the &#x60;id&#x60; field of the webhook payload, so all the attempts made for the same event share it. Null for deliveries recorded before retries were introduced. | [optional] 
+**Attempt** | Pointer to **int32** | Delivery attempt number, starting at 1. Failed deliveries (any non-2xx response except 410, or a network error) are retried with increasing delays; each retry is recorded as a separate history item. | [optional] 
 **StatusCode** | Pointer to **int32** | HTTP status code returned by the webhook endpoint. A value of 0 means the request could not be completed due to a network error (e.g., DNS resolution failure, connection refused, or timeout). This typically indicates that the endpoint URL is misconfigured or no longer exists. | [optional] 
 **Error** | Pointer to **NullableString** | Error description, if any. Null when the delivery is successful (2xx). Contains the exception message for network errors (status code 0) or the response body for non-2xx HTTP responses. | [optional] 
 **DateTime** | Pointer to **time.Time** | Date and time of the request. | [optional] 
@@ -194,6 +196,66 @@ HasEvent returns a boolean if a field has been set.
 `func (o *WebHookHistory) UnsetEvent()`
 
 UnsetEvent ensures that no value is present for Event, not even an explicit nil
+### GetEventId
+
+`func (o *WebHookHistory) GetEventId() int32`
+
+GetEventId returns the EventId field if non-nil, zero value otherwise.
+
+### GetEventIdOk
+
+`func (o *WebHookHistory) GetEventIdOk() (*int32, bool)`
+
+GetEventIdOk returns a tuple with the EventId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetEventId
+
+`func (o *WebHookHistory) SetEventId(v int32)`
+
+SetEventId sets EventId field to given value.
+
+### HasEventId
+
+`func (o *WebHookHistory) HasEventId() bool`
+
+HasEventId returns a boolean if a field has been set.
+
+### SetEventIdNil
+
+`func (o *WebHookHistory) SetEventIdNil(b bool)`
+
+ SetEventIdNil sets the value for EventId to be an explicit nil
+
+### UnsetEventId
+`func (o *WebHookHistory) UnsetEventId()`
+
+UnsetEventId ensures that no value is present for EventId, not even an explicit nil
+### GetAttempt
+
+`func (o *WebHookHistory) GetAttempt() int32`
+
+GetAttempt returns the Attempt field if non-nil, zero value otherwise.
+
+### GetAttemptOk
+
+`func (o *WebHookHistory) GetAttemptOk() (*int32, bool)`
+
+GetAttemptOk returns a tuple with the Attempt field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAttempt
+
+`func (o *WebHookHistory) SetAttempt(v int32)`
+
+SetAttempt sets Attempt field to given value.
+
+### HasAttempt
+
+`func (o *WebHookHistory) HasAttempt() bool`
+
+HasAttempt returns a boolean if a field has been set.
+
 ### GetStatusCode
 
 `func (o *WebHookHistory) GetStatusCode() int32`
