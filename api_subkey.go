@@ -1,9 +1,9 @@
 /*
 Invoicetronic API
 
-The [Invoicetronic API][2] is a RESTful service that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. It provides advanced features as encryption at rest, multi-language pre-flight invoice validation, multiple upload formats, webhooks, event logging, client SDKs, and CLI tools.  For more information, see  [Invoicetronic website][2]  ## Before you start  For the full integration guide, tutorials, SDKs and quickstarts, see the **[Documentation](https://invoicetronic.com/en/docs/)**. A few cross-cutting topics worth knowing before integrating:  - **[Prerequisites](https://invoicetronic.com/en/docs/prerequisites/)** — what you need to start in Sandbox and what's required to move to production. - **[API Keys](https://invoicetronic.com/en/docs/apikeys/)** — how `ik_live_` and `ik_test_` keys select the environment. - **[Sandbox](https://invoicetronic.com/en/docs/sandbox/)** — free test environment that mirrors the live workflow, with no credits consumed. - **[Rate Limiting](https://invoicetronic.com/en/docs/ratelimiting/)** — per-second, per-minute and per-day limits; how to handle `429 Too Many Requests`. - **[Pagination](https://invoicetronic.com/en/docs/pagination/)** — `page` and `page_size` parameters and the `Invoicetronic-Total-Count` response header. - **[CORS](https://invoicetronic.com/en/docs/cors/)** — calling the API from the browser; allowed origins are configured per key. - **[Webhooks](https://invoicetronic.com/en/docs/webhooks/)** — real-time event notifications with HMAC-SHA256 signature validation. - **[Localization](https://invoicetronic.com/en/docs/accept-language/)** — use the `Accept-Language` header to receive error messages in Italian, English or German.  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/ 
+The [Invoicetronic API][2] is a RESTful service that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. It provides advanced features as encryption at rest, multi-language pre-flight invoice validation, multiple upload formats, webhooks, event logging, client SDKs, and CLI tools.  For more information, see  [Invoicetronic website][2]  ## Before you start  For the full integration guide, tutorials, SDKs and quickstarts, see the **[Documentation](https://invoicetronic.com/en/docs/)**. A few cross-cutting topics worth knowing before integrating:  - **[Prerequisites](https://invoicetronic.com/en/docs/prerequisites/)** — what you need to start in Sandbox and what's required to move to production. - **[API Keys](https://invoicetronic.com/en/docs/apikeys/)** — how `ik_live_` and `ik_test_` keys select the environment. - **[Restricted Keys](https://invoicetronic.com/en/docs/sub-keys/)** — keys limited to some companies and permissions, managed from the Dashboard or through `/subkey`. - **[Sandbox](https://invoicetronic.com/en/docs/sandbox/)** — free test environment that mirrors the live workflow, with no credits consumed. - **[Rate Limiting](https://invoicetronic.com/en/docs/ratelimiting/)** — per-second, per-minute and per-day limits; how to handle `429 Too Many Requests`. - **[Pagination](https://invoicetronic.com/en/docs/pagination/)** — `page` and `page_size` parameters and the `Invoicetronic-Total-Count` response header. - **[CORS](https://invoicetronic.com/en/docs/cors/)** — calling the API from the browser; allowed origins are configured per key. - **[Webhooks](https://invoicetronic.com/en/docs/webhooks/)** — real-time event notifications with HMAC-SHA256 signature validation. - **[Localization](https://invoicetronic.com/en/docs/accept-language/)** — use the `Accept-Language` header to receive error messages in Italian, English or German.  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/ 
 
-API version: 1.17.0
+API version: 1.20.3
 Contact: info@invoicetronic.com
 */
 
@@ -74,6 +74,8 @@ SubkeyGet List restricted keys
 Retrieve a paginated list of the restricted keys of the calling main key. Secrets are never included.
 
 **Restricted keys** are API keys created under your main key, with the permissions and companies you choose. Use them to give each of your customers, integrations or collaborators only the access they need: a restricted key limited to one company sees only that company's invoices, updates, webhooks and events.
+
+The [Restricted Keys documentation page](https://invoicetronic.com/en/docs/sub-keys/) covers the whole feature, including managing restricted keys from the Dashboard.
 
 Only a main key can manage restricted keys: a restricted key calling these endpoints gets `403 Forbidden` with `code` = `subkey_not_allowed`.
 
@@ -189,6 +191,17 @@ func (a *SubkeyAPIService) SubkeyGetExecute(r ApiSubkeyGetRequest) ([]SubKey, *h
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v ProblemDetails
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 		if localVarHTTPResponse.StatusCode == 403 {
 			var v ProblemDetails
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
@@ -230,6 +243,8 @@ SubkeyIdDelete Delete a restricted key
 Delete a restricted key of the calling main key. It stops authenticating at once.
 
 **Restricted keys** are API keys created under your main key, with the permissions and companies you choose. Use them to give each of your customers, integrations or collaborators only the access they need: a restricted key limited to one company sees only that company's invoices, updates, webhooks and events.
+
+The [Restricted Keys documentation page](https://invoicetronic.com/en/docs/sub-keys/) covers the whole feature, including managing restricted keys from the Dashboard.
 
 Only a main key can manage restricted keys: a restricted key calling these endpoints gets `403 Forbidden` with `code` = `subkey_not_allowed`.
 
@@ -366,6 +381,8 @@ SubkeyIdGet Get a restricted key by id
 Retrieve a restricted key of the calling main key. Secrets are never included.
 
 **Restricted keys** are API keys created under your main key, with the permissions and companies you choose. Use them to give each of your customers, integrations or collaborators only the access they need: a restricted key limited to one company sees only that company's invoices, updates, webhooks and events.
+
+The [Restricted Keys documentation page](https://invoicetronic.com/en/docs/sub-keys/) covers the whole feature, including managing restricted keys from the Dashboard.
 
 Only a main key can manage restricted keys: a restricted key calling these endpoints gets `403 Forbidden` with `code` = `subkey_not_allowed`.
 
@@ -510,6 +527,8 @@ Generate new `test_key` and `live_key` for a restricted key, keeping its id, per
 
 **Restricted keys** are API keys created under your main key, with the permissions and companies you choose. Use them to give each of your customers, integrations or collaborators only the access they need: a restricted key limited to one company sees only that company's invoices, updates, webhooks and events.
 
+The [Restricted Keys documentation page](https://invoicetronic.com/en/docs/sub-keys/) covers the whole feature, including managing restricted keys from the Dashboard.
+
 Only a main key can manage restricted keys: a restricted key calling these endpoints gets `403 Forbidden` with `code` = `subkey_not_allowed`.
 
 **Onboarding a company in two calls.** Create the company with `POST /company`, then create a restricted key limited to it with `POST /subkey` and `company_ids` = `[<company id>]`. Hand the key to your customer: it can operate only on that company.
@@ -607,6 +626,17 @@ func (a *SubkeyAPIService) SubkeyIdRollPostExecute(r ApiSubkeyIdRollPostRequest)
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v ProblemDetails
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 		if localVarHTTPResponse.StatusCode == 403 {
 			var v ProblemDetails
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
@@ -653,6 +683,8 @@ SubkeyPost Add a restricted key
 Create a restricted key under the calling main key. The response is the only one carrying `test_key` and `live_key`, together with the one of a roll: store them safely.
 
 **Restricted keys** are API keys created under your main key, with the permissions and companies you choose. Use them to give each of your customers, integrations or collaborators only the access they need: a restricted key limited to one company sees only that company's invoices, updates, webhooks and events.
+
+The [Restricted Keys documentation page](https://invoicetronic.com/en/docs/sub-keys/) covers the whole feature, including managing restricted keys from the Dashboard.
 
 Only a main key can manage restricted keys: a restricted key calling these endpoints gets `403 Forbidden` with `code` = `subkey_not_allowed`.
 
@@ -750,6 +782,17 @@ func (a *SubkeyAPIService) SubkeyPostExecute(r ApiSubkeyPostRequest) (*SubKeyWit
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v ProblemDetails
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 		if localVarHTTPResponse.StatusCode == 403 {
 			var v ProblemDetails
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
@@ -796,6 +839,8 @@ SubkeyPut Update a restricted key
 Replace the description, active flag, permissions, companies and CORS origins of a restricted key. Omitted `permissions`, `company_ids` or `cors_origins` mean none. A stale `version` fails with `422`.
 
 **Restricted keys** are API keys created under your main key, with the permissions and companies you choose. Use them to give each of your customers, integrations or collaborators only the access they need: a restricted key limited to one company sees only that company's invoices, updates, webhooks and events.
+
+The [Restricted Keys documentation page](https://invoicetronic.com/en/docs/sub-keys/) covers the whole feature, including managing restricted keys from the Dashboard.
 
 Only a main key can manage restricted keys: a restricted key calling these endpoints gets `403 Forbidden` with `code` = `subkey_not_allowed`.
 
@@ -892,6 +937,17 @@ func (a *SubkeyAPIService) SubkeyPutExecute(r ApiSubkeyPutRequest) (*SubKey, *ht
 		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v ProblemDetails
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 422 {
 			var v ProblemDetails

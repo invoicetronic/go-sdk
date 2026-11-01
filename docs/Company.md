@@ -8,15 +8,15 @@ Name | Type | Description | Notes
 **Created** | Pointer to **time.Time** | Creation date. It is set automatically. | [optional] [readonly] 
 **Version** | Pointer to **int32** | Row version, for optimistic concurrency. It is set automatically. | [optional] [readonly] 
 **UserId** | Pointer to **int32** | User id. It is set automatically based on the authenticated user. | [optional] [readonly] 
-**Vat** | **string** | Vat number. Must include the country code. | 
-**FiscalCode** | **string** | Fiscal code. In most cases it&#39;s the same as the vat number. | 
+**Vat** | Pointer to **NullableString** | Vat number. Must include the country code. Required when fiscal_code is missing; omit it for entities that only have a fiscal code, such as non-profit organizations. | [optional] 
+**FiscalCode** | Pointer to **NullableString** | Fiscal code. In most cases it&#39;s the same as the vat number. When missing, it is derived from the vat number. | [optional] 
 **Name** | **string** | Name | 
 
 ## Methods
 
 ### NewCompany
 
-`func NewCompany(vat string, fiscalCode string, name string, ) *Company`
+`func NewCompany(name string, ) *Company`
 
 NewCompany instantiates a new Company object
 This constructor will assign default values to properties that have it defined,
@@ -150,7 +150,22 @@ and a boolean to check if the value has been set.
 
 SetVat sets Vat field to given value.
 
+### HasVat
 
+`func (o *Company) HasVat() bool`
+
+HasVat returns a boolean if a field has been set.
+
+### SetVatNil
+
+`func (o *Company) SetVatNil(b bool)`
+
+ SetVatNil sets the value for Vat to be an explicit nil
+
+### UnsetVat
+`func (o *Company) UnsetVat()`
+
+UnsetVat ensures that no value is present for Vat, not even an explicit nil
 ### GetFiscalCode
 
 `func (o *Company) GetFiscalCode() string`
@@ -170,7 +185,22 @@ and a boolean to check if the value has been set.
 
 SetFiscalCode sets FiscalCode field to given value.
 
+### HasFiscalCode
 
+`func (o *Company) HasFiscalCode() bool`
+
+HasFiscalCode returns a boolean if a field has been set.
+
+### SetFiscalCodeNil
+
+`func (o *Company) SetFiscalCodeNil(b bool)`
+
+ SetFiscalCodeNil sets the value for FiscalCode to be an explicit nil
+
+### UnsetFiscalCode
+`func (o *Company) UnsetFiscalCode()`
+
+UnsetFiscalCode ensures that no value is present for FiscalCode, not even an explicit nil
 ### GetName
 
 `func (o *Company) GetName() string`

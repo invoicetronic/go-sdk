@@ -1,9 +1,9 @@
 /*
 Invoicetronic API
 
-The [Invoicetronic API][2] is a RESTful service that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. It provides advanced features as encryption at rest, multi-language pre-flight invoice validation, multiple upload formats, webhooks, event logging, client SDKs, and CLI tools.  For more information, see  [Invoicetronic website][2]  ## Before you start  For the full integration guide, tutorials, SDKs and quickstarts, see the **[Documentation](https://invoicetronic.com/en/docs/)**. A few cross-cutting topics worth knowing before integrating:  - **[Prerequisites](https://invoicetronic.com/en/docs/prerequisites/)** — what you need to start in Sandbox and what's required to move to production. - **[API Keys](https://invoicetronic.com/en/docs/apikeys/)** — how `ik_live_` and `ik_test_` keys select the environment. - **[Sandbox](https://invoicetronic.com/en/docs/sandbox/)** — free test environment that mirrors the live workflow, with no credits consumed. - **[Rate Limiting](https://invoicetronic.com/en/docs/ratelimiting/)** — per-second, per-minute and per-day limits; how to handle `429 Too Many Requests`. - **[Pagination](https://invoicetronic.com/en/docs/pagination/)** — `page` and `page_size` parameters and the `Invoicetronic-Total-Count` response header. - **[CORS](https://invoicetronic.com/en/docs/cors/)** — calling the API from the browser; allowed origins are configured per key. - **[Webhooks](https://invoicetronic.com/en/docs/webhooks/)** — real-time event notifications with HMAC-SHA256 signature validation. - **[Localization](https://invoicetronic.com/en/docs/accept-language/)** — use the `Accept-Language` header to receive error messages in Italian, English or German.  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/ 
+The [Invoicetronic API][2] is a RESTful service that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. It provides advanced features as encryption at rest, multi-language pre-flight invoice validation, multiple upload formats, webhooks, event logging, client SDKs, and CLI tools.  For more information, see  [Invoicetronic website][2]  ## Before you start  For the full integration guide, tutorials, SDKs and quickstarts, see the **[Documentation](https://invoicetronic.com/en/docs/)**. A few cross-cutting topics worth knowing before integrating:  - **[Prerequisites](https://invoicetronic.com/en/docs/prerequisites/)** — what you need to start in Sandbox and what's required to move to production. - **[API Keys](https://invoicetronic.com/en/docs/apikeys/)** — how `ik_live_` and `ik_test_` keys select the environment. - **[Restricted Keys](https://invoicetronic.com/en/docs/sub-keys/)** — keys limited to some companies and permissions, managed from the Dashboard or through `/subkey`. - **[Sandbox](https://invoicetronic.com/en/docs/sandbox/)** — free test environment that mirrors the live workflow, with no credits consumed. - **[Rate Limiting](https://invoicetronic.com/en/docs/ratelimiting/)** — per-second, per-minute and per-day limits; how to handle `429 Too Many Requests`. - **[Pagination](https://invoicetronic.com/en/docs/pagination/)** — `page` and `page_size` parameters and the `Invoicetronic-Total-Count` response header. - **[CORS](https://invoicetronic.com/en/docs/cors/)** — calling the API from the browser; allowed origins are configured per key. - **[Webhooks](https://invoicetronic.com/en/docs/webhooks/)** — real-time event notifications with HMAC-SHA256 signature validation. - **[Localization](https://invoicetronic.com/en/docs/accept-language/)** — use the `Accept-Language` header to receive error messages in Italian, English or German.  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/ 
 
-API version: 1.17.0
+API version: 1.20.3
 Contact: info@invoicetronic.com
 */
 
@@ -14,7 +14,6 @@ package invoicetronicsdk
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -60,6 +59,7 @@ type Send struct {
 	// Current SDI state of the invoice. Reflects the most recent update received from SDI. Null when no update has been received yet.
 	LatestState NullableString `json:"latest_state,omitempty"`
 	Company *Company `json:"company,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Send Send
@@ -839,6 +839,11 @@ func (o Send) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Company) {
 		toSerialize["company"] = o.Company
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -866,15 +871,38 @@ func (o *Send) UnmarshalJSON(data []byte) (err error) {
 
 	varSend := _Send{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSend)
+	err = json.Unmarshal(data, &varSend)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Send(varSend)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "created")
+		delete(additionalProperties, "version")
+		delete(additionalProperties, "user_id")
+		delete(additionalProperties, "company_id")
+		delete(additionalProperties, "committente")
+		delete(additionalProperties, "prestatore")
+		delete(additionalProperties, "identifier")
+		delete(additionalProperties, "file_name")
+		delete(additionalProperties, "format")
+		delete(additionalProperties, "payload")
+		delete(additionalProperties, "last_update")
+		delete(additionalProperties, "date_sent")
+		delete(additionalProperties, "documents")
+		delete(additionalProperties, "encoding")
+		delete(additionalProperties, "nome_committente")
+		delete(additionalProperties, "meta_data")
+		delete(additionalProperties, "latest_state")
+		delete(additionalProperties, "company")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

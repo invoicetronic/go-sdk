@@ -1,9 +1,9 @@
 /*
 Invoicetronic API
 
-The [Invoicetronic API][2] is a RESTful service that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. It provides advanced features as encryption at rest, multi-language pre-flight invoice validation, multiple upload formats, webhooks, event logging, client SDKs, and CLI tools.  For more information, see  [Invoicetronic website][2]  ## Before you start  For the full integration guide, tutorials, SDKs and quickstarts, see the **[Documentation](https://invoicetronic.com/en/docs/)**. A few cross-cutting topics worth knowing before integrating:  - **[Prerequisites](https://invoicetronic.com/en/docs/prerequisites/)** — what you need to start in Sandbox and what's required to move to production. - **[API Keys](https://invoicetronic.com/en/docs/apikeys/)** — how `ik_live_` and `ik_test_` keys select the environment. - **[Sandbox](https://invoicetronic.com/en/docs/sandbox/)** — free test environment that mirrors the live workflow, with no credits consumed. - **[Rate Limiting](https://invoicetronic.com/en/docs/ratelimiting/)** — per-second, per-minute and per-day limits; how to handle `429 Too Many Requests`. - **[Pagination](https://invoicetronic.com/en/docs/pagination/)** — `page` and `page_size` parameters and the `Invoicetronic-Total-Count` response header. - **[CORS](https://invoicetronic.com/en/docs/cors/)** — calling the API from the browser; allowed origins are configured per key. - **[Webhooks](https://invoicetronic.com/en/docs/webhooks/)** — real-time event notifications with HMAC-SHA256 signature validation. - **[Localization](https://invoicetronic.com/en/docs/accept-language/)** — use the `Accept-Language` header to receive error messages in Italian, English or German.  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/ 
+The [Invoicetronic API][2] is a RESTful service that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. It provides advanced features as encryption at rest, multi-language pre-flight invoice validation, multiple upload formats, webhooks, event logging, client SDKs, and CLI tools.  For more information, see  [Invoicetronic website][2]  ## Before you start  For the full integration guide, tutorials, SDKs and quickstarts, see the **[Documentation](https://invoicetronic.com/en/docs/)**. A few cross-cutting topics worth knowing before integrating:  - **[Prerequisites](https://invoicetronic.com/en/docs/prerequisites/)** — what you need to start in Sandbox and what's required to move to production. - **[API Keys](https://invoicetronic.com/en/docs/apikeys/)** — how `ik_live_` and `ik_test_` keys select the environment. - **[Restricted Keys](https://invoicetronic.com/en/docs/sub-keys/)** — keys limited to some companies and permissions, managed from the Dashboard or through `/subkey`. - **[Sandbox](https://invoicetronic.com/en/docs/sandbox/)** — free test environment that mirrors the live workflow, with no credits consumed. - **[Rate Limiting](https://invoicetronic.com/en/docs/ratelimiting/)** — per-second, per-minute and per-day limits; how to handle `429 Too Many Requests`. - **[Pagination](https://invoicetronic.com/en/docs/pagination/)** — `page` and `page_size` parameters and the `Invoicetronic-Total-Count` response header. - **[CORS](https://invoicetronic.com/en/docs/cors/)** — calling the API from the browser; allowed origins are configured per key. - **[Webhooks](https://invoicetronic.com/en/docs/webhooks/)** — real-time event notifications with HMAC-SHA256 signature validation. - **[Localization](https://invoicetronic.com/en/docs/accept-language/)** — use the `Accept-Language` header to receive error messages in Italian, English or German.  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/ 
 
-API version: 1.17.0
+API version: 1.20.3
 Contact: info@invoicetronic.com
 */
 
@@ -14,7 +14,6 @@ package invoicetronicsdk
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -31,12 +30,13 @@ type Company struct {
 	Version *int32 `json:"version,omitempty"`
 	// User id. It is set automatically based on the authenticated user.
 	UserId *int32 `json:"user_id,omitempty"`
-	// Vat number. Must include the country code.
-	Vat string `json:"vat"`
-	// Fiscal code. In most cases it's the same as the vat number.
-	FiscalCode string `json:"fiscal_code"`
+	// Vat number. Must include the country code. Required when fiscal_code is missing; omit it for entities that only have a fiscal code, such as non-profit organizations.
+	Vat NullableString `json:"vat,omitempty"`
+	// Fiscal code. In most cases it's the same as the vat number. When missing, it is derived from the vat number.
+	FiscalCode NullableString `json:"fiscal_code,omitempty"`
 	// Name
 	Name string `json:"name"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Company Company
@@ -45,10 +45,8 @@ type _Company Company
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCompany(vat string, fiscalCode string, name string) *Company {
+func NewCompany(name string) *Company {
 	this := Company{}
-	this.Vat = vat
-	this.FiscalCode = fiscalCode
 	this.Name = name
 	return &this
 }
@@ -189,52 +187,88 @@ func (o *Company) SetUserId(v int32) {
 	o.UserId = &v
 }
 
-// GetVat returns the Vat field value
+// GetVat returns the Vat field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *Company) GetVat() string {
-	if o == nil {
+	if o == nil || IsNil(o.Vat.Get()) {
 		var ret string
 		return ret
 	}
-
-	return o.Vat
+	return *o.Vat.Get()
 }
 
-// GetVatOk returns a tuple with the Vat field value
+// GetVatOk returns a tuple with the Vat field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Company) GetVatOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Vat, true
+	return o.Vat.Get(), o.Vat.IsSet()
 }
 
-// SetVat sets field value
+// HasVat returns a boolean if a field has been set.
+func (o *Company) HasVat() bool {
+	if o != nil && o.Vat.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetVat gets a reference to the given NullableString and assigns it to the Vat field.
 func (o *Company) SetVat(v string) {
-	o.Vat = v
+	o.Vat.Set(&v)
+}
+// SetVatNil sets the value for Vat to be an explicit nil
+func (o *Company) SetVatNil() {
+	o.Vat.Set(nil)
 }
 
-// GetFiscalCode returns the FiscalCode field value
+// UnsetVat ensures that no value is present for Vat, not even an explicit nil
+func (o *Company) UnsetVat() {
+	o.Vat.Unset()
+}
+
+// GetFiscalCode returns the FiscalCode field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *Company) GetFiscalCode() string {
-	if o == nil {
+	if o == nil || IsNil(o.FiscalCode.Get()) {
 		var ret string
 		return ret
 	}
-
-	return o.FiscalCode
+	return *o.FiscalCode.Get()
 }
 
-// GetFiscalCodeOk returns a tuple with the FiscalCode field value
+// GetFiscalCodeOk returns a tuple with the FiscalCode field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Company) GetFiscalCodeOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.FiscalCode, true
+	return o.FiscalCode.Get(), o.FiscalCode.IsSet()
 }
 
-// SetFiscalCode sets field value
+// HasFiscalCode returns a boolean if a field has been set.
+func (o *Company) HasFiscalCode() bool {
+	if o != nil && o.FiscalCode.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetFiscalCode gets a reference to the given NullableString and assigns it to the FiscalCode field.
 func (o *Company) SetFiscalCode(v string) {
-	o.FiscalCode = v
+	o.FiscalCode.Set(&v)
+}
+// SetFiscalCodeNil sets the value for FiscalCode to be an explicit nil
+func (o *Company) SetFiscalCodeNil() {
+	o.FiscalCode.Set(nil)
+}
+
+// UnsetFiscalCode ensures that no value is present for FiscalCode, not even an explicit nil
+func (o *Company) UnsetFiscalCode() {
+	o.FiscalCode.Unset()
 }
 
 // GetName returns the Name field value
@@ -283,9 +317,18 @@ func (o Company) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.UserId) {
 		toSerialize["user_id"] = o.UserId
 	}
-	toSerialize["vat"] = o.Vat
-	toSerialize["fiscal_code"] = o.FiscalCode
+	if o.Vat.IsSet() {
+		toSerialize["vat"] = o.Vat.Get()
+	}
+	if o.FiscalCode.IsSet() {
+		toSerialize["fiscal_code"] = o.FiscalCode.Get()
+	}
 	toSerialize["name"] = o.Name
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -294,8 +337,6 @@ func (o *Company) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"vat",
-		"fiscal_code",
 		"name",
 	}
 
@@ -315,15 +356,26 @@ func (o *Company) UnmarshalJSON(data []byte) (err error) {
 
 	varCompany := _Company{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCompany)
+	err = json.Unmarshal(data, &varCompany)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Company(varCompany)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "created")
+		delete(additionalProperties, "version")
+		delete(additionalProperties, "user_id")
+		delete(additionalProperties, "vat")
+		delete(additionalProperties, "fiscal_code")
+		delete(additionalProperties, "name")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

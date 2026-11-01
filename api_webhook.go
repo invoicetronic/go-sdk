@@ -1,9 +1,9 @@
 /*
 Invoicetronic API
 
-The [Invoicetronic API][2] is a RESTful service that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. It provides advanced features as encryption at rest, multi-language pre-flight invoice validation, multiple upload formats, webhooks, event logging, client SDKs, and CLI tools.  For more information, see  [Invoicetronic website][2]  ## Before you start  For the full integration guide, tutorials, SDKs and quickstarts, see the **[Documentation](https://invoicetronic.com/en/docs/)**. A few cross-cutting topics worth knowing before integrating:  - **[Prerequisites](https://invoicetronic.com/en/docs/prerequisites/)** — what you need to start in Sandbox and what's required to move to production. - **[API Keys](https://invoicetronic.com/en/docs/apikeys/)** — how `ik_live_` and `ik_test_` keys select the environment. - **[Sandbox](https://invoicetronic.com/en/docs/sandbox/)** — free test environment that mirrors the live workflow, with no credits consumed. - **[Rate Limiting](https://invoicetronic.com/en/docs/ratelimiting/)** — per-second, per-minute and per-day limits; how to handle `429 Too Many Requests`. - **[Pagination](https://invoicetronic.com/en/docs/pagination/)** — `page` and `page_size` parameters and the `Invoicetronic-Total-Count` response header. - **[CORS](https://invoicetronic.com/en/docs/cors/)** — calling the API from the browser; allowed origins are configured per key. - **[Webhooks](https://invoicetronic.com/en/docs/webhooks/)** — real-time event notifications with HMAC-SHA256 signature validation. - **[Localization](https://invoicetronic.com/en/docs/accept-language/)** — use the `Accept-Language` header to receive error messages in Italian, English or German.  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/ 
+The [Invoicetronic API][2] is a RESTful service that allows you to send and receive invoices through the Italian [Servizio di Interscambio (SDI)][1], or Interchange Service. The API is designed to be simple and easy to use, abstracting away SDI complexity while providing complete control over the invoice send/receive process. It provides advanced features as encryption at rest, multi-language pre-flight invoice validation, multiple upload formats, webhooks, event logging, client SDKs, and CLI tools.  For more information, see  [Invoicetronic website][2]  ## Before you start  For the full integration guide, tutorials, SDKs and quickstarts, see the **[Documentation](https://invoicetronic.com/en/docs/)**. A few cross-cutting topics worth knowing before integrating:  - **[Prerequisites](https://invoicetronic.com/en/docs/prerequisites/)** — what you need to start in Sandbox and what's required to move to production. - **[API Keys](https://invoicetronic.com/en/docs/apikeys/)** — how `ik_live_` and `ik_test_` keys select the environment. - **[Restricted Keys](https://invoicetronic.com/en/docs/sub-keys/)** — keys limited to some companies and permissions, managed from the Dashboard or through `/subkey`. - **[Sandbox](https://invoicetronic.com/en/docs/sandbox/)** — free test environment that mirrors the live workflow, with no credits consumed. - **[Rate Limiting](https://invoicetronic.com/en/docs/ratelimiting/)** — per-second, per-minute and per-day limits; how to handle `429 Too Many Requests`. - **[Pagination](https://invoicetronic.com/en/docs/pagination/)** — `page` and `page_size` parameters and the `Invoicetronic-Total-Count` response header. - **[CORS](https://invoicetronic.com/en/docs/cors/)** — calling the API from the browser; allowed origins are configured per key. - **[Webhooks](https://invoicetronic.com/en/docs/webhooks/)** — real-time event notifications with HMAC-SHA256 signature validation. - **[Localization](https://invoicetronic.com/en/docs/accept-language/)** — use the `Accept-Language` header to receive error messages in Italian, English or German.  [1]: https://www.fatturapa.gov.it/it/sistemainterscambio/cose-il-sdi/ [2]: https://invoicetronic.com/ 
 
-API version: 1.17.0
+API version: 1.20.3
 Contact: info@invoicetronic.com
 */
 
@@ -94,7 +94,7 @@ Retrieve a paginated list of webhooks. Results can be filtered by company, descr
 
 You can also manage webhooks via the [Dashboard](https://dashboard.invoicetronic.com).
 
-Failed deliveries (any non-2xx response except `410 Gone`, or a network error or timeout) are retried up to 7 times, about 1 minute, 5 minutes, 30 minutes, 2 hours, 6 hours, 12 hours and 24 hours after the previous attempt: 8 attempts over about 45 hours. Delivery is therefore *at least once*: use the event `id` in the payload to discard duplicates. Each request carries an `Invoicetronic-Delivery-Attempt` header with the attempt number. Responding with `410 Gone` disables the webhook and stops the retries.
+Failed deliveries (any non-2xx response except `410 Gone`, or a network error or timeout) are retried up to 7 times, about 1 minute, 5 minutes, 30 minutes, 2 hours, 6 hours, 12 hours and 24 hours after the previous attempt: 8 attempts over about 45 hours. Delivery is therefore *at least once*: use the event `Id` in the payload (webhook payloads are PascalCase) to discard duplicates. Each request carries an `Invoicetronic-Delivery-Attempt` header with the attempt number. Responding with `410 Gone` disables the webhook and stops the retries.
 
 A webhook that fails continuously for 7 days (no successful delivery in between) is automatically disabled (`enabled` set to `false`) and the account owner is notified by email. To resume deliveries, set `enabled` back to `true` from the Dashboard or via `PATCH /webhook/{id}`.
 
@@ -173,7 +173,7 @@ func (a *WebhookAPIService) WebhookGetExecute(r ApiWebhookGetRequest) ([]WebHook
 	}
 
 	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
@@ -201,6 +201,16 @@ func (a *WebhookAPIService) WebhookGetExecute(r ApiWebhookGetRequest) ([]WebHook
 		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v ProblemDetails
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -236,7 +246,7 @@ Delete a webhook subscription by its internal id.
 
 You can also manage webhooks via the [Dashboard](https://dashboard.invoicetronic.com).
 
-Failed deliveries (any non-2xx response except `410 Gone`, or a network error or timeout) are retried up to 7 times, about 1 minute, 5 minutes, 30 minutes, 2 hours, 6 hours, 12 hours and 24 hours after the previous attempt: 8 attempts over about 45 hours. Delivery is therefore *at least once*: use the event `id` in the payload to discard duplicates. Each request carries an `Invoicetronic-Delivery-Attempt` header with the attempt number. Responding with `410 Gone` disables the webhook and stops the retries.
+Failed deliveries (any non-2xx response except `410 Gone`, or a network error or timeout) are retried up to 7 times, about 1 minute, 5 minutes, 30 minutes, 2 hours, 6 hours, 12 hours and 24 hours after the previous attempt: 8 attempts over about 45 hours. Delivery is therefore *at least once*: use the event `Id` in the payload (webhook payloads are PascalCase) to discard duplicates. Each request carries an `Invoicetronic-Delivery-Attempt` header with the attempt number. Responding with `410 Gone` disables the webhook and stops the retries.
 
 A webhook that fails continuously for 7 days (no successful delivery in between) is automatically disabled (`enabled` set to `false`) and the account owner is notified by email. To resume deliveries, set `enabled` back to `true` from the Dashboard or via `PATCH /webhook/{id}`.
 
@@ -286,7 +296,7 @@ func (a *WebhookAPIService) WebhookIdDeleteExecute(r ApiWebhookIdDeleteRequest) 
 	}
 
 	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
@@ -314,6 +324,39 @@ func (a *WebhookAPIService) WebhookIdDeleteExecute(r ApiWebhookIdDeleteRequest) 
 		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 422 {
+			var v ProblemDetails
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v ProblemDetails
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 409 {
+			var v ProblemDetails
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -349,7 +392,7 @@ Retrieve a webhook by its internal id.
 
 You can also manage webhooks via the [Dashboard](https://dashboard.invoicetronic.com).
 
-Failed deliveries (any non-2xx response except `410 Gone`, or a network error or timeout) are retried up to 7 times, about 1 minute, 5 minutes, 30 minutes, 2 hours, 6 hours, 12 hours and 24 hours after the previous attempt: 8 attempts over about 45 hours. Delivery is therefore *at least once*: use the event `id` in the payload to discard duplicates. Each request carries an `Invoicetronic-Delivery-Attempt` header with the attempt number. Responding with `410 Gone` disables the webhook and stops the retries.
+Failed deliveries (any non-2xx response except `410 Gone`, or a network error or timeout) are retried up to 7 times, about 1 minute, 5 minutes, 30 minutes, 2 hours, 6 hours, 12 hours and 24 hours after the previous attempt: 8 attempts over about 45 hours. Delivery is therefore *at least once*: use the event `Id` in the payload (webhook payloads are PascalCase) to discard duplicates. Each request carries an `Invoicetronic-Delivery-Attempt` header with the attempt number. Responding with `410 Gone` disables the webhook and stops the retries.
 
 A webhook that fails continuously for 7 days (no successful delivery in between) is automatically disabled (`enabled` set to `false`) and the account owner is notified by email. To resume deliveries, set `enabled` back to `true` from the Dashboard or via `PATCH /webhook/{id}`.
 
@@ -467,7 +510,7 @@ Create a new webhook subscription.
 
 You can also manage webhooks via the [Dashboard](https://dashboard.invoicetronic.com).
 
-Failed deliveries (any non-2xx response except `410 Gone`, or a network error or timeout) are retried up to 7 times, about 1 minute, 5 minutes, 30 minutes, 2 hours, 6 hours, 12 hours and 24 hours after the previous attempt: 8 attempts over about 45 hours. Delivery is therefore *at least once*: use the event `id` in the payload to discard duplicates. Each request carries an `Invoicetronic-Delivery-Attempt` header with the attempt number. Responding with `410 Gone` disables the webhook and stops the retries.
+Failed deliveries (any non-2xx response except `410 Gone`, or a network error or timeout) are retried up to 7 times, about 1 minute, 5 minutes, 30 minutes, 2 hours, 6 hours, 12 hours and 24 hours after the previous attempt: 8 attempts over about 45 hours. Delivery is therefore *at least once*: use the event `Id` in the payload (webhook payloads are PascalCase) to discard duplicates. Each request carries an `Invoicetronic-Delivery-Attempt` header with the attempt number. Responding with `410 Gone` disables the webhook and stops the retries.
 
 A webhook that fails continuously for 7 days (no successful delivery in between) is automatically disabled (`enabled` set to `false`) and the account owner is notified by email. To resume deliveries, set `enabled` back to `true` from the Dashboard or via `PATCH /webhook/{id}`.
 
@@ -559,6 +602,17 @@ func (a *WebhookAPIService) WebhookPostExecute(r ApiWebhookPostRequest) (*WebHoo
 					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v ProblemDetails
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 		if localVarHTTPResponse.StatusCode == 422 {
 			var v ProblemDetails
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
@@ -608,7 +662,7 @@ Update an existing webhook subscription.
 
 You can also manage webhooks via the [Dashboard](https://dashboard.invoicetronic.com).
 
-Failed deliveries (any non-2xx response except `410 Gone`, or a network error or timeout) are retried up to 7 times, about 1 minute, 5 minutes, 30 minutes, 2 hours, 6 hours, 12 hours and 24 hours after the previous attempt: 8 attempts over about 45 hours. Delivery is therefore *at least once*: use the event `id` in the payload to discard duplicates. Each request carries an `Invoicetronic-Delivery-Attempt` header with the attempt number. Responding with `410 Gone` disables the webhook and stops the retries.
+Failed deliveries (any non-2xx response except `410 Gone`, or a network error or timeout) are retried up to 7 times, about 1 minute, 5 minutes, 30 minutes, 2 hours, 6 hours, 12 hours and 24 hours after the previous attempt: 8 attempts over about 45 hours. Delivery is therefore *at least once*: use the event `Id` in the payload (webhook payloads are PascalCase) to discard duplicates. Each request carries an `Invoicetronic-Delivery-Attempt` header with the attempt number. Responding with `410 Gone` disables the webhook and stops the retries.
 
 A webhook that fails continuously for 7 days (no successful delivery in between) is automatically disabled (`enabled` set to `false`) and the account owner is notified by email. To resume deliveries, set `enabled` back to `true` from the Dashboard or via `PATCH /webhook/{id}`.
 
@@ -690,6 +744,17 @@ func (a *WebhookAPIService) WebhookPutExecute(r ApiWebhookPutRequest) (*WebHook,
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 422 {
+			var v ProblemDetails
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 400 {
 			var v ProblemDetails
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -830,7 +895,7 @@ func (a *WebhookAPIService) WebhookhistoryGetExecute(r ApiWebhookhistoryGetReque
 	}
 
 	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
@@ -858,6 +923,16 @@ func (a *WebhookAPIService) WebhookhistoryGetExecute(r ApiWebhookhistoryGetReque
 		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v ProblemDetails
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
